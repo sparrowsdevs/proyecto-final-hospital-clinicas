@@ -39,4 +39,4 @@ El repositorio se divide en los siguientes módulos operativos, cada uno con sus
 - `descarga-documento.html`: Vista para la exportación de reportes y métricas de calidad.
 - `instrucciones.html`: Documentación operativa para el personal del área.
 
-**Mas información:** https://deepwiki.com/riseboe/proyecto-final-hospital-clinicas
+**Mas información:** https://deepwiki.com/sparrowsdevs/proyecto-final-hospital-clinicas
