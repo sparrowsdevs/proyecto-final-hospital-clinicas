@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Encuesta de Satisfacción del Usuario - Hospital de Clínicas</title>
+    
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/css/encuestas.css">
+</head>
+<body class="app-layout">
+
+    <header class="topbar">
+        <div class="topbar-left">
+            <span class="brand-title">Hospital de Clínicas</span>
+        </div>
+        
+        <nav class="desktop-nav">
+            <a class="nav-link" href="#">Documentación</a>
+            <a class="nav-link" href="#">Pacientes</a>
+            <a class="nav-link" href="#">Reportes</a>
+        </nav>
+
+        <div class="topbar-right">
+            <button class="icon-btn" aria-label="Notificaciones">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <button class="icon-btn" aria-label="Perfil">
+                <span class="material-symbols-outlined">account_circle</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="app-body">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Gestión Documental</h2>
+                <p>Administración Central</p>
+            </div>
+            
+            <button class="btn btn-action mb-lg">
+                <span class="material-symbols-outlined">add</span>
+                Nuevo Documento
+            </button>
+
+            <nav class="sidebar-nav">
+                <a class="nav-link-side" href="#">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-link-side" href="#">
+                    <span class="material-symbols-outlined">folder_shared</span>
+                    <span>Expedientes</span>
+                </a>
+                <a class="nav-link-side" href="#">
+                    <span class="material-symbols-outlined">upload_file</span>
+                    <span>Carga de Archivos</span>
+                </a>
+                <a class="nav-link-side" href="#">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span>Configuración</span>
+                </a>
+                <a class="nav-link-side" href="#">
+                    <span class="material-symbols-outlined">help</span>
+                    <span>Ayuda</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="container-sm">
+                
+                <div class="page-header text-center-mobile">
+                    <h1>Encuesta de Satisfacción del Usuario</h1>
+                    <p>Su opinión es fundamental para mejorar la calidad de nuestros servicios en el Hospital de Clínicas.</p>
+                </div>
+
+                <div class="survey-card">
+                    <div class="accent-bar-left"></div>
+                    
+                    <form id="surveyForm" action="#" method="POST">
+                        
+                        <div class="form-section">
+                            <label class="question-title">¿Qué tan fácil fue acceder a la información?</label>
+                            <p class="question-subtitle">Califícanos del 1 al 5, donde 5 es muy fácil.</p>
+                            
+                            <div class="star-rating">
+                                <input id="star5" name="rating_access" type="radio" value="5">
+                                <label for="star5" title="5 estrellas"><span class="material-symbols-outlined filled">star</span></label>
+                                
+                                <input id="star4" name="rating_access" type="radio" value="4">
+                                <label for="star4" title="4 estrellas"><span class="material-symbols-outlined filled">star</span></label>
+                                
+                                <input id="star3" name="rating_access" type="radio" value="3">
+                                <label for="star3" title="3 estrellas"><span class="material-symbols-outlined filled">star</span></label>
+                                
+                                <input id="star2" name="rating_access" type="radio" value="2">
+                                <label for="star2" title="2 estrellas"><span class="material-symbols-outlined filled">star</span></label>
+                                
+                                <input id="star1" name="rating_access" type="radio" value="1">
+                                <label for="star1" title="1 estrella"><span class="material-symbols-outlined filled">star</span></label>
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="form-section">
+                            <label class="question-title mb-md">¿La información proporcionada fue útil para su preparación/tratamiento?</label>
+                            
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input name="usefulness" type="radio" value="muy_util">
+                                    <span class="radio-text">Sí, muy útil</span>
+                                </label>
+                                
+                                <label class="radio-option">
+                                    <input name="usefulness" type="radio" value="si">
+                                    <span class="radio-text">Sí</span>
+                                </label>
+                                
+                                <label class="radio-option">
+                                    <input name="usefulness" type="radio" value="regular">
+                                    <span class="radio-text">Regular</span>
+                                </label>
+                                
+                                <label class="radio-option">
+                                    <input name="usefulness" type="radio" value="no">
+                                    <span class="radio-text">No</span>
+                                </label>
+                                
+                                <label class="radio-option">
+                                    <input name="usefulness" type="radio" value="para_nada">
+                                    <span class="radio-text">Para nada útil</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="form-section">
+                            <label class="question-title" for="comments">¿Tiene algún comentario o sugerencia adicional?</label>
+                            <p class="question-subtitle">Opcional. Nos ayuda a entender mejor su experiencia.</p>
+                            
+                            <textarea class="form-textarea" id="comments" name="comments" rows="5" placeholder="Escriba sus comentarios aquí..."></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn btn-submit" type="submit">
+                                Enviar Encuesta
+                                <span class="material-symbols-outlined">send</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <footer class="minimal-footer">
+                    <p>© 2026 Hospital de Clínicas "Dr. Manuel Quintela". Todos los derechos reservados.</p>
+                    <div class="footer-links">
+                        <a href="#">Términos de Privacidad</a>
+                        <span class="dot-separator">•</span>
+                        <a href="#">Contacto Institucional</a>
+                    </div>
+                </footer>
+
+            </div>
+        </main>
+    </div>
+
+    <nav class="mobile-nav">
+        <a class="mobile-nav-item" href="#">
+            <span class="material-symbols-outlined">description</span>
+            <span class="nav-label">Mis Docs</span>
+        </a>
+        <a class="mobile-nav-item active" href="#">
+            <span class="material-symbols-outlined filled">star_rate</span>
+            <span class="nav-label">Encuesta</span>
+        </a>
+        <a class="mobile-nav-item" href="#">
+            <span class="material-symbols-outlined">download</span>
+            <span class="nav-label">Descargas</span>
+        </a>
+        <a class="mobile-nav-item" href="#">
+            <span class="material-symbols-outlined">person</span>
+            <span class="nav-label">Perfil</span>
+        </a>
+    </nav>
+
+    <script>
+        // Interacción simple para el formulario
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Encuesta enviada exitosamente. ¡Gracias por sus comentarios!');
+            this.reset(); // Opcional: limpiar el formulario tras enviarlo
+        });
+    </script>
+</body>
+</html>

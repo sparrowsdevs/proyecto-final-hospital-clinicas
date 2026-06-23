@@ -1,0 +1,253 @@
+/* =========================================
+   1. VARIABLES CSS
+   ========================================= */
+:root {
+    /* Paleta de Colores */
+    --primary: #00254b;
+    --primary-container: #003b71;
+    --primary-fixed: #d4e3ff;
+    --on-primary: #ffffff;
+    
+    --clinical-blue-vibrant: #186AAD;
+    
+    --surface: #fbf9f8;
+    --on-surface: #1b1c1c;
+    --on-surface-variant: #424750;
+    --surface-container-low: rgba(246, 243, 242, 0.8); /* Usado con blur en el footer */
+    
+    --outline: #737781;
+    --outline-variant: #c3c6d1;
+
+    /* Tipografías */
+    --font-body: 'Open Sans', sans-serif;
+    --font-heading: 'Montserrat', sans-serif;
+
+    /* Espaciados */
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+}
+
+/* =========================================
+   2. RESET Y BASE
+   ========================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* EL TRUCO PARA EL FOOTER: Flexbox en el body con min-height: 100vh */
+body {
+    font-family: var(--font-body);
+    color: var(--on-surface);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--surface);
+    /* Efecto Mesh */
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(205, 225, 252, 0.3) 0, transparent 50%), 
+        radial-gradient(at 100% 100%, rgba(176, 196, 222, 0.2) 0, transparent 50%);
+    -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; }
+button, input { font-family: inherit; border: none; outline: none; background: transparent; }
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* =========================================
+   3. BACKGROUND Y DECORACIÓN
+   ========================================= */
+.bg-wrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.2;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) brightness(125%);
+    transform: scale(1.1);
+    transition: transform 0.1s ease-out;
+}
+
+/* =========================================
+   4. CONTENIDO PRINCIPAL Y CENTRADO
+   ========================================= */
+/* Al tener flex-grow: 1, ocupa todo el espacio libre y empuja el footer abajo */
+.main-content {
+    position: relative;
+    z-index: 10;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm);
+}
+@media (min-width: 768px) {
+    .main-content { padding: var(--spacing-lg); }
+}
+
+.login-card {
+    width: 100%;
+    max-width: 28rem; /* 448px */
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    border: 1px solid var(--outline-variant);
+    box-shadow: 0 8px 32px -4px rgba(0, 37, 75, 0.08);
+    overflow: hidden;
+    transition: border-color 0.3s;
+}
+.login-card:hover { border-color: var(--primary-fixed); }
+
+.accent-bar { height: 6px; width: 100%; background-color: var(--primary-container); }
+.card-body { padding: var(--spacing-lg); }
+
+/* Card Header */
+.card-header { display: flex; flex-direction: column; align-items: center; margin-bottom: var(--spacing-lg); text-align: center; }
+.brand-logo { height: 100px; width: auto; object-fit: contain; margin-bottom: var(--spacing-md); }
+.title { font-family: var(--font-heading); font-size: 24px; font-weight: 600; color: var(--primary); margin-top: var(--spacing-xs); }
+.subtitle { font-size: 12px; font-weight: 600; color: var(--outline); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+
+/* =========================================
+   5. FORMULARIO
+   ========================================= */
+.login-form { display: flex; flex-direction: column; gap: var(--spacing-md); }
+.form-group { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.form-label { font-size: 12px; font-weight: 600; color: var(--on-surface-variant); }
+
+/* Inputs y Wrappers */
+.input-wrapper { position: relative; display: flex; align-items: center; }
+.input-icon { position: absolute; left: 12px; color: var(--outline); transition: color 0.2s; }
+.input-wrapper:focus-within .input-icon { color: var(--primary); }
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px 12px 40px;
+    background-color: #ffffff;
+    border: 1px solid var(--outline-variant);
+    border-radius: 0.5rem;
+    font-size: 16px;
+    color: var(--on-surface);
+    transition: all 0.2s;
+}
+.form-control::placeholder { color: rgba(115, 119, 129, 0.5); }
+.form-control:focus { border-color: var(--primary-container); box-shadow: 0 0 0 2px var(--primary-fixed); }
+.pr-12 { padding-right: 48px; } /* Espacio para el ojito de password */
+
+.toggle-password-btn {
+    position: absolute;
+    right: 12px;
+    color: var(--outline);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+.toggle-password-btn:hover { color: var(--primary); }
+
+/* Opciones debajo de inputs */
+.form-actions { display: flex; align-items: center; justify-content: space-between; padding-top: 4px; }
+.checkbox-wrapper { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.custom-checkbox { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--outline-variant); accent-color: var(--primary-container); cursor: pointer; }
+.checkbox-text { font-size: 14px; color: var(--on-surface-variant); transition: color 0.2s; }
+.checkbox-wrapper:hover .checkbox-text { color: var(--on-surface); }
+.forgot-link { font-size: 12px; font-weight: 600; color: var(--primary-container); text-underline-offset: 4px; text-decoration-thickness: 2px; transition: text-decoration 0.2s; }
+.forgot-link:hover { text-decoration: underline; }
+
+/* Botón Submit */
+.btn-submit {
+    width: 100%;
+    background-color: var(--primary-container);
+    color: var(--on-primary);
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    padding: 16px;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 59, 113, 0.2);
+    transition: all 0.3s;
+}
+.btn-submit:hover { background-color: var(--primary); }
+.btn-submit:active { transform: scale(0.98); }
+.btn-submit.loading { opacity: 0.8; cursor: not-allowed; pointer-events: none; }
+
+/* Animación Spinner para cuando carga */
+.spinner { height: 20px; width: 20px; color: var(--on-primary); animation: spin 1s linear infinite; }
+.spinner-track { opacity: 0.25; }
+.spinner-head { opacity: 0.75; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Form Footer Links */
+.card-footer {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--outline-variant);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+.card-footer p { font-size: 14px; color: var(--on-surface-variant); }
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--clinical-blue-vibrant);
+    border: 2px solid rgba(24, 106, 173, 0.2);
+    border-radius: 9999px;
+    padding: 8px 24px;
+    transition: all 0.3s;
+}
+.btn-outline:hover { background-color: var(--clinical-blue-vibrant); color: var(--on-primary); border-color: var(--clinical-blue-vibrant); }
+
+/* =========================================
+   6. GLOBAL FOOTER
+   ========================================= */
+.global-footer {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-sm);
+    background-color: var(--surface-container-low);
+    backdrop-filter: blur(4px);
+    border-top: 1px solid var(--outline-variant);
+    margin-top: auto; /* Empuja el footer firmemente al fondo si el main no ocupa todo */
+}
+@media (min-width: 768px) {
+    .global-footer { padding-left: var(--spacing-lg); padding-right: var(--spacing-lg); }
+}
+
+.footer-content {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+@media (min-width: 768px) {
+    .footer-content { flex-direction: row; }
+}
+
+.footer-copy { font-size: 12px; font-weight: 600; color: var(--on-surface-variant); text-align: center; }
+.footer-links { display: flex; gap: var(--spacing-md); }
+.footer-links a { font-size: 12px; font-weight: 600; color: var(--outline); transition: color 0.2s; }
+.footer-links a:hover { color: var(--primary); }

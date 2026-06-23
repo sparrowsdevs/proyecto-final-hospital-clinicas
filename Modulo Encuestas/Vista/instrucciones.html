@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Instrucciones Médicas - Hospital de Clínicas</title>
+    
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/css/instrucciones.css">
+</head>
+<body class="app-layout">
+
+    <header class="topbar">
+        <div class="topbar-left">
+            <img alt="Hospital de Clínicas Logo" class="brand-logo" src="https://www.hc.edu.uy/images/imagenesarticulos/Logo_Hc.png">
+        </div>
+        
+        <div class="topbar-right">
+            <button class="icon-btn" aria-label="Notificaciones">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <button class="icon-btn" aria-label="Perfil">
+                <span class="material-symbols-outlined">account_circle</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container-sm">
+            
+            <section class="hero-section animate-fade-in">
+                <h1 class="page-title">Instrucciones para estudios médicos</h1>
+                <p class="page-subtitle">Siga cuidadosamente estas indicaciones para garantizar la precisión de sus resultados clínicos.</p>
+            </section>
+
+            <div class="bento-layout animate-fade-in">
+                
+                <div class="info-card">
+                    <div class="accent-bar-left"></div>
+                    
+                    <div class="card-header">
+                        <span class="material-symbols-outlined text-clinical">info</span>
+                        <span class="card-title-small">Indicaciones Generales</span>
+                    </div>
+                    
+                    <ul class="instruction-list">
+                        <li>
+                            <span class="material-symbols-outlined icon-check text-primary">check_circle</span>
+                            <span>Ayuno mínimo de 8 horas para análisis de sangre.</span>
+                        </li>
+                        <li>
+                            <span class="material-symbols-outlined icon-check text-primary">check_circle</span>
+                            <span>Evite realizar ejercicio físico intenso 24 horas antes.</span>
+                        </li>
+                        <li>
+                            <span class="material-symbols-outlined icon-check text-primary">check_circle</span>
+                            <span>Traer cédula de identidad vigente y orden médica.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="image-card group">
+                    <img alt="Interior del Hospital" class="bg-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkED8Vsn7KF4FVG3JhplK8x3kd_pv5Nw1A4dMg4zoId79ZgxR7aoXl1uzCFDS1KDff2YUbyv_2r5s_2HnXaIpOLmsKm-NglbHZN5M2s5Ga67FNifRBIcnO_OfOjnbB-69k6c8-XHVaWDeNWGFUNdJe3EpyunDwRyQiHkTJ6XNgGNA9dVz5H5M3SAzKOX1xuSSkScETtp7E_k9Zqi5cTZ8dFPQe8lwu2OlcoK79_HLB-ZRxYHrWW5Rn-e2lzt6Owxq-9LmjGivXeQDP">
+                    <div class="gradient-overlay"></div>
+                    <div class="image-text">
+                        <p class="title">Unidad de Diagnóstico</p>
+                        <p class="subtitle">Piso 2, Ala Norte</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <section class="cta-section animate-fade-in">
+                <p class="update-text">Documento actualizado: 24 May 2026</p>
+                
+                <button class="btn btn-primary" id="pdfButton">
+                    <span class="material-symbols-outlined transition-icon">picture_as_pdf</span>
+                    Ver / Descargar PDF
+                </button>
+                
+                <button class="btn btn-outline">
+                    <span class="material-symbols-outlined">share</span>
+                    Compartir por WhatsApp
+                </button>
+            </section>
+
+        </div>
+    </main>
+
+    <nav class="mobile-nav">
+        <a class="mobile-nav-item active" href="#">
+            <span class="material-symbols-outlined filled">description</span>
+            <span class="nav-label">Mis Docs</span>
+        </a>
+        <a class="mobile-nav-item" href="#">
+            <span class="material-symbols-outlined">star_rate</span>
+            <span class="nav-label">Encuesta</span>
+        </a>
+        <a class="mobile-nav-item" href="#">
+            <span class="material-symbols-outlined">download</span>
+            <span class="nav-label">Descargas</span>
+        </a>
+        <a class="mobile-nav-item" href="#">
+            <span class="material-symbols-outlined">person</span>
+            <span class="nav-label">Perfil</span>
+        </a>
+    </nav>
+
+    <script>
+        // Micro-interaction for the PDF button
+        const pdfButton = document.getElementById('pdfButton');
+        
+        if(pdfButton) {
+            pdfButton.addEventListener('click', () => {
+                const icon = pdfButton.querySelector('.transition-icon');
+                
+                icon.textContent = 'downloading';
+                
+                setTimeout(() => {
+                    icon.textContent = 'check_circle';
+                    
+                    setTimeout(() => {
+                        icon.textContent = 'picture_as_pdf';
+                    }, 2000);
+                }, 1500);
+            });
+        }
+
+        // Soft reveal animation on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.animate-fade-in');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(15px)';
+                void el.offsetWidth; // Force reflow
+                el.style.transition = `opacity 0.6s ease ${index * 0.15}s, transform 0.6s ease ${index * 0.15}s`;
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

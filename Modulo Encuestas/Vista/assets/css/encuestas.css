@@ -1,0 +1,170 @@
+/* =========================================
+   1. VARIABLES CSS (Tokens de diseño)
+   ========================================= */
+:root {
+    /* Paleta Principal */
+    --primary: #00254b;
+    --primary-container: #003b71;
+    --on-primary-container: #7ea7e3;
+    --on-primary: #ffffff;
+    
+    --secondary: #4d6077;
+    --secondary-container: #cde1fc;
+    
+    --tertiary-container: #003a73;
+    --clinical-blue: #186AAD;
+    
+    /* Superficies */
+    --background: #fbf9f8;
+    --surface: #ffffff;
+    --surface-subtle: #F2F4F5;
+    
+    /* Textos y Bordes */
+    --on-surface: #1b1c1c;
+    --on-surface-variant: #424750;
+    --outline: #737781;
+    --outline-variant: #c3c6d1;
+
+    /* Tipografía */
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+
+    /* Espaciados y Bordes */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --max-width-sm: 768px; /* Ideal para formularios */
+}
+
+/* =========================================
+   2. RESET Y ESTRUCTURA BASE
+   ========================================= */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background-color: var(--background); color: var(--on-surface); -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+button, input, textarea { font-family: inherit; border: none; outline: none; background: transparent; }
+button { cursor: pointer; }
+hr { border: none; border-top: 1px solid rgba(195, 198, 209, 0.5); }
+
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; }
+.material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; }
+
+.app-layout { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+/* Utilidades */
+.mb-md { margin-bottom: 16px; }
+.mb-lg { margin-bottom: 32px; }
+.text-center-mobile { text-align: center; }
+@media (min-width: 768px) { .text-center-mobile { text-align: left; } }
+
+/* =========================================
+   3. TOP NAV BAR
+   ========================================= */
+.topbar { background-color: var(--surface); border-bottom: 1px solid var(--outline-variant); height: 64px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; position: sticky; top: 0; z-index: 50; }
+@media (min-width: 768px) { .topbar { padding: 0 32px; } }
+
+.brand-title { font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: var(--primary); }
+
+.desktop-nav { display: none; gap: 24px; }
+@media (min-width: 768px) { .desktop-nav { display: flex; } }
+.nav-link { font-size: 14px; font-weight: 600; color: var(--secondary); padding: 8px 12px; border-radius: 8px; transition: background-color 0.2s; }
+.nav-link:hover { background-color: var(--surface-subtle); color: var(--primary); }
+
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.icon-btn { color: var(--primary); padding: 8px; border-radius: 50%; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; }
+.icon-btn:hover { background-color: var(--surface-subtle); }
+
+/* =========================================
+   4. SIDEBAR & CONTENT AREA
+   ========================================= */
+.app-body { flex: 1; display: flex; overflow: hidden; }
+
+/* Sidebar */
+.sidebar { display: none; flex-direction: column; width: 256px; background-color: var(--surface-subtle); border-right: 1px solid var(--outline-variant); padding: 32px 16px; flex-shrink: 0; overflow-y: auto; }
+@media (min-width: 768px) { .sidebar { display: flex; } }
+
+.sidebar-header { margin-bottom: 32px; padding: 0 8px; }
+.sidebar-header h2 { font-family: var(--font-heading); font-size: 20px; color: var(--primary); font-weight: 700; }
+.sidebar-header p { font-size: 14px; color: var(--secondary); }
+
+.btn-action { width: 100%; background-color: var(--primary-container); color: var(--on-primary); padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 0.2s; }
+.btn-action:hover { background-color: var(--tertiary-container); }
+
+.sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
+.nav-link-side { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; font-size: 14px; color: var(--secondary); transition: all 0.2s; }
+.nav-link-side:hover { background-color: rgba(205, 225, 252, 0.5); color: var(--primary); }
+
+/* Main Content */
+.main-content { flex: 1; overflow-y: auto; padding: 24px 16px; padding-bottom: 96px; }
+@media (min-width: 768px) { .main-content { padding: 32px; padding-bottom: 48px; } }
+
+.container-sm { width: 100%; max-width: var(--max-width-sm); margin: 0 auto; }
+
+.page-header { margin-bottom: 32px; }
+.page-header h1 { font-family: var(--font-heading); font-size: 28px; color: var(--primary); font-weight: 700; margin-bottom: 8px; line-height: 1.2; }
+@media (min-width: 768px) { .page-header h1 { font-size: 32px; } }
+.page-header p { font-size: 16px; color: var(--secondary); }
+
+/* =========================================
+   5. FORM CARD & INPUTS
+   ========================================= */
+.survey-card { background-color: var(--surface); border: 1px solid var(--outline-variant); border-radius: var(--radius-lg); padding: 24px; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+@media (min-width: 768px) { .survey-card { padding: 32px; } }
+
+.accent-bar-left { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background-color: var(--clinical-blue); }
+
+#surveyForm { display: flex; flex-direction: column; gap: 32px; }
+.form-section { display: flex; flex-direction: column; gap: 8px; }
+
+.question-title { font-family: var(--font-heading); font-size: 20px; font-weight: 600; color: var(--on-surface); }
+.question-subtitle { font-size: 14px; color: var(--secondary); margin-bottom: 16px; }
+
+/* Star Rating Trick (CSS Puro) */
+.star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 4px; }
+.star-rating input[type="radio"] { display: none; }
+.star-rating label { cursor: pointer; color: var(--outline-variant); transition: color 0.2s ease-in-out; }
+.star-rating label span { font-size: 40px; }
+/* La magia de pintar las estrellas seleccionadas o en hover */
+.star-rating input[type="radio"]:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label { color: var(--primary-container); }
+
+/* Custom Radio Buttons */
+.radio-group { display: flex; flex-direction: column; gap: 12px; }
+.radio-option { display: flex; align-items: center; padding: 12px; border: 1px solid var(--outline-variant); border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.radio-option:hover { background-color: var(--surface-subtle); }
+.radio-option input[type="radio"] { width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer; }
+.radio-text { margin-left: 12px; font-size: 16px; color: var(--on-surface); }
+
+/* Selector moderno :has() para pintar el borde al hacer check */
+.radio-option:has(input[type="radio"]:checked) { border-color: var(--primary); background-color: rgba(0, 59, 113, 0.05); }
+
+/* Textarea */
+.form-textarea { width: 100%; padding: 12px 16px; background-color: var(--surface); border: 1px solid var(--outline-variant); border-radius: 8px; font-size: 16px; color: var(--on-surface); resize: vertical; transition: all 0.2s; }
+.form-textarea::placeholder { color: var(--outline); }
+.form-textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+
+/* Submit Button */
+.form-actions { padding-top: 16px; display: flex; justify-content: flex-end; }
+.btn-submit { width: 100%; background-color: var(--primary-container); color: var(--on-primary); font-size: 14px; font-weight: 600; padding: 12px 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: background-color 0.2s; }
+@media (min-width: 768px) { .btn-submit { width: auto; } }
+.btn-submit:hover { background-color: var(--tertiary-container); }
+.btn-submit:active { transform: scale(0.98); }
+
+/* =========================================
+   6. FOOTER Y MOBILE NAV
+   ========================================= */
+.minimal-footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--outline-variant); text-align: center; }
+.minimal-footer p { font-size: 14px; color: var(--secondary); margin-bottom: 8px; }
+.footer-links { display: flex; justify-content: center; align-items: center; gap: 16px; }
+.footer-links a { font-size: 12px; font-weight: 600; color: var(--primary); transition: text-decoration 0.2s; }
+.footer-links a:hover { text-decoration: underline; }
+.dot-separator { color: var(--outline-variant); }
+
+.mobile-nav { display: flex; justify-content: space-around; align-items: center; position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--surface); border-top: 1px solid var(--outline-variant); padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom)); z-index: 50; box-shadow: 0 -2px 8px rgba(0,0,0,0.05); border-radius: 12px 12px 0 0; }
+@media (min-width: 768px) { .mobile-nav { display: none; } }
+
+.mobile-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; color: var(--secondary); transition: transform 0.1s; }
+.mobile-nav-item:active { transform: scale(0.95); }
+.nav-label { font-size: 10px; font-weight: 600; }
+.mobile-nav-item.active { background-color: var(--primary-container); color: var(--on-primary); padding: 4px 16px; border-radius: 999px; }

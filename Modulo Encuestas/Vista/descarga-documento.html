@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Vista de Documento - Hospital de Clínicas</title>
+    
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/css/descarga-documento.css">
+</head>
+<body class="app-layout">
+
+    <header class="topbar">
+        <div class="topbar-left">
+            <img alt="Hospital de Clínicas Dr. Manuel Quintela Logo" class="brand-logo" src="https://www.hc.edu.uy/images/imagenesarticulos/Logo_Hc.png">
+            <span class="brand-title desktop-only">Atención al Paciente</span>
+            <span class="brand-title mobile-only">Atención al Paciente</span>
+        </div>
+        
+        <nav class="desktop-nav">
+            <a class="nav-link" href="#">Documentación</a>
+            <a class="nav-link active" href="#">Descargas</a>
+            <a class="nav-link" href="#">Encuesta</a>
+        </nav>
+
+        <div class="topbar-right">
+            <button class="icon-btn" aria-label="Ayuda">
+                <span class="material-symbols-outlined">help</span>
+            </button>
+            <button class="icon-btn" aria-label="Perfil">
+                <span class="material-symbols-outlined">account_circle</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container-center">
+            
+            <div class="doc-card">
+                <div class="accent-bar-left"></div>
+                
+                <div class="doc-card-body">
+                    <div class="badge-group">
+                        <span class="badge badge-gray">Documento Clínico</span>
+                        <span class="badge badge-blue flex-center">
+                            <span class="material-symbols-outlined icon-sm">update</span>
+                            Actualizado el 15/10/2026
+                        </span>
+                    </div>
+
+                    <h1 class="doc-title">Preparación para Centellograma de Perfusión Miocárdica</h1>
+                    <p class="doc-subtitle">Instrucciones detalladas para pacientes que se someterán al estudio.</p>
+                    
+                    <div class="action-container">
+                        <button class="btn btn-download">
+                            <span class="material-symbols-outlined filled icon-animated">download</span>
+                            Descargar/Visualizar Documento PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-card">
+                <span class="material-symbols-outlined filled text-clinical icon-large">star_rate</span>
+                <p class="feedback-text">
+                    ¿Fue útil esta información? Por favor, tómese un momento para completar nuestra breve encuesta de satisfacción. Su opinión nos ayuda a mejorar nuestros servicios.
+                </p>
+                <button class="btn btn-outline-primary">
+                    <span class="material-symbols-outlined">rate_review</span>
+                    Completar Encuesta
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <nav class="mobile-nav">
+        <a class="mobile-nav-item" href="#">
+            <span class="material-symbols-outlined">description</span>
+            <span class="nav-label">Mis Docs</span>
+        </a>
+        <a class="mobile-nav-item" href="#">
+            <span class="material-symbols-outlined">star_rate</span>
+            <span class="nav-label">Encuesta</span>
+        </a>
+        <a class="mobile-nav-item active" href="#">
+            <span class="material-symbols-outlined filled">download</span>
+            <span class="nav-label">Descargas</span>
+        </a>
+        <a class="mobile-nav-item" href="#">
+            <span class="material-symbols-outlined">person</span>
+            <span class="nav-label">Perfil</span>
+        </a>
+    </nav>
+
+</body>
+</html>

@@ -1,0 +1,341 @@
+/* ==========================================================================
+   VARIABLES Y RESET
+   ========================================================================== */
+:root {
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    
+    /* Colores específicos de las tarjetas */
+    --c-blue: #2563eb;
+    --c-teal: #0f766e;
+    --c-slate: #475569;
+    
+    /* Color para el estado Actualizado */
+    --badge-green-bg: #dcfce7;
+    --badge-green-txt: #166534;
+
+    --max-width: 1200px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ==========================================================================
+   HEADER Y LOGOS
+   ========================================================================== */
+.header {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.logo-hospital {
+    height: 55px; /* Altura ideal para que no rompa el diseño */
+    width: auto;
+    object-fit: contain;
+}
+
+.logo-text-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--c-blue);
+}
+
+.logo-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.logo-devs {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* ==========================================================================
+   CONTENIDO PRINCIPAL Y HERO
+   ========================================================================== */
+.main-content {
+    flex-grow: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+    width: 100%;
+}
+
+.hero {
+    margin-bottom: 3rem;
+}
+
+.hero-content h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+}
+
+.hero-content p {
+    color: var(--text-muted);
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   GRILLA DE MÓDULOS (CSS GRID)
+   ========================================================================== */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+/* ==========================================================================
+   ESTILO DE LAS TARJETAS
+   ========================================================================== */
+.module-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.module-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
+.bg-icon {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 120px;
+    color: #f1f5f9;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Cabecera de la Tarjeta */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.icon-box.box-blue { background-color: var(--c-blue); }
+.icon-box.box-teal { background-color: var(--c-teal); }
+.icon-box.box-slate { background-color: var(--c-slate); }
+
+.card-header h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+.text-blue { color: var(--c-blue); }
+.text-teal { color: var(--c-teal); }
+.text-slate { color: var(--c-slate); }
+
+/* Enlaces Internos */
+.card-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: relative;
+    z-index: 1;
+    flex-grow: 1;
+}
+
+.link-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8fafc;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: var(--text-main);
+    transition: background-color 0.2s;
+}
+
+.link-item:hover {
+    background-color: #f1f5f9;
+}
+
+.link-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.link-left .material-symbols-outlined {
+    color: var(--c-blue);
+}
+
+.icon-arrow {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+}
+
+/* Pie de la Tarjeta */
+.card-footer {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.footer-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+}
+
+.badge-green { 
+    background-color: var(--badge-green-bg); 
+    color: var(--badge-green-txt); 
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.footer {
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    padding: 2rem;
+    margin-top: auto;
+}
+
+.footer-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-info strong {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+.footer-info p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.footer-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: #16a34a;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (Mobile)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        text-align: center;
+    }
+    
+    .logo-area {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.5rem;
+    }
+    
+    .footer-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

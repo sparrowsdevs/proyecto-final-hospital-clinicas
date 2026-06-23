@@ -1,0 +1,151 @@
+/* =========================================
+   1. VARIABLES CSS (Tokens de diseño)
+   ========================================= */
+:root {
+    /* Paleta Principal */
+    --primary: #00254b;
+    --primary-container: #003b71;
+    --on-primary: #ffffff;
+    
+    --secondary: #4d6077;
+    --secondary-container: #cde1fc;
+    --on-secondary-container: #51647b;
+    
+    --tertiary-container: #003a73;
+    --clinical-blue: #186AAD;
+    
+    /* Superficies */
+    --background: #fbf9f8;
+    --surface: #ffffff;
+    --surface-bright: #fbf9f8;
+    --surface-subtle: #F2F4F5;
+    --surface-container: #f0eded;
+    
+    /* Textos y Bordes */
+    --on-surface: #1b1c1c;
+    --on-surface-variant: #424750;
+    --outline: #737781;
+    --outline-variant: #c3c6d1;
+
+    /* Tipografía */
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+
+    /* Espaciados y Bordes */
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --max-width-md: 768px; /* Ideal para la card centrada */
+}
+
+/* =========================================
+   2. RESET Y ESTRUCTURA BASE
+   ========================================= */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background-color: var(--background); color: var(--on-surface); -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; border: none; outline: none; background: transparent; cursor: pointer; }
+
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; }
+.material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; }
+
+.app-layout { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* Utilidades */
+.text-clinical { color: var(--clinical-blue); }
+.icon-sm { font-size: 16px; margin-right: 4px; }
+.icon-large { font-size: 36px; margin-bottom: 8px; }
+.flex-center { display: inline-flex; align-items: center; justify-content: center; }
+
+/* =========================================
+   3. TOP NAV BAR
+   ========================================= */
+.topbar { background-color: var(--surface); border-bottom: 1px solid var(--outline-variant); height: 64px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; position: sticky; top: 0; z-index: 50; }
+@media (min-width: 768px) { .topbar { padding: 0 32px; } }
+
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.brand-logo { height: 40px; width: auto; object-fit: contain; }
+
+.brand-title { font-family: var(--font-heading); font-weight: 700; color: var(--primary); }
+.desktop-only { display: none; font-size: 24px; }
+.mobile-only { display: block; font-size: 18px; }
+@media (min-width: 768px) { 
+    .desktop-only { display: block; }
+    .mobile-only { display: none; }
+}
+
+.desktop-nav { display: none; gap: 24px; }
+@media (min-width: 768px) { .desktop-nav { display: flex; } }
+.nav-link { font-size: 16px; font-weight: 600; color: var(--secondary); padding: 8px 12px; border-radius: 8px; transition: background-color 0.2s; }
+.nav-link:hover { background-color: var(--surface-subtle); color: var(--primary); }
+.nav-link.active { color: var(--primary); border-bottom: 2px solid var(--primary); border-radius: 0; padding-bottom: 6px; }
+
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.icon-btn { color: var(--primary); padding: 8px; border-radius: 50%; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; }
+.icon-btn:hover { background-color: var(--surface-subtle); }
+
+/* =========================================
+   4. MAIN CONTENT Y CENTRADO
+   ========================================= */
+.main-content { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; /* Centra verticalmente en desktop */
+    padding: 32px 16px; 
+    padding-bottom: 96px; /* Espacio para el nav mobile */
+}
+@media (min-width: 768px) { .main-content { padding: 48px 32px; } }
+
+.container-center { width: 100%; max-width: var(--max-width-md); display: flex; flex-direction: column; align-items: center; }
+
+/* =========================================
+   5. DOCUMENT CARD
+   ========================================= */
+.doc-card { width: 100%; background-color: var(--surface); border: 1px solid var(--outline-variant); border-radius: var(--radius-lg); position: relative; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.02); }
+.accent-bar-left { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background-color: var(--clinical-blue); }
+
+.doc-card-body { padding: 32px 24px 32px 32px; display: flex; flex-direction: column; gap: 16px; text-align: center; }
+@media (min-width: 768px) { .doc-card-body { text-align: left; } }
+
+.badge-group { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 8px; }
+@media (min-width: 768px) { .badge-group { flex-direction: row; justify-content: flex-start; } }
+
+.badge { padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.badge-gray { background-color: var(--surface-container); color: var(--secondary); }
+.badge-blue { background-color: var(--secondary-container); color: var(--on-secondary-container); text-transform: none; font-weight: 400; }
+
+.doc-title { font-family: var(--font-heading); font-size: 28px; font-weight: 700; color: var(--primary); line-height: 1.2; }
+@media (min-width: 768px) { .doc-title { font-size: 48px; } }
+
+.doc-subtitle { font-size: 18px; color: var(--secondary); margin-bottom: 16px; line-height: 1.5; }
+
+.action-container { display: flex; justify-content: center; margin-top: 16px; }
+@media (min-width: 768px) { .action-container { justify-content: flex-start; } }
+
+.btn-download { width: 100%; background-color: var(--primary-container); color: var(--on-primary); font-family: var(--font-heading); font-size: 20px; font-weight: 600; padding: 16px 32px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: background-color 0.2s; }
+@media (min-width: 768px) { .btn-download { width: auto; } }
+.btn-download:hover { background-color: var(--tertiary-container); }
+.btn-download:hover .icon-animated { transform: translateY(-4px); }
+.icon-animated { transition: transform 0.2s; }
+
+/* =========================================
+   6. FEEDBACK SECTION
+   ========================================= */
+.feedback-card { width: 100%; margin-top: 32px; background-color: var(--surface-bright); border: 1px solid var(--outline-variant); border-radius: var(--radius-lg); padding: 32px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+
+.feedback-text { font-size: 16px; color: var(--on-surface); margin-bottom: 24px; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+
+.btn-outline-primary { align-self: center; background-color: transparent; border: 2px solid var(--primary-container); color: var(--primary-container); font-family: var(--font-heading); font-size: 20px; font-weight: 600; padding: 12px 24px; border-radius: var(--radius-md); display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+.btn-outline-primary:hover { background-color: var(--primary-container); color: var(--on-primary); }
+
+/* =========================================
+   7. BOTTOM NAVIGATION BAR (Mobile)
+   ========================================= */
+.mobile-nav { display: flex; justify-content: space-around; align-items: center; position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--surface); border-top: 1px solid var(--outline-variant); padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom)); z-index: 50; box-shadow: 0 -2px 8px rgba(0,0,0,0.05); border-radius: 12px 12px 0 0; }
+@media (min-width: 768px) { .mobile-nav { display: none; } }
+
+.mobile-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; color: var(--secondary); transition: transform 0.1s; }
+.mobile-nav-item:active { transform: scale(0.95); }
+.nav-label { font-size: 10px; font-weight: 600; }
+.mobile-nav-item.active { background-color: var(--primary-container); color: var(--on-primary); padding: 4px 16px; border-radius: 999px; }
