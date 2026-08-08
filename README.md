@@ -1,42 +1,32 @@
-# 🏥 S.I.G.S.M. - Frontend del Sistema de Gestión Hospitalaria
+S.I.G.S.M. - Sistema Institucional de Gestión y Seguimiento Médico
 
-## 📋 Descripción del Proyecto
+Proyecto final para el Hospital de Clínicas. La idea es digitalizar algunos de los procesos internos del hospital que hoy se manejan de forma manual: traslados en ambulancia, gestión de documentación clínica y encuestas de satisfacción a pacientes.
 
-Este repositorio contiene la arquitectura Frontend completa y las interfaces de usuario para el **S.I.G.S.M.** (Sistema Institucional de Gestión y Seguimiento Médico), diseñado para optimizar los flujos operativos del **Hospital de Clínicas**.
+Todo arranca desde un login por cédula, y de ahí cada usuario accede a los módulos según su rol (administrador, personal médico, chofer, etc).
 
-El proyecto abarca desde el índice centralizado de navegación (Dashboard) hasta las ventanas funcionales de cada área del hospital. Todo el diseño fue pensado bajo criterios de accesibilidad, usabilidad clínica y un enfoque visual minimalista.
+Cómo está armado
 
-## 🚀 Tecnologías Utilizadas
+Decidimos separar el proyecto en módulos, y cada módulo sigue más o menos la lógica de Modelo-Vista-Controlador. Después hay una carpeta de "Servicios Comunes" con todo lo que se comparte entre módulos (conexión a la base, autenticación, permisos), para no repetir código.
 
-La maquetación de las vistas fue desarrollada desde cero utilizando tecnologías web estándar, demostrando dominio en la construcción de interfaces sin dependencia de frameworks externos (como Bootstrap o Tailwind):
+Módulos
 
-- **HTML5 Semántico:** Estructuración clara de la información y formularios.
-- **CSS3 Puro (Vanilla):**
-  - Implementación de **CSS Grid** para la disposición de tarjetas y layouts complejos.
-  - Uso de **Flexbox** para la alineación responsiva de barras de navegación, menús y formularios.
-  - Uso de variables CSS (`:root`) para mantener la coherencia de la paleta de colores institucionales.
-- **Recursos Visuales:** Tipografía _Inter_ para máxima legibilidad en pantallas y _Material Symbols Outlined_ para la iconografía médica.
+Ambulancias — pedir un traslado, asignarle una unidad y hacerle seguimiento hasta que llega a destino.
 
-## 📂 Estructura de Módulos y Vistas
+Documentación — subir y categorizar historias clínicas y otros documentos de pacientes, con un panel para el personal de documentación y otro para administración.
 
-El repositorio se divide en los siguientes módulos operativos, cada uno con sus respectivas ventanas de interfaz:
+Encuestas — armar encuestas de satisfacción, ver/exportar los resultados y dejar instrucciones para el personal que las usa.
 
-### 1. 🚑 Módulo Ambulancias
+Backend / autenticación
 
-- `form-traslado.html`: Interfaz para el registro y solicitud de traslados de pacientes.
-- `panel-de-gestion.html`: Tablero de control para la asignación y estado de los vehículos.
-- `seguimiento.html`: Vista de monitoreo y geolocalización de unidades en tiempo real.
+El login funciona con cédula y contraseña. Las contraseñas se guardan hasheadas (password_hash) y nunca se guarda la contraseña en la sesión, solo los datos del usuario y sus roles.
 
-### 2. 📁 Módulo Documentación
+La conexión a la base es un Singleton en PHP con PDO (Servicios Comunes/Conexion BD/conexion.php), así todos los módulos usan la misma instancia en vez de abrir conexiones nuevas por todos lados.
 
-- `cargar-documento.html`: Formulario para la subida y categorización de historias clínicas y resultados.
-- `panel-administrador.html`: Vista gerencial para la supervisión de documentos y validaciones.
-- `panel-documentacion.html`: Grilla de acceso rápido a los archivos de los pacientes.
+Base de datos
 
-### 3. 📊 Módulo Encuestas
+En database/modulo1.sql está el modelo inicial: usuarios, roles (relación N:M por si un usuario tiene más de un rol), categorías y documentos. Motor InnoDB, charset utf8mb4.
 
-- `encuestas.html`: Interfaz para la gestión y creación de formularios de satisfacción.
-- `descarga-documento.html`: Vista para la exportación de reportes y métricas de calidad.
-- `instrucciones.html`: Documentación operativa para el personal del área.
-
-**Mas información:** https://deepwiki.com/sparrowsdevs/proyecto-final-hospital-clinicas
+Tecnologías
+HTML5 + CSS3 puro para las vistas (sin Bootstrap ni Tailwind, todo maquetado a mano con Grid y Flexbox)
+PHP orientado a objetos para el backend
+MySQL para la base
