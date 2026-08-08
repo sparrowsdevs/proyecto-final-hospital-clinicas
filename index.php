@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="assets/css/inicio-sesion.css">
+    <link rel="stylesheet" href="styles/inicio-sesion.css">
 </head>
 <body>
 
