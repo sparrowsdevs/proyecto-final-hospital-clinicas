@@ -29,4 +29,4 @@ En database/modulo1.sql está el modelo inicial: usuarios, roles (relación N:M 
 Tecnologías
 HTML5 + CSS3 puro para las vistas (sin Bootstrap ni Tailwind, todo maquetado a mano con Grid y Flexbox)
 PHP orientado a objetos para el backend
-MySQL para la base
+MySQL para la base de datos
