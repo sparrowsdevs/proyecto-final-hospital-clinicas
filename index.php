@@ -1,7 +1,5 @@
 <?php
 /**
- * index.php - Login del sistema S.I.G.S.M.
- *
  * Si el usuario ya tiene una sesión activa, se lo redirige directo
  * al panel correspondiente sin mostrar el formulario nuevamente.
  */
