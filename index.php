@@ -9,8 +9,8 @@ $auth = new AuthController();
 
 if ($auth->sesionActiva()) {
     $redireccion = $auth->tieneRol('Administrador')
-        ? 'Modulo Documentacion/Vista/panel-administrador.html'
-        : 'Modulo Documentacion/Vista/panel-documentacion.html';
+        ? 'Modulo Documentacion/Vista/panel-administrador.php'
+        : 'Modulo Documentacion/Vista/panel-documentacion.php';
 
     header('Location: ' . $redireccion);
     exit;

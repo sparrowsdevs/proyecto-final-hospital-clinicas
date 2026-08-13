@@ -1,3 +1,20 @@
+<?php
+/**
+ * panel-documentacion.php
+ *
+ * Acceso para cualquier usuario con sesión activa (todos los roles
+ * autenticados pueden ver el panel general de documentación).
+ * Si no hay sesión, se lo redirige al login.
+ */
+require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
+
+$auth = new AuthController();
+
+if (!$auth->sesionActiva()) {
+    header('Location: ../../index.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,16 +47,13 @@
                     <span class="material-symbols-outlined text-primary">account_circle</span>
                     <span class="user-name">Dr. Garcia</span>
                 </div>
-                <button class="btn-logout">
+                <a href="../../Servicios Comunes/Autenticacion/logout.php" class="btn-logout">
                     <span class="material-symbols-outlined">logout</span>
                     <span class="logout-text">Cerrar Sesión</span>
-                </button>
+                </a>
             </div>
         </div>
-    <a href="../../Servicios Comunes/Autenticacion/logout.php" class="btn-logout">
-        <span class="material-symbols-outlined">logout</span>
-        Cerrar sesión
-    </a>
+
     </header>
 
     <main class="main-content">

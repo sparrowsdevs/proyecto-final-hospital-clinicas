@@ -1,3 +1,19 @@
+<?php
+/**
+ * panel-administrador.php
+ *
+ * Acceso exclusivo para usuarios con sesión activa y rol Administrador.
+ * Si no cumple ambas condiciones, se lo redirige al login.
+ */
+require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
+
+$auth = new AuthController();
+
+if (!$auth->sesionActiva() || !$auth->tieneRol('Administrador')) {
+    header('Location: ../../index.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,7 +25,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/css/panel-administrador.css">
-    
 </head>
 <body>
 
@@ -83,11 +98,16 @@
                     </div>
                 </div>
             </div>
-    
-    <a href="../../Servicios Comunes/Autenticacion/logout.php" class="btn-logout">
-        <span class="material-symbols-outlined">logout</span>
-        Cerrar sesión
-    </a>
+            <div class="topbar-right">
+                <div class="user-profile">
+                    <span class="material-symbols-outlined text-primary">account_circle</span>
+                    <span class="user-name">Dr. Garcia</span>
+                </div>
+                <a href="../../Servicios Comunes/Autenticacion/logout.php" class="btn-logout">
+                    <span class="material-symbols-outlined">logout</span>
+                    <span class="logout-text">Cerrar Sesión</span>
+                </a>
+            </div>
         </header>
 
         <div class="page-body">

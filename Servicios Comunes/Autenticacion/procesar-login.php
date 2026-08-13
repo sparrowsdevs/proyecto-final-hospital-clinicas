@@ -46,10 +46,10 @@ if (!$resultado['exito']) {
 // Determina a qué panel redirigir según el rol del usuario.
 // Prioridad: Administrador > resto de roles (Médico, Enfermería, etc.).
 // Ruta relativa a la raíz del proyecto, donde vive index.php.
-$redireccion = 'Modulo Documentacion/Vista/panel-documentacion.html';
+$redireccion = 'Modulo Documentacion/Vista/panel-documentacion.php';
 
 if ($auth->tieneRol('Administrador')) {
-    $redireccion = 'Modulo Documentacion/Vista/panel-administrador.html';
+    $redireccion = 'Modulo Documentacion/Vista/panel-administrador.php';
 }
 
 echo json_encode([
