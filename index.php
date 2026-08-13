@@ -1,3 +1,23 @@
+<?php
+/**
+ * index.php - Login del sistema S.I.G.S.M.
+ *
+ * Si el usuario ya tiene una sesión activa, se lo redirige directo
+ * al panel correspondiente sin mostrar el formulario nuevamente.
+ */
+require_once __DIR__ . '/Servicios Comunes/Autenticacion/AuthController.php';
+
+$auth = new AuthController();
+
+if ($auth->sesionActiva()) {
+    $redireccion = $auth->tieneRol('Administrador')
+        ? 'Modulo Documentacion/Vista/panel-administrador.html'
+        : 'Modulo Documentacion/Vista/panel-documentacion.html';
+
+    header('Location: ' . $redireccion);
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -27,13 +47,15 @@
                     <p class="subtitle">Módulo de Gestión Documental</p>
                 </div>
 
-                <form class="login-form" id="loginForm" onsubmit="return false">
-                    
+                <form class="login-form" id="loginForm">
+
+                    <div class="mensaje-error" id="mensajeError" role="alert" style="display: none;"></div>
+
                     <div class="form-group">
                         <label class="form-label" for="cedula">Cédula de Identidad</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined input-icon">person</span>
-                            <input class="form-control" id="cedula" placeholder="1.234.567-8" required type="text">
+                            <input class="form-control" id="cedula" name="cedula" placeholder="1.234.567-8" required type="text">
                         </div>
                     </div>
 
@@ -41,7 +63,7 @@
                         <label class="form-label" for="password">Contraseña</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined input-icon">lock</span>
-                            <input class="form-control pr-12" id="password" placeholder="••••••••" required type="password">
+                            <input class="form-control pr-12" id="password" name="contrasena" placeholder="••••••••" required type="password">
                             <button class="toggle-password-btn" type="button" aria-label="Mostrar contraseña">
                                 <span class="material-symbols-outlined" id="togglePassword">visibility</span>
                             </button>
@@ -96,13 +118,17 @@
             togglePassword.textContent = isPassword ? 'visibility_off' : 'visibility';
         });
 
-        // Form Submit Simulation
-        loginForm.addEventListener('submit', () => {
+        // Envío real del formulario vía AJAX
+        const mensajeError = document.getElementById('mensajeError');
+
+        loginForm.addEventListener('submit', async (evento) => {
+            evento.preventDefault();
+
             const originalContent = submitBtn.innerHTML;
             submitBtn.disabled = true;
             submitBtn.classList.add('loading');
-            
-            // Reemplazo del contenido por el spinner sin depender de Tailwind
+            mensajeError.style.display = 'none';
+
             submitBtn.innerHTML = `
                 <svg class="spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="spinner-track" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -110,14 +136,32 @@
                 </svg>
                 <span>Verificando...</span>
             `;
-            
-            // Mock delay
-            setTimeout(() => {
+
+            try {
+                const datosFormulario = new FormData(loginForm);
+
+                const respuesta = await fetch('Servicios Comunes/Autenticacion/procesar-login.php', {
+                    method: 'POST',
+                    body: datosFormulario,
+                });
+
+                const resultado = await respuesta.json();
+
+                if (resultado.exito) {
+                    window.location.href = resultado.redireccion;
+                    return; // No restauramos el botón: la página está navegando
+                }
+
+                mensajeError.textContent = resultado.mensaje;
+                mensajeError.style.display = 'block';
+            } catch (error) {
+                mensajeError.textContent = 'No fue posible conectar con el servidor. Intente nuevamente.';
+                mensajeError.style.display = 'block';
+            } finally {
                 submitBtn.innerHTML = originalContent;
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('loading');
-                alert('Conexión con el servidor de autenticación exitosa.');
-            }, 1500);
+            }
         });
 
         // Parallax Effect
