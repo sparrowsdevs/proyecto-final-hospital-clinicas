@@ -83,6 +83,37 @@ class AuthController
     }
 
     /**
+     * Protege una ruta: exige sesión activa (y opcionalmente un rol específico).
+     * Si no se cumple, redirige al login. Además, envía cabeceras HTTP que
+     * impiden el cacheo de la página en el navegador — esto evita que, tras
+     * cerrar sesión, el botón "Atrás" muestre una copia cacheada del panel
+     * en vez de forzar una nueva verificación de sesión contra el servidor.
+     *
+     * Uso: al inicio de cada vista protegida, ANTES de imprimir cualquier HTML.
+     *   $auth->protegerRuta();                  // exige solo sesión activa
+     *   $auth->protegerRuta('Administrador');   // exige sesión + rol específico
+     *
+     * @param string|null $rolRequerido Nombre del rol exigido, o null si alcanza con estar logueado.
+     * @param string $rutaLogin Ruta relativa hacia index.php desde el archivo que llama a este método.
+     */
+    public function protegerRuta(?string $rolRequerido = null, string $rutaLogin = '../../index.php'): void
+    {
+        // Cabeceras anti-caché: fuerzan al navegador a no guardar esta página
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Pragma: no-cache');
+        header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
+
+        $autorizado = $rolRequerido === null
+            ? $this->sesionActiva()
+            : $this->sesionActiva() && $this->tieneRol($rolRequerido);
+
+        if (!$autorizado) {
+            header('Location: ' . $rutaLogin);
+            exit;
+        }
+    }
+
+    /**
      * Verifica si existe una sesión activa (usuario logueado).
      * Uso típico: al inicio de cada panel protegido.
      *
