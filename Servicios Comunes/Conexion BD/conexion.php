@@ -11,7 +11,7 @@ class Conexion
 {
     // --- Datos de conexión ---
     private static string $host = 'localhost';
-    private static string $puerto = '3306';
+    private static string $puerto = '3307';
     private static string $baseDatos = 'database_clinicas';
     private static string $usuario = 'root';
     private static string $contrasena = '';
