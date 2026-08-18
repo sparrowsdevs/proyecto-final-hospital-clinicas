@@ -1,7 +1,5 @@
 <?php
-/**
- * panel-documentacion.php
- *
+/*
  * Acceso para cualquier usuario con sesión activa (todos los roles
  * autenticados pueden ver el panel general de documentación).
  * Si no hay sesión, se lo redirige al login.
@@ -9,11 +7,7 @@
 require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
 
 $auth = new AuthController();
-
-if (!$auth->sesionActiva()) {
-    header('Location: ../../index.php');
-    exit;
-}
+$auth->protegerRuta();
 ?>
 <!DOCTYPE html>
 <html lang="es">
