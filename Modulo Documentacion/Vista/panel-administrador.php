@@ -1,7 +1,5 @@
 <?php
-/**
- * panel-administrador.php
- *
+/*
  * Acceso exclusivo para usuarios con sesión activa y rol Administrador.
  * Si no cumple ambas condiciones, se lo redirige al login.
  */
