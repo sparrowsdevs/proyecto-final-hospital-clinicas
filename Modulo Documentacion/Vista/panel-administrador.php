@@ -8,11 +8,7 @@
 require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
 
 $auth = new AuthController();
-
-if (!$auth->sesionActiva() || !$auth->tieneRol('Administrador')) {
-    header('Location: ../../index.php');
-    exit;
-}
+$auth->protegerRuta('Administrador');
 ?>
 <!DOCTYPE html>
 <html lang="es">
