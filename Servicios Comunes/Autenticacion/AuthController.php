@@ -1,11 +1,5 @@
 <?php
-/**
- * Clase AuthController
- * Servicios Comunes / Autenticacion
- *
- * Proyecto S.I.G.S.M. - Hospital de Clínicas
- * Sparrows Devs
- *
+/*
  * Controlador transversal de autenticación: maneja el inicio/cierre de sesión
  * y la verificación de roles. Punto de entrada único al sistema para todos
  * los módulos (Documentación, Ambulancias, Encuestas).
@@ -115,8 +109,6 @@ class AuthController
 
     /**
      * Verifica si existe una sesión activa (usuario logueado).
-     * Uso típico: al inicio de cada panel protegido.
-     *
      * @return bool
      */
     public function sesionActiva(): bool
@@ -140,6 +132,7 @@ class AuthController
         foreach ($_SESSION['roles'] as $rol) {
             if (strcasecmp($rol['nombre_rol'], $nombreRol) === 0) {
                 return true;
+
             }
         }
 

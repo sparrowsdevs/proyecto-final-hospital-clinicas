@@ -1,3 +1,12 @@
+<?php
+/*
+ * Acceso exclusivo para usuarios con sesión activa y rol Administrador.
+ */
+require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
+
+$auth = new AuthController();
+$auth->protegerRuta('Administrador');
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
