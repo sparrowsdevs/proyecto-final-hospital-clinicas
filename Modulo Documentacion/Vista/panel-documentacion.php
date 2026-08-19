@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * panel-documentacion.php
+ *
  * Acceso para cualquier usuario con sesión activa (todos los roles
  * autenticados pueden ver el panel general de documentación).
  * Si no hay sesión, se lo redirige al login.
@@ -170,38 +172,6 @@ $auth->protegerRuta();
         </div>
     </div>
 
-    <script>
-        // Lógica del Modal
-        function openModal(name, category) {
-            const modal = document.getElementById('qrModal');
-            const container = document.getElementById('modalContainer');
-            
-            document.getElementById('modalDocName').innerText = name;
-            document.getElementById('modalDocCategory').innerText = category;
-            
-            modal.classList.remove('hidden');
-            
-            // Timeout para permitir la animación CSS
-            setTimeout(() => {
-                container.classList.add('show');
-            }, 10);
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('qrModal');
-            const container = document.getElementById('modalContainer');
-            
-            container.classList.remove('show');
-            
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300); // Espera a que termine la animación
-        }
-
-        // Cierra el modal con la tecla Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
-    </script>
+    <script src="assets/js/panel-documentacion.js"></script>
 </body>
 </html>
