@@ -261,3 +261,15 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     font-size: 0.9rem;
     margin-bottom: 12px;
 }
+
+.input-invalido {
+    border-color: #b3261e !important;
+}
+
+.mensaje-validacion {
+    display: block;
+    min-height: 16px;
+    color: #b3261e;
+    font-size: 0.78rem;
+    margin-top: 4px;
+}

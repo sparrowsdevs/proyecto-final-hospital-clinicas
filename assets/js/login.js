@@ -1,10 +1,4 @@
-/**
- * login.js
- * assets/js/
- *
- * Proyecto S.I.G.S.M. - Hospital de Clínicas
- * Sparrows Devs
- *
+/*
  * Lógica de la vista de login (index.php): toggle de visibilidad de
  * contraseña, envío del formulario vía AJAX (fetch) y efecto parallax
  * del fondo.
@@ -13,8 +7,84 @@
 const loginForm = document.getElementById('loginForm');
 const submitBtn = document.getElementById('submitBtn');
 const togglePassword = document.getElementById('togglePassword');
+const cedulaInput = document.getElementById('cedula');
 const passwordInput = document.getElementById('password');
 const mensajeError = document.getElementById('mensajeError');
+const errorCedula = document.getElementById('errorCedula');
+const errorPassword = document.getElementById('errorPassword');
+
+// Validaciones de formulario (experiencia de usuario)
+// La validación real y definitiva sigue ocurriendo en el backend.
+
+
+/**
+ * Valida el formato de la cédula: solo dígitos, 7 u 8 caracteres.
+ * @returns {boolean} true si es válida.
+ */
+function validarCedula() {
+    const valor = cedulaInput.value.trim();
+    const esValida = /^\d{7,8}$/.test(valor);
+
+    if (valor === '') {
+        mostrarError(cedulaInput, errorCedula, 'La cédula es obligatoria.');
+    } else if (!esValida) {
+        mostrarError(cedulaInput, errorCedula, 'Ingrese solo números (7 u 8 dígitos, sin puntos ni guión).');
+    } else {
+        limpiarError(cedulaInput, errorCedula);
+    }
+
+    return esValida;
+}
+
+/**
+ * Valida que la contraseña no esté vacía.
+ * @returns {boolean} true si es válida.
+ */
+function validarPassword() {
+    const esValida = passwordInput.value.length > 0;
+
+    if (!esValida) {
+        mostrarError(passwordInput, errorPassword, 'La contraseña es obligatoria.');
+    } else {
+        limpiarError(passwordInput, errorPassword);
+    }
+
+    return esValida;
+}
+
+function mostrarError(input, contenedorError, mensaje) {
+    input.classList.add('input-invalido');
+    contenedorError.textContent = mensaje;
+}
+
+function limpiarError(input, contenedorError) {
+    input.classList.remove('input-invalido');
+    contenedorError.textContent = '';
+}
+
+/**
+ * Revisa el estado global del formulario y habilita/deshabilita el botón.
+ * Se llama tras cada validación individual, no dispara mensajes nuevos.
+ */
+function actualizarEstadoBoton() {
+    const cedulaOk = /^\d{7,8}$/.test(cedulaInput.value.trim());
+    const passwordOk = passwordInput.value.length > 0;
+    submitBtn.disabled = !(cedulaOk && passwordOk);
+}
+
+// Validación mientras el usuario escribe la cédula (solo permite dígitos)
+cedulaInput.addEventListener('input', () => {
+    cedulaInput.value = cedulaInput.value.replace(/\D/g, ''); // Elimina cualquier no-dígito al tipear
+    validarCedula();
+    actualizarEstadoBoton();
+});
+
+// Validación de contraseña al perder el foco (no interrumpe mientras escribe)
+passwordInput.addEventListener('blur', validarPassword);
+passwordInput.addEventListener('input', actualizarEstadoBoton);
+
+// Estado inicial: botón deshabilitado hasta que completen ambos campos
+submitBtn.disabled = true;
 
 // Toggle Password Visibility
 togglePassword.addEventListener('click', () => {
@@ -26,6 +96,14 @@ togglePassword.addEventListener('click', () => {
 // Envío real del formulario vía AJAX
 loginForm.addEventListener('submit', async (evento) => {
     evento.preventDefault();
+
+    // Doble chequeo: por si el envío se dispara sin pasar por el botón (ej. tecla Enter)
+    const cedulaValida = validarCedula();
+    const passwordValida = validarPassword();
+    if (!cedulaValida || !passwordValida) {
+        actualizarEstadoBoton();
+        return;
+    }
 
     const originalContent = submitBtn.innerHTML;
     submitBtn.disabled = true;
