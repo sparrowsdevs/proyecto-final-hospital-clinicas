@@ -1,7 +1,5 @@
 <?php
-/**
- * panel-documentacion.php
- *
+/*
  * Acceso para cualquier usuario con sesión activa (todos los roles
  * autenticados pueden ver el panel general de documentación).
  * Si no hay sesión, se lo redirige al login.

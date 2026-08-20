@@ -1,6 +1,5 @@
 <?php
-/**
- * Clase UsuarioModelo
+/*
  * Modelo transversal de Usuario: autenticación por Cédula de Identidad,
  * gestión de roles (N:M) y administración de estado (activo/inactivo).
  * Reutilizable por los módulos Documentación, Ambulancias y Encuestas.
