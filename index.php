@@ -53,8 +53,9 @@ if ($auth->sesionActiva()) {
                         <label class="form-label" for="cedula">Cédula de Identidad</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined input-icon">person</span>
-                            <input class="form-control" id="cedula" name="cedula" placeholder="1.234.567-8" required type="text">
+                            <input class="form-control" id="cedula" name="cedula" placeholder="1.234.567-8" required type="text" maxlength="8" inputmode="numeric">
                         </div>
+                        <span class="mensaje-validacion" id="errorCedula"></span>
                     </div>
 
                     <div class="form-group">
@@ -66,6 +67,7 @@ if ($auth->sesionActiva()) {
                                 <span class="material-symbols-outlined" id="togglePassword">visibility</span>
                             </button>
                         </div>
+                        <span class="mensaje-validacion" id="errorPassword"></span>
                     </div>
 
                     <div class="form-actions">
