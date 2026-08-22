@@ -85,18 +85,14 @@ $auth->protegerRuta('Administrador');
                     </button>
                     <div class="user-profile">
                         <div class="user-info">
-                            <p class="user-name">Dr. Ricardo Boggini</p>
-                            <p class="user-role">Jefe de Área</p>
+                            <p class="user-name">Acá traemos datos del usuario.</p>
+                            <p class="user-role">Acá traemos rol del usuario.</p>
                         </div>
                         <img alt="Avatar del usuario" class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfsEIou6s2sMAq4m24L_nLyJfh2FtUJGkUBwv9EYRRDsyNxnRz9sPofD3A54kY6d6OSy7SI77mXa_LxtgZRen0VE8zM1KlqNcGE-sEadHhKeYv9_5fbTVtJopEfkdTCe3v_JgxfARWaziGM4U4Lo3MP8-qfOhlIwVpFFGv2iM-eALZ_YBT2ZujuZ-FpPL4w7K6c287gkV9A9RecFUoL_kZBi1XydK38hLm0BKDr-Mz3lW1LR8UlWOsEujLJFsOm-n2MRrKvuLN105U">
                     </div>
                 </div>
             </div>
             <div class="topbar-right">
-                <div class="user-profile">
-                    <span class="material-symbols-outlined text-primary">account_circle</span>
-                    <span class="user-name">Dr. Garcia</span>
-                </div>
                 <a href="../../Servicios Comunes/Autenticacion/logout.php" class="btn-logout">
                     <span class="material-symbols-outlined">logout</span>
                     <span class="logout-text">Cerrar Sesión</span>
@@ -123,28 +119,28 @@ $auth->protegerRuta('Administrador');
                         <div class="stat-icon bg-blue-light text-blue"><span class="material-symbols-outlined">description</span></div>
                         <div class="stat-info">
                             <p class="stat-label">Total Docs</p>
-                            <p class="stat-value text-primary">1,284</p>
+                            <p class="stat-value text-primary">0</p>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon bg-success-light text-success"><span class="material-symbols-outlined">check_circle</span></div>
                         <div class="stat-info">
                             <p class="stat-label">Firmados</p>
-                            <p class="stat-value text-primary">942</p>
+                            <p class="stat-value text-primary">0</p>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon bg-clinical-light text-clinical"><span class="material-symbols-outlined">pending_actions</span></div>
                         <div class="stat-info">
                             <p class="stat-label">Pendientes</p>
-                            <p class="stat-value text-primary">312</p>
+                            <p class="stat-value text-primary">0</p>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon bg-error-light text-error"><span class="material-symbols-outlined">warning</span></div>
                         <div class="stat-info">
                             <p class="stat-label">Urgentes</p>
-                            <p class="stat-value text-primary">12</p>
+                            <p class="stat-value text-primary">0</p>
                         </div>
                     </div>
                 </section>
