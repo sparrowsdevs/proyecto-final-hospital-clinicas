@@ -64,25 +64,9 @@ input { cursor: text; }
 
 /* =========================================
    3. TOP NAV BAR
+   Migrado a: Servicios Comunes/Vista General/assets/css/navbar.css
+   (componente compartido por los 3 paneles del sistema)
    ========================================= */
-.topbar { background-color: var(--surface); border-bottom: 1px solid var(--outline-variant); position: sticky; top: 0; z-index: 50; }
-.topbar-inner { height: 64px; display: flex; justify-content: space-between; align-items: center; }
-
-.topbar-left { display: flex; align-items: center; gap: 32px; }
-.brand-logo { height: 40px; width: auto; object-fit: contain; }
-
-.desktop-nav { display: none; gap: 24px; }
-@media (min-width: 768px) { .desktop-nav { display: flex; } }
-.nav-link { font-size: 12px; font-weight: 600; color: var(--on-surface-variant); transition: color 0.2s; padding-bottom: 4px; }
-.nav-link:hover { color: var(--primary); }
-.nav-link.active { color: var(--primary); font-weight: 700; border-bottom: 2px solid var(--primary); }
-
-.topbar-right { display: flex; align-items: center; gap: 16px; }
-.user-profile { display: flex; align-items: center; gap: 8px; padding-right: 16px; border-right: 1px solid var(--outline-variant); }
-.user-name { font-size: 12px; font-weight: 700; color: var(--primary); }
-.btn-logout { display: flex; align-items: center; gap: 4px; color: var(--on-surface-variant); transition: color 0.2s; }
-.btn-logout:hover { color: var(--error); }
-.logout-text { font-size: 12px; font-weight: 600; }
 
 /* =========================================
    4. HERO SEARCH SECTION

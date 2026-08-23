@@ -8,9 +8,7 @@ require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.ph
 $auth = new AuthController();
 $auth->protegerRuta('Administrador');
 
-// Datos reales del usuario en sesión, para mostrar en la topbar
-$nombreUsuario = trim(($_SESSION['nombre'] ?? '') . ' ' . ($_SESSION['apellido'] ?? ''));
-$rolUsuario = 'Administrador'; // Esta ruta ya exige rol Administrador, no hace falta calcularlo
+$paginaActual = 'dashboard';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -23,82 +21,13 @@ $rolUsuario = 'Administrador'; // Esta ruta ya exige rol Administrador, no hace 
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/css/panel-administrador.css">
+    <link rel="stylesheet" href="../../Servicios Comunes/Vista General/assets/css/navbar.css">
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <img alt="Logo Institucional" class="brand-logo" src="https://www.hc.edu.uy/images/imagenesarticulos/Logo_Hc.png">
-            <h2>Gestión Documental</h2>
-            <p>Administración Central</p>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <a class="nav-link active" href="panel-administrador.php">
-                <span class="material-symbols-outlined">dashboard</span>
-                <span>Dashboard</span>
-            </a>
-            <a class="nav-link" href="panel-documentacion.php">
-                <span class="material-symbols-outlined">folder_shared</span>
-                <span>Documentación</span>
-            </a>
-            <a class="nav-link" href="cargar-documento.php">
-                <span class="material-symbols-outlined">upload_file</span>
-                <span>Carga de Archivos</span>
-            </a>
-            <a class="nav-link" href="gestion-usuarios.php">
-                <span class="material-symbols-outlined">group</span>
-                <span>Gestión de Usuarios</span>
-            </a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <button class="btn btn-action">
-                <span class="material-symbols-outlined">add_circle</span>
-                Nuevo Documento
-            </button>
-        </div>
-    </aside>
+    <?php require __DIR__ . '/../../Servicios Comunes/Vista General/navbar.php'; ?>
 
     <main class="main-wrapper">
-        
-        <header class="topbar">
-            <div class="topbar-left">
-                <button class="menu-toggle"><span class="material-symbols-outlined">menu</span></button>
-                <div class="desktop-nav">
-                    <a class="nav-tab" href="#">Documentación</a>
-                    <a class="nav-tab active-tab" href="#">Pacientes</a>
-                    <a class="nav-tab" href="#">Reportes</a>
-                </div>
-            </div>
-
-            <div class="topbar-right">
-                <div class="search-box">
-                    <span class="material-symbols-outlined search-icon">search</span>
-                    <input type="text" placeholder="Buscar paciente...">
-                </div>
-                
-                <div class="user-actions">
-                    <button class="icon-btn">
-                        <span class="material-symbols-outlined">notifications</span>
-                        <span class="badge-dot"></span>
-                    </button>
-                    <div class="user-profile">
-                        <div class="user-info">
-                            <p class="user-name"><?= htmlspecialchars($nombreUsuario, ENT_QUOTES, 'UTF-8') ?></p>
-                            <p class="user-role"><?= htmlspecialchars($rolUsuario, ENT_QUOTES, 'UTF-8') ?></p>
-                        </div>
-                        <img alt="Avatar del usuario" class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfsEIou6s2sMAq4m24L_nLyJfh2FtUJGkUBwv9EYRRDsyNxnRz9sPofD3A54kY6d6OSy7SI77mXa_LxtgZRen0VE8zM1KlqNcGE-sEadHhKeYv9_5fbTVtJopEfkdTCe3v_JgxfARWaziGM4U4Lo3MP8-qfOhlIwVpFFGv2iM-eALZ_YBT2ZujuZ-FpPL4w7K6c287gkV9A9RecFUoL_kZBi1XydK38hLm0BKDr-Mz3lW1LR8UlWOsEujLJFsOm-n2MRrKvuLN105U">
-                    </div>
-                </div>
-            </div>
-            <div class="topbar-right">
-                <a href="../../Servicios Comunes/Autenticacion/logout.php" class="btn-logout">
-                    <span class="material-symbols-outlined">logout</span>
-                    <span class="logout-text">Cerrar Sesión</span>
-                </a>
-            </div>
-        </header>
 
         <div class="page-body">
             <div class="container">

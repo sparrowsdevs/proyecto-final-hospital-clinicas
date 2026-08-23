@@ -9,9 +9,7 @@ require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.ph
 $auth = new AuthController();
 $auth->protegerRuta();
 
-// Datos reales del usuario en sesión, para mostrar en la topbar
-$nombreUsuario = trim(($_SESSION['nombre'] ?? '') . ' ' . ($_SESSION['apellido'] ?? ''));
-$rolUsuario = $auth->tieneRol('Administrador') ? 'Administrador' : 'Usuario Básico';
+$paginaActual = 'documentacion';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -24,41 +22,15 @@ $rolUsuario = $auth->tieneRol('Administrador') ? 'Administrador' : 'Usuario Bás
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/css/panel-documentacion.css">
+    <link rel="stylesheet" href="../../Servicios Comunes/Vista General/assets/css/navbar.css">
 </head>
 <body>
 
-    <header class="topbar">
-        <div class="container topbar-inner">
-            <div class="topbar-left">
-                <img alt="Hospital de Clínicas Logo" class="brand-logo" src="https://www.hc.edu.uy/images/imagenesarticulos/Logo_Hc.png">
-                
-                <nav class="desktop-nav">
-                    <a class="nav-link active" href="#">Dashboard</a>
-                    <a class="nav-link" href="#">Pacientes</a>
-                    <a class="nav-link" href="#">Agenda</a>
-                    <a class="nav-link" href="#">Reportes</a>
-                </nav>
-            </div>
-            
-            <div class="topbar-right">
-                <div class="user-profile">
-                    <span class="material-symbols-outlined text-primary">account_circle</span>
-                    <div class="user-profile-text">
-                        <span class="user-name"><?= htmlspecialchars($nombreUsuario, ENT_QUOTES, 'UTF-8') ?></span>
-                        <span class="user-role"><?= htmlspecialchars($rolUsuario, ENT_QUOTES, 'UTF-8') ?></span>
-                    </div>
-                </div>
-                <a href="../../Servicios Comunes/Autenticacion/logout.php" class="btn-logout">
-                    <span class="material-symbols-outlined">logout</span>
-                    <span class="logout-text">Cerrar Sesión</span>
-                </a>
-            </div>
-        </div>
+    <?php require __DIR__ . '/../../Servicios Comunes/Vista General/navbar.php'; ?>
 
-    </header>
-
-    <main class="main-content">
-        <div class="container">
+    <main class="main-wrapper">
+        <div class="main-content">
+            <div class="container">
             
             <section class="hero-section">
                 <h1 class="page-title">Panel Médico: Documentación Clínica</h1>
