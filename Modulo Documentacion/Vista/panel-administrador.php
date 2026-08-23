@@ -7,6 +7,10 @@ require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.ph
 
 $auth = new AuthController();
 $auth->protegerRuta('Administrador');
+
+// Datos reales del usuario en sesión, para mostrar en la topbar
+$nombreUsuario = trim(($_SESSION['nombre'] ?? '') . ' ' . ($_SESSION['apellido'] ?? ''));
+$rolUsuario = 'Administrador'; // Esta ruta ya exige rol Administrador, no hace falta calcularlo
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -85,8 +89,8 @@ $auth->protegerRuta('Administrador');
                     </button>
                     <div class="user-profile">
                         <div class="user-info">
-                            <p class="user-name">Acá traemos datos del usuario.</p>
-                            <p class="user-role">Acá traemos rol del usuario.</p>
+                            <p class="user-name"><?= htmlspecialchars($nombreUsuario, ENT_QUOTES, 'UTF-8') ?></p>
+                            <p class="user-role"><?= htmlspecialchars($rolUsuario, ENT_QUOTES, 'UTF-8') ?></p>
                         </div>
                         <img alt="Avatar del usuario" class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfsEIou6s2sMAq4m24L_nLyJfh2FtUJGkUBwv9EYRRDsyNxnRz9sPofD3A54kY6d6OSy7SI77mXa_LxtgZRen0VE8zM1KlqNcGE-sEadHhKeYv9_5fbTVtJopEfkdTCe3v_JgxfARWaziGM4U4Lo3MP8-qfOhlIwVpFFGv2iM-eALZ_YBT2ZujuZ-FpPL4w7K6c287gkV9A9RecFUoL_kZBi1XydK38hLm0BKDr-Mz3lW1LR8UlWOsEujLJFsOm-n2MRrKvuLN105U">
                     </div>
