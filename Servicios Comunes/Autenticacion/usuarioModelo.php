@@ -108,6 +108,97 @@ class UsuarioModelo
     }
 
     /**
+     * Lista todos los usuarios del sistema con su rol principal, para la
+     * pantalla de Gestión de Usuarios (uso exclusivo Administrador).
+     * Si un usuario tuviera más de un rol asignado, se muestran todos
+     * separados por coma (hoy el sistema asigna un único rol por usuario).
+     *
+     * @return array Lista de usuarios con: id_usuario, cedula, nombre,
+     *                apellido, email, activo, roles (string).
+     */
+    public function listarTodos(): array
+    {
+        $sql = "SELECT
+                    u.id_usuario, u.cedula, u.nombre, u.apellido, u.email, u.activo,
+                    GROUP_CONCAT(r.nombre_rol SEPARATOR ', ') AS roles
+                FROM usuario u
+                LEFT JOIN usuario_rol ur ON ur.id_usuario = u.id_usuario
+                LEFT JOIN rol r ON r.id_rol = ur.id_rol
+                GROUP BY u.id_usuario, u.cedula, u.nombre, u.apellido, u.email, u.activo
+                ORDER BY u.nombre, u.apellido";
+
+        $consulta = $this->conexion->prepare($sql);
+        $consulta->execute();
+
+        return $consulta->fetchAll();
+    }
+
+    /**
+     * Busca un usuario por su ID (para precargar el formulario de edición).
+     *
+     * @param int $idUsuario
+     * @return array|false
+     */
+    public function buscarPorId(int $idUsuario): array|false
+    {
+        $sql = 'SELECT id_usuario, cedula, nombre, apellido, email, activo
+                FROM usuario
+                WHERE id_usuario = :id_usuario';
+
+        $consulta = $this->conexion->prepare($sql);
+        $consulta->bindParam(':id_usuario', $idUsuario, PDO::PARAM_INT);
+        $consulta->execute();
+
+        return $consulta->fetch();
+    }
+
+    /**
+     * Actualiza los datos personales de un usuario (nombre, apellido, email,
+     * estado activo/inactivo, y opcionalmente la contraseña).
+     * Uso exclusivo del rol Administrador. No modifica el rol asignado.
+     *
+     * @param int $idUsuario
+     * @param array $datos Debe incluir: nombre, apellido, email, activo (bool).
+     *                      'contrasena' es opcional: si viene no vacía, se
+     *                      hashea y se actualiza; si no, se deja la actual.
+     * @return bool
+     */
+    public function actualizar(int $idUsuario, array $datos): bool
+    {
+        $campos = [
+            'nombre = :nombre',
+            'apellido = :apellido',
+            'email = :email',
+            'activo = :activo',
+        ];
+
+        $parametros = [
+            ':id_usuario' => $idUsuario,
+            ':nombre' => $datos['nombre'],
+            ':apellido' => $datos['apellido'],
+            ':email' => $datos['email'] ?? null,
+            ':activo' => $datos['activo'],
+        ];
+
+        // La contraseña solo se actualiza si el administrador cargó una nueva
+        if (!empty($datos['contrasena'])) {
+            $campos[] = 'contrasena = :contrasena';
+            $parametros[':contrasena'] = password_hash($datos['contrasena'], PASSWORD_DEFAULT);
+        }
+
+        $sql = 'UPDATE usuario SET ' . implode(', ', $campos) . ' WHERE id_usuario = :id_usuario';
+
+        $consulta = $this->conexion->prepare($sql);
+
+        foreach ($parametros as $marcador => $valor) {
+            $tipo = is_bool($valor) ? PDO::PARAM_BOOL : PDO::PARAM_STR;
+            $consulta->bindValue($marcador, $valor, $tipo);
+        }
+
+        return $consulta->execute();
+    }
+
+    /**
      * Suspende (borrado lógico) a un usuario: activo = false.
      * Uso exclusivo del rol Administrador.
      */
