@@ -1,16 +1,3 @@
-/**
- * navbar.css
- * Servicios Comunes / Vista General / assets/css
- *
- * Proyecto S.I.G.S.M. - Hospital de Clínicas
- * Sparrows Devs
- *
- * Estilos del sidebar + topbar únicos, extraídos del diseño original
- * de panel-administrador.css (ya aprobado). Cada variable usa un valor
- * de respaldo (fallback) para verse idéntico sin importar si la página
- * que lo carga tiene esa variable definida en su propio :root.
- */
-
 .sidebar {
     display: none;
     flex-direction: column;
@@ -61,11 +48,11 @@
 @media (min-width: 768px) { .menu-toggle { display: none; } }
 
 .topbar-right { display: flex; align-items: center; gap: 16px; }
-.search-box { display: none; position: relative; }
-@media (min-width: 640px) { .search-box { display: block; } }
-.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--outline, #737781); font-size: 20px; }
-.search-box input { width: 256px; padding: 8px 16px 8px 40px; background-color: var(--surface-container-low, #f6f3f2); border: 1px solid var(--outline-variant, #c3c6d1); border-radius: 999px; font-size: 14px; transition: border-color 0.2s; }
-.search-box input:focus { border-color: var(--primary, #00254b); outline: none; }
+.topbar .search-box { display: none; position: relative; }
+@media (min-width: 640px) { .topbar .search-box { display: block; } }
+.topbar .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--outline, #737781); font-size: 20px; }
+.topbar .search-box input { width: 256px; padding: 8px 16px 8px 40px; background-color: var(--surface-container-low, #f6f3f2); border: 1px solid var(--outline-variant, #c3c6d1); border-radius: 999px; font-size: 14px; transition: border-color 0.2s; }
+.topbar .search-box input:focus { border-color: var(--primary, #00254b); outline: none; }
 
 .user-actions { display: flex; align-items: center; gap: 12px; border-left: 1px solid var(--outline-variant, #c3c6d1); padding-left: 16px; }
 .icon-btn { position: relative; color: var(--secondary, #4d6077); padding: 8px; border-radius: 50%; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; }

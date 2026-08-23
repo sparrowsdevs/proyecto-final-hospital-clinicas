@@ -6,6 +6,8 @@ require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.ph
 
 $auth = new AuthController();
 $auth->protegerRuta('Administrador');
+
+$paginaActual = 'cargar-documento';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -18,60 +20,15 @@ $auth->protegerRuta('Administrador');
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/css/cargar-documento.css">
+    <link rel="stylesheet" href="../../Servicios Comunes/Vista General/assets/css/navbar.css">
 </head>
-<body class="dashboard-layout">
+<body>
 
-    <header class="topbar">
-        <div class="topbar-left">
-            <img alt="Logo Hospital de Clínicas" class="brand-logo" src="https://www.hc.edu.uy/images/imagenesarticulos/Logo_Hc.png">
-        </div>
-        
-        <div class="topbar-right">
-            <div class="desktop-actions">
-                <button class="icon-btn-circle" aria-label="Notificaciones">
-                    <span class="material-symbols-outlined">notifications</span>
-                </button>
-                <button class="user-menu-btn">
-                    <span class="material-symbols-outlined text-secondary">account_circle</span>
-                    <span class="text-secondary font-bold">Cerrar sesión</span>
-                </button>
-            </div>
-            <button class="mobile-menu-btn" aria-label="Menú">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
-        </div>
-    </header>
+    <?php require __DIR__ . '/../../Servicios Comunes/Vista General/navbar.php'; ?>
 
-    <div class="app-body">
-        
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Gestión Documental</h2>
-                <p>Administración Central</p>
-            </div>
-            <nav class="sidebar-nav">
-                <a class="nav-link" href="#">
-                    <span class="material-symbols-outlined">dashboard</span>
-                    Panel de control
-                </a>
-                <a class="nav-link active" href="#">
-                    <span class="material-symbols-outlined filled">folder_shared</span>
-                    Documentos
-                </a>
-                <a class="nav-link" href="#">
-                    <span class="material-symbols-outlined">star_rate</span>
-                    Encuestas
-                </a>
-                <a class="nav-link" href="#">
-                    <span class="material-symbols-outlined">qr_code_2</span>
-                    Generador de QR
-                </a>
-            </nav>
-        </aside>
-
-        <main class="main-content">
-            <div class="container">
-                
+    <main class="main-wrapper">
+        <div class="main-content">
+        <div class="container">
                 <div class="page-header">
                     <div class="header-text">
                         <h1>Documentos</h1>
@@ -217,8 +174,8 @@ $auth->protegerRuta('Administrador');
                 </div>
 
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <div class="modal-overlay hidden" id="uploadModal">
         <div class="modal-window">
@@ -282,25 +239,6 @@ $auth->protegerRuta('Administrador');
             </div>
         </div>
     </div>
-
-    <nav class="mobile-nav">
-        <a class="mobile-nav-item" href="#">
-            <span class="material-symbols-outlined">dashboard</span>
-            <span class="nav-label">Panel</span>
-        </a>
-        <a class="mobile-nav-item active" href="#">
-            <span class="material-symbols-outlined filled">folder_shared</span>
-            <span class="nav-label">Docs</span>
-        </a>
-        <a class="mobile-nav-item" href="#">
-            <span class="material-symbols-outlined">star_rate</span>
-            <span class="nav-label">Encuestas</span>
-        </a>
-        <a class="mobile-nav-item" href="#">
-            <span class="material-symbols-outlined">qr_code_2</span>
-            <span class="nav-label">QR</span>
-        </a>
-    </nav>
 
     <script src="assets/js/cargar-documento.js"></script>
 </body>
