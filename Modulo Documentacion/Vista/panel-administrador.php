@@ -34,25 +34,21 @@ $rolUsuario = 'Administrador'; // Esta ruta ya exige rol Administrador, no hace 
         </div>
         
         <nav class="sidebar-nav">
-            <a class="nav-link active" href="#">
+            <a class="nav-link active" href="panel-administrador.php">
                 <span class="material-symbols-outlined">dashboard</span>
                 <span>Dashboard</span>
             </a>
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="panel-documentacion.php">
                 <span class="material-symbols-outlined">folder_shared</span>
-                <span>Expedientes</span>
+                <span>Documentación</span>
             </a>
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="cargar-documento.php">
                 <span class="material-symbols-outlined">upload_file</span>
                 <span>Carga de Archivos</span>
             </a>
-            <a class="nav-link" href="#">
-                <span class="material-symbols-outlined">settings</span>
-                <span>Configuración</span>
-            </a>
-            <a class="nav-link" href="#">
-                <span class="material-symbols-outlined">help</span>
-                <span>Ayuda</span>
+            <a class="nav-link" href="gestion-usuarios.php">
+                <span class="material-symbols-outlined">group</span>
+                <span>Gestión de Usuarios</span>
             </a>
         </nav>
 
