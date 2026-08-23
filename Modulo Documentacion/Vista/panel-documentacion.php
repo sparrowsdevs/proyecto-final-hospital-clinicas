@@ -8,6 +8,10 @@ require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.ph
 
 $auth = new AuthController();
 $auth->protegerRuta();
+
+// Datos reales del usuario en sesión, para mostrar en la topbar
+$nombreUsuario = trim(($_SESSION['nombre'] ?? '') . ' ' . ($_SESSION['apellido'] ?? ''));
+$rolUsuario = $auth->tieneRol('Administrador') ? 'Administrador' : 'Usuario Básico';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -39,7 +43,10 @@ $auth->protegerRuta();
             <div class="topbar-right">
                 <div class="user-profile">
                     <span class="material-symbols-outlined text-primary">account_circle</span>
-                    <span class="user-name">Dr. Garcia</span>
+                    <div class="user-profile-text">
+                        <span class="user-name"><?= htmlspecialchars($nombreUsuario, ENT_QUOTES, 'UTF-8') ?></span>
+                        <span class="user-role"><?= htmlspecialchars($rolUsuario, ENT_QUOTES, 'UTF-8') ?></span>
+                    </div>
                 </div>
                 <a href="../../Servicios Comunes/Autenticacion/logout.php" class="btn-logout">
                     <span class="material-symbols-outlined">logout</span>
