@@ -63,26 +63,19 @@ function claseActivaNav(string $pagina, string $paginaActual): string
     </div>
 
     <div class="topbar-right">
-        <div class="search-box">
-            <span class="material-symbols-outlined search-icon">search</span>
-            <input type="text" placeholder="Buscar paciente...">
+        <button class="icon-btn">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="badge-dot"></span>
+        </button>
+
+        <div class="user-profile">
+            <div class="user-info">
+                <p class="user-name"><?= htmlspecialchars($nombreUsuario, ENT_QUOTES, 'UTF-8') ?></p>
+                <p class="user-role"><?= htmlspecialchars(mb_strtoupper($rolUsuario, 'UTF-8'), ENT_QUOTES, 'UTF-8') ?></p>
+            </div>
+            <img alt="Avatar del usuario" class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfsEIou6s2sMAq4m24L_nLyJfh2FtUJGkUBwv9EYRRDsyNxnRz9sPofD3A54kY6d6OSy7SI77mXa_LxtgZRen0VE8zM1KlqNcGE-sEadHhKeYv9_5fbTVtJopEfkdTCe3v_JgxfARWaziGM4U4Lo3MP8-qfOhlIwVpFFGv2iM-eALZ_YBT2ZujuZ-FpPL4w7K6c287gkV9A9RecFUoL_kZBi1XydK38hLm0BKDr-Mz3lW1LR8UlWOsEujLJFsOm-n2MRrKvuLN105U">
         </div>
 
-        <div class="user-actions">
-            <button class="icon-btn">
-                <span class="material-symbols-outlined">notifications</span>
-                <span class="badge-dot"></span>
-            </button>
-            <div class="user-profile">
-                <div class="user-info">
-                    <p class="user-name"><?= htmlspecialchars($nombreUsuario, ENT_QUOTES, 'UTF-8') ?></p>
-                    <p class="user-role"><?= htmlspecialchars(mb_strtoupper($rolUsuario, 'UTF-8'), ENT_QUOTES, 'UTF-8') ?></p>
-                </div>
-                <img alt="Avatar del usuario" class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfsEIou6s2sMAq4m24L_nLyJfh2FtUJGkUBwv9EYRRDsyNxnRz9sPofD3A54kY6d6OSy7SI77mXa_LxtgZRen0VE8zM1KlqNcGE-sEadHhKeYv9_5fbTVtJopEfkdTCe3v_JgxfARWaziGM4U4Lo3MP8-qfOhlIwVpFFGv2iM-eALZ_YBT2ZujuZ-FpPL4w7K6c287gkV9A9RecFUoL_kZBi1XydK38hLm0BKDr-Mz3lW1LR8UlWOsEujLJFsOm-n2MRrKvuLN105U">
-            </div>
-        </div>
-    </div>
-    <div class="topbar-right">
         <a href="../../Servicios Comunes/Autenticacion/logout.php" class="btn-logout">
             <span class="material-symbols-outlined">logout</span>
             <span class="logout-text">Cerrar Sesión</span>

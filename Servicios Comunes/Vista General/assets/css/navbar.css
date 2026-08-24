@@ -59,7 +59,7 @@
 .icon-btn:hover { background-color: var(--surface-subtle, #F2F4F5); }
 .badge-dot { position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; background-color: var(--error, #D32F2F); border: 1px solid #ffffff; border-radius: 50%; }
 
-.user-profile { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.user-profile { display: flex; align-items: center; gap: 12px; cursor: pointer; padding-left: 16px; border-left: 1px solid var(--outline-variant, #c3c6d1); }
 .user-profile .user-info { display: none; text-align: right; }
 @media (min-width: 1024px) { .user-profile .user-info { display: block; } }
 .user-profile .user-name { font-size: 12px; font-weight: 600; line-height: 1; color: var(--on-surface, #1b1c1c); }
