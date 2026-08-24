@@ -1,5 +1,9 @@
 <?php
-
+/*
+ * Acceso exclusivo para usuarios con sesión activa y rol Administrador.
+ * Lista todos los usuarios del sistema y permite editar sus datos
+ * personales o suspender/reactivar su cuenta.
+ */
 require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
 require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/UsuarioModelo.php';
 
@@ -10,6 +14,7 @@ $paginaActual = 'usuarios';
 
 $usuarioModelo = new UsuarioModelo();
 $usuarios = $usuarioModelo->listarTodos();
+$rolesDisponibles = $usuarioModelo->obtenerRolesDisponibles();
 $idUsuarioSesion = (int) ($_SESSION['id_usuario'] ?? 0);
 ?>
 <!DOCTYPE html>
@@ -34,8 +39,14 @@ $idUsuarioSesion = (int) ($_SESSION['id_usuario'] ?? 0);
             <div class="container">
 
                 <div class="page-header">
-                    <h1>Gestión de Usuarios</h1>
-                    <p>Administre los usuarios registrados en el sistema: edite sus datos o cambie su estado.</p>
+                    <div>
+                        <h1>Gestión de Usuarios</h1>
+                        <p>Administre los usuarios registrados en el sistema: edite sus datos o cambie su estado.</p>
+                    </div>
+                    <button class="btn-primary-action" type="button" onclick="abrirModalCreacion()">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">person_add</span>
+                        Nuevo Usuario
+                    </button>
                 </div>
 
                 <div class="table-container">
@@ -169,6 +180,70 @@ $idUsuarioSesion = (int) ($_SESSION['id_usuario'] ?? 0);
                     <button class="btn-primary-action" type="submit" id="btnGuardarEdicion">
                         <span class="material-symbols-outlined" style="font-size: 18px;">save</span>
                         Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de creación de usuario -->
+    <div class="modal-overlay hidden" id="modalCreacion">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3>Nuevo Usuario</h3>
+                <button class="btn-close-circle" type="button" onclick="cerrarModalCreacion()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <form id="formCreacionUsuario">
+                <div class="modal-body">
+                    <div class="mensaje-error" id="mensajeErrorCreacion"></div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="crearCedula">Cédula de Identidad</label>
+                        <input class="form-input" id="crearCedula" name="cedula" type="text" maxlength="8" inputmode="numeric" required>
+                        <span class="form-hint">Solo números, sin puntos ni guión (7 u 8 dígitos).</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="crearNombre">Nombre</label>
+                        <input class="form-input" id="crearNombre" name="nombre" type="text" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="crearApellido">Apellido</label>
+                        <input class="form-input" id="crearApellido" name="apellido" type="text" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="crearEmail">Email</label>
+                        <input class="form-input" id="crearEmail" name="email" type="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="crearContrasena">Contraseña</label>
+                        <input class="form-input" id="crearContrasena" name="contrasena" type="password" autocomplete="new-password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="crearRol">Rol</label>
+                        <select class="form-input" id="crearRol" name="id_rol" required>
+                            <option value="">Seleccione un rol...</option>
+                            <?php foreach ($rolesDisponibles as $rol): ?>
+                                <option value="<?= (int) $rol['id_rol'] ?>">
+                                    <?= htmlspecialchars($rol['nombre_rol'], ENT_QUOTES, 'UTF-8') ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn-secondary" type="button" onclick="cerrarModalCreacion()">Cancelar</button>
+                    <button class="btn-primary-action" type="submit" id="btnGuardarCreacion">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">person_add</span>
+                        Crear Usuario
                     </button>
                 </div>
             </form>

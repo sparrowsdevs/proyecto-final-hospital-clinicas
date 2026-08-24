@@ -1,3 +1,10 @@
+/*
+ *
+ * Lógica de la pantalla Gestión de Usuarios: apertura/cierre del modal de
+ * edición, envío del formulario vía AJAX, y confirmación de suspender/
+ * reactivar. Todas las acciones se procesan en procesar-usuario.php.
+ */
+
 const ENDPOINT_USUARIOS = '../../Servicios Comunes/Autenticacion/procesar-usuario.php';
 
 const modalEdicion = document.getElementById('modalEdicion');
@@ -80,10 +87,7 @@ formEdicionUsuario.addEventListener('submit', async (evento) => {
     }
 });
 
-/**
- * Pide confirmación antes de suspender o reactivar un usuario, y ejecuta
- * la acción vía AJAX si el administrador confirma.
- */
+
 async function confirmarCambioEstado(idUsuario, accion) {
     const mensajeConfirmacion = accion === 'suspender'
         ? '¿Confirma que desea suspender a este usuario? No podrá iniciar sesión hasta ser reactivado.'
@@ -115,3 +119,74 @@ async function confirmarCambioEstado(idUsuario, accion) {
         window.alert('No fue posible conectar con el servidor. Intente nuevamente.');
     }
 }
+
+
+// Modal de creación de usuario
+
+
+const modalCreacion = document.getElementById('modalCreacion');
+const formCreacionUsuario = document.getElementById('formCreacionUsuario');
+const mensajeErrorCreacion = document.getElementById('mensajeErrorCreacion');
+const btnGuardarCreacion = document.getElementById('btnGuardarCreacion');
+const crearCedulaInput = document.getElementById('crearCedula');
+
+function abrirModalCreacion() {
+    formCreacionUsuario.reset();
+    mensajeErrorCreacion.textContent = '';
+
+    modalCreacion.classList.remove('hidden');
+    setTimeout(() => {
+        modalCreacion.querySelector('.modal-window').classList.add('show');
+    }, 10);
+}
+
+function cerrarModalCreacion() {
+    modalCreacion.querySelector('.modal-window').classList.remove('show');
+    setTimeout(() => {
+        modalCreacion.classList.add('hidden');
+    }, 300);
+}
+
+modalCreacion.addEventListener('click', (evento) => {
+    if (evento.target === modalCreacion) cerrarModalCreacion();
+});
+document.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Escape' && !modalCreacion.classList.contains('hidden')) {
+        cerrarModalCreacion();
+    }
+});
+
+// Solo permite dígitos en el campo de cédula, igual que en el login
+crearCedulaInput.addEventListener('input', () => {
+    crearCedulaInput.value = crearCedulaInput.value.replace(/\D/g, '');
+});
+
+formCreacionUsuario.addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+
+    mensajeErrorCreacion.textContent = '';
+    btnGuardarCreacion.disabled = true;
+
+    try {
+        const datosFormulario = new FormData(formCreacionUsuario);
+        datosFormulario.append('accion', 'crear');
+
+        const respuesta = await fetch(ENDPOINT_USUARIOS, {
+            method: 'POST',
+            body: datosFormulario,
+        });
+
+        const resultado = await respuesta.json();
+
+        if (resultado.exito) {
+            window.location.reload();
+            return;
+        }
+
+        mensajeErrorCreacion.textContent = resultado.mensaje;
+    } catch (error) {
+        mensajeErrorCreacion.textContent = 'No fue posible conectar con el servidor. Intente nuevamente.';
+    } finally {
+        btnGuardarCreacion.disabled = false;
+    }
+});
