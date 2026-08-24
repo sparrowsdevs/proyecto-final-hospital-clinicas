@@ -1,9 +1,5 @@
 <?php
-/*
- * Modelo transversal de Usuario: autenticación por Cédula de Identidad,
- * gestión de roles (N:M) y administración de estado (activo/inactivo).
- * Reutilizable por los módulos Documentación, Ambulancias y Encuestas.
- */
+
 
 require_once __DIR__ . '/../Conexion BD/conexion.php';
 
@@ -15,14 +11,7 @@ class UsuarioModelo
     {
         $this->conexion = conexion::obtenerConexion();
     }
-
-    /**
-     * Busca un usuario por su Cédula de Identidad.
-     * No filtra por estado activo/inactivo: esa validación la hace autenticar().
-     *
-     * @param string $cedula
-     * @return array|false Datos del usuario, o false si no existe.
-     */
+    
     public function buscarPorCedula(string $cedula): array|false
     {
         $sql = 'SELECT id_usuario, cedula, contrasena, nombre, apellido, email, activo
@@ -65,10 +54,7 @@ class UsuarioModelo
         return $usuario;
     }
 
-    /**
-     * Obtiene los roles asignados a un usuario (join usuario_rol + rol).
-     *
-     */
+    
     public function obtenerRoles(int $idUsuario): array
     {
         $sql = 'SELECT r.id_rol, r.nombre_rol, r.descripcion, ur.fecha_asignacion
@@ -107,15 +93,30 @@ class UsuarioModelo
         return (int) $this->conexion->lastInsertId();
     }
 
-    /**
-     * Lista todos los usuarios del sistema con su rol principal, para la
-     * pantalla de Gestión de Usuarios (uso exclusivo Administrador).
-     * Si un usuario tuviera más de un rol asignado, se muestran todos
-     * separados por coma (hoy el sistema asigna un único rol por usuario).
-     *
-     * @return array Lista de usuarios con: id_usuario, cedula, nombre,
-     *                apellido, email, activo, roles (string).
-     */
+    
+    public function obtenerRolesDisponibles(): array
+    {
+        $sql = 'SELECT id_rol, nombre_rol FROM rol ORDER BY nombre_rol';
+
+        $consulta = $this->conexion->prepare($sql);
+        $consulta->execute();
+
+        return $consulta->fetchAll();
+    }
+
+   
+    public function asignarRol(int $idUsuario, int $idRol): bool
+    {
+        $sql = 'INSERT INTO usuario_rol (id_usuario, id_rol) VALUES (:id_usuario, :id_rol)';
+
+        $consulta = $this->conexion->prepare($sql);
+        $consulta->bindValue(':id_usuario', $idUsuario, PDO::PARAM_INT);
+        $consulta->bindValue(':id_rol', $idRol, PDO::PARAM_INT);
+
+        return $consulta->execute();
+    }
+
+  
     public function listarTodos(): array
     {
         $sql = "SELECT
@@ -133,12 +134,7 @@ class UsuarioModelo
         return $consulta->fetchAll();
     }
 
-    /**
-     * Busca un usuario por su ID (para precargar el formulario de edición).
-     *
-     * @param int $idUsuario
-     * @return array|false
-     */
+    
     public function buscarPorId(int $idUsuario): array|false
     {
         $sql = 'SELECT id_usuario, cedula, nombre, apellido, email, activo
@@ -152,17 +148,7 @@ class UsuarioModelo
         return $consulta->fetch();
     }
 
-    /**
-     * Actualiza los datos personales de un usuario (nombre, apellido, email,
-     * estado activo/inactivo, y opcionalmente la contraseña).
-     * Uso exclusivo del rol Administrador. No modifica el rol asignado.
-     *
-     * @param int $idUsuario
-     * @param array $datos Debe incluir: nombre, apellido, email, activo (bool).
-     *                      'contrasena' es opcional: si viene no vacía, se
-     *                      hashea y se actualiza; si no, se deja la actual.
-     * @return bool
-     */
+    
     public function actualizar(int $idUsuario, array $datos): bool
     {
         $campos = [
