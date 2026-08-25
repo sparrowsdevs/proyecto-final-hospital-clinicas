@@ -7,7 +7,7 @@ if (!isset($auth) || !($auth instanceof AuthController)) {
 $paginaActual = $paginaActual ?? '';
 $esAdministrador = $auth->tieneRol('Administrador');
 $nombreUsuario = trim(($_SESSION['nombre'] ?? '') . ' ' . ($_SESSION['apellido'] ?? ''));
-$rolUsuario = $esAdministrador ? 'Administrador' : 'Usuario Común';
+$rolUsuario = $esAdministrador ? 'Administrador' : 'Usuario Básico';
 
 function claseActivaNav(string $pagina, string $paginaActual): string
 {
