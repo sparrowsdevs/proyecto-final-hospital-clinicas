@@ -37,10 +37,6 @@ $paginaActual = 'dashboard';
                         <h1>Panel de Administración</h1>
                         <p>Gestión de documentación clínica para gestionar y distribuir documentos informativos y de cuidados </p>
                     </div>
-                    <a href="cargar-documento.php" class="btn btn-primary">
-                        <span class="material-symbols-outlined">add</span>
-                        + Cargar Nuevo Documento
-                    </a>
                 </section>
 
                 <section class="stats-grid">
