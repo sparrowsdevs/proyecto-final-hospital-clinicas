@@ -65,9 +65,14 @@ switch ($accion) {
         $email = trim($_POST['email'] ?? '');
         $contrasena = $_POST['contrasena'] ?? '';
         $activo = isset($_POST['activo']) && $_POST['activo'] === '1';
+        $idRol = isset($_POST['id_rol']) ? (int) $_POST['id_rol'] : 0;
 
         if ($nombre === '' || $apellido === '') {
             echo json_encode(['exito' => false, 'mensaje' => 'Nombre y apellido son obligatorios.']);
+            exit;
+        }
+        if ($idRol <= 0) {
+            echo json_encode(['exito' => false, 'mensaje' => 'Debe seleccionar un rol para el usuario.']);
             exit;
         }
 
@@ -77,6 +82,17 @@ switch ($accion) {
             exit;
         }
 
+        // Protección: no permitir que un Administrador se cambie su propio rol
+        // (evita que se quite sus propios privilegios por error)
+        if ($esSuMismaCuenta) {
+            $rolesActuales = $usuarioModelo->obtenerRoles($idUsuario);
+            $idsRolesActuales = array_column($rolesActuales, 'id_rol');
+            if (!in_array($idRol, $idsRolesActuales, true)) {
+                echo json_encode(['exito' => false, 'mensaje' => 'No puede cambiar su propio rol.']);
+                exit;
+            }
+        }
+
         $ok = $usuarioModelo->actualizar($idUsuario, [
             'nombre' => $nombre,
             'apellido' => $apellido,
@@ -84,6 +100,10 @@ switch ($accion) {
             'activo' => $activo,
             'contrasena' => $contrasena,
         ]);
+
+        if ($ok) {
+            $ok = $usuarioModelo->cambiarRol($idUsuario, $idRol);
+        }
 
         echo json_encode([
             'exito' => $ok,

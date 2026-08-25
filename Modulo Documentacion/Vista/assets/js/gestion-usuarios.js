@@ -13,7 +13,7 @@ const mensajeErrorEdicion = document.getElementById('mensajeErrorEdicion');
 const btnGuardarEdicion = document.getElementById('btnGuardarEdicion');
 
 
-function abrirModalEdicion(idUsuario, nombre, apellido, email, activo, esCuentaPropia) {
+function abrirModalEdicion(idUsuario, nombre, apellido, email, activo, esCuentaPropia, idRolActual) {
     document.getElementById('editIdUsuario').value = idUsuario;
     document.getElementById('editNombre').value = nombre;
     document.getElementById('editApellido').value = apellido;
@@ -23,6 +23,13 @@ function abrirModalEdicion(idUsuario, nombre, apellido, email, activo, esCuentaP
     const checkboxActivo = document.getElementById('editActivo');
     checkboxActivo.checked = activo;
     checkboxActivo.disabled = esCuentaPropia;
+
+    const selectRol = document.getElementById('editRol');
+    selectRol.value = idRolActual !== null ? String(idRolActual) : '';
+    selectRol.disabled = esCuentaPropia;
+
+    const rolHint = document.getElementById('editRolHint');
+    rolHint.textContent = esCuentaPropia ? 'No puede cambiar su propio rol.' : '';
 
     mensajeErrorEdicion.textContent = '';
 
@@ -66,6 +73,11 @@ formEdicionUsuario.addEventListener('submit', async (evento) => {
         // (cuenta propia) forzamos activo=1 igual, ya que no se puede desactivar.
         const checkboxActivo = document.getElementById('editActivo');
         datosFormulario.set('activo', checkboxActivo.checked ? '1' : '0');
+
+        // Un <select disabled> no se incluye en FormData; si está deshabilitado
+        // (cuenta propia), forzamos igual su valor actual para no perderlo.
+        const selectRol = document.getElementById('editRol');
+        datosFormulario.set('id_rol', selectRol.value);
 
         const respuesta = await fetch(ENDPOINT_USUARIOS, {
             method: 'POST',

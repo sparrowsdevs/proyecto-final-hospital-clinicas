@@ -90,7 +90,8 @@ $idUsuarioSesion = (int) ($_SESSION['id_usuario'] ?? 0);
                                                     '<?= htmlspecialchars(addslashes($usuario['apellido']), ENT_QUOTES, 'UTF-8') ?>',
                                                     '<?= htmlspecialchars(addslashes($usuario['email'] ?? ''), ENT_QUOTES, 'UTF-8') ?>',
                                                     <?= $usuario['activo'] ? 'true' : 'false' ?>,
-                                                    <?= $esCuentaPropia ? 'true' : 'false' ?>
+                                                    <?= $esCuentaPropia ? 'true' : 'false' ?>,
+                                                    <?= $usuario['id_rol'] !== null ? (int) $usuario['id_rol'] : 'null' ?>
                                                 )">
                                                 <span class="material-symbols-outlined" style="font-size: 18px;">edit</span>
                                             </button>
@@ -161,6 +162,19 @@ $idUsuarioSesion = (int) ($_SESSION['id_usuario'] ?? 0);
                     <div class="form-group">
                         <label class="form-label" for="editEmail">Email</label>
                         <input class="form-input" id="editEmail" name="email" type="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editRol">Rol</label>
+                        <select class="form-input" id="editRol" name="id_rol" required>
+                            <option value="">Seleccione un rol...</option>
+                            <?php foreach ($rolesDisponibles as $rol): ?>
+                                <option value="<?= (int) $rol['id_rol'] ?>">
+                                    <?= htmlspecialchars($rol['nombre_rol'], ENT_QUOTES, 'UTF-8') ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span class="form-hint" id="editRolHint"></span>
                     </div>
 
                     <div class="form-group">
