@@ -121,6 +121,7 @@ class UsuarioModelo
     {
         $sql = "SELECT
                     u.id_usuario, u.cedula, u.nombre, u.apellido, u.email, u.activo,
+                    MIN(ur.id_rol) AS id_rol,
                     GROUP_CONCAT(r.nombre_rol SEPARATOR ', ') AS roles
                 FROM usuario u
                 LEFT JOIN usuario_rol ur ON ur.id_usuario = u.id_usuario
@@ -132,6 +133,38 @@ class UsuarioModelo
         $consulta->execute();
 
         return $consulta->fetchAll();
+    }
+
+    /**
+     * Cambia el rol de un usuario: elimina su(s) asignación(es) actual(es)
+     * en usuario_rol y asigna el nuevo rol. Uso exclusivo del rol Administrador.
+     * Envuelto en transacción para que no quede el usuario sin rol si algo falla.
+     *
+     * @param int $idUsuario
+     * @param int $idRol
+     * @return bool
+     */
+    public function cambiarRol(int $idUsuario, int $idRol): bool
+    {
+        try {
+            $this->conexion->beginTransaction();
+
+            $eliminar = $this->conexion->prepare('DELETE FROM usuario_rol WHERE id_usuario = :id_usuario');
+            $eliminar->bindValue(':id_usuario', $idUsuario, PDO::PARAM_INT);
+            $eliminar->execute();
+
+            $insertar = $this->conexion->prepare('INSERT INTO usuario_rol (id_usuario, id_rol) VALUES (:id_usuario, :id_rol)');
+            $insertar->bindValue(':id_usuario', $idUsuario, PDO::PARAM_INT);
+            $insertar->bindValue(':id_rol', $idRol, PDO::PARAM_INT);
+            $insertar->execute();
+
+            $this->conexion->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->conexion->rollBack();
+            error_log('Error al cambiar rol de usuario: ' . $e->getMessage());
+            return false;
+        }
     }
 
     
