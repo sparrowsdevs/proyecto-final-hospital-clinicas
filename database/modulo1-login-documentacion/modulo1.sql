@@ -1,5 +1,5 @@
 -- S.I.G.S.M. - Módulo Documentación
--- Motor: MySQL/MariaDB | Charset: utf8mb4
+-- Motor: MySQL | Charset: utf8mb4
 
 
 CREATE TABLE usuario (
@@ -14,7 +14,7 @@ CREATE TABLE usuario (
 
 CREATE TABLE rol (
     id_rol          INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_rol      VARCHAR(50) NOT NULL,
+    nombre_rol      ENUM('Administrador', 'Usuario Básico') NOT NULL,
     descripcion     VARCHAR(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -31,7 +31,21 @@ CREATE TABLE usuario_rol (
 
 CREATE TABLE categoria (
     id_categoria    INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_categoria VARCHAR(100) NOT NULL,
+    nombre_categoria ENUM(
+        'Unidad de Cuidados Paliativos', 'Emergencia', 'Neonatología', 
+        'Dpto. Clínico de medicina', 'Cardiología', 'Centro cardiovascular', 
+        'Hemodinamia', 'Crujía cardíaca', 'Clínica médica a', 'Clínica médica b', 
+        'Clínica médica c', 'Dermatología', 'Endocrinología', 'Gastroenterología', 
+        'Unidad de ostomías', 'Geriatría', 'Hematología', 'Infectología', 
+        'Medicina física, rehabilitación y medicina del deporte', 'Nefrología', 
+        'Neurología', 'Oncología', 'Psiquiatría', 'U.e. Autoinmunes sistémicas', 
+        'Unidad de tabaquismo', 'Depto. Clínico de cirugía', 'Anestesiología', 
+        'Cirugía plástica y quemados', 'Cirugía vascular periférica', 
+        'Ginecotocologica b', 'Neurocirugía', 'Odontología', 'Oftalmología', 
+        'Otorrinolaringología', 'Quirúrgica a', 'Quirúrgica b', 'Quirúrgica f', 
+        'Urología', 'Traumatología y ortopedia de adultos', 'Radioterapia', 
+        'Medicina Nuclear', 'Hemoterapia', 'Imagenología', 'Ginecobstetricia'
+    ) NOT NULL,
     descripcion     VARCHAR(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -45,7 +59,7 @@ CREATE TABLE documento (
     id_usuario_carga    INT NOT NULL,                 -- Quién cargó el documento
     activo              BOOLEAN NOT NULL DEFAULT TRUE, -- Borrado lógico
     fecha_modificacion  DATE,
-    qr                  VARCHAR(255),                  -- URL/token del QR generado
+    
     FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
         ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_usuario_carga) REFERENCES usuario(id_usuario)
