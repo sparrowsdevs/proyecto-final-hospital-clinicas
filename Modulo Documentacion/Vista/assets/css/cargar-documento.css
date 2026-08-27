@@ -92,17 +92,17 @@ table { border-collapse: collapse; width: 100%; text-align: left; }
 .text-right { text-align: right; }
 .cursor-pointer { cursor: pointer; }
 
-/* =========================================
-   3. TOP NAVIGATION BAR + SIDEBAR
+
+/*    3. TOP NAVIGATION BAR + SIDEBAR
    Migrados a: Servicios Comunes/Vista General/assets/css/navbar.css
    (componente compartido por los 3 paneles del sistema)
-   ========================================= */
+   */
 
-/* =========================================
-   4. ESTRUCTURA PRINCIPAL (Contenido)
-   ========================================= */
 
-/* Main Content Area */
+ /* ESTRUCTURA PRINCIPAL (Contenido) */
+   
+
+
 .main-content {
     background-color: var(--background);
     padding: 16px;
@@ -112,9 +112,9 @@ table { border-collapse: collapse; width: 100%; text-align: left; }
 
 .container { width: 100%; max-width: var(--max-width); margin: 0 auto; }
 
-/* =========================================
-   5. COMPONENTES DEL CONTENIDO
-   ========================================= */
+
+/* COMPONENTES DEL CONTENIDO */
+   
 /* Page Header */
 .page-header { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
 @media (min-width: 768px) { .page-header { flex-direction: row; justify-content: space-between; align-items: flex-end; } }
@@ -162,6 +162,11 @@ table { border-collapse: collapse; width: 100%; text-align: left; }
 .badge-gray { background-color: var(--surface-container); color: var(--on-surface-variant); }
 .badge-error { background-color: var(--error-container); color: var(--on-error-container); }
 .badge-tertiary { background-color: var(--tertiary-fixed); color: var(--on-tertiary-fixed); }
+.badge-success { background-color: rgba(46, 125, 50, 0.12); color: var(--success); }
+
+.form-hint { display: block; font-size: 12px; color: var(--outline); margin-top: 4px; }
+.mensaje-error { background-color: var(--error-container, #fdecea); color: var(--on-error-container, #b3261e); border-radius: 8px; padding: 10px 14px; font-size: 0.85rem; margin-bottom: 12px; }
+.mensaje-error:empty { display: none; }
 
 .icon-action { padding: 4px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; transition: color 0.2s; }
 .hover-blue:hover { color: var(--clinical-blue); }
@@ -175,9 +180,9 @@ table { border-collapse: collapse; width: 100%; text-align: left; }
 .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .page-btn.active { background-color: var(--surface-subtle); font-weight: 700; color: var(--on-surface); }
 
-/* =========================================
-   6. MODAL STYLES
-   ========================================= */
+
+  /* MODAL STYLES */
+  
 .modal-overlay { position: fixed; inset: 0; background-color: rgba(27, 28, 28, 0.4); backdrop-filter: blur(4px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 16px; }
 .modal-overlay.hidden { display: none; }
 
@@ -219,9 +224,9 @@ table { border-collapse: collapse; width: 100%; text-align: left; }
 .btn-primary-action { padding: 8px 16px; font-size: 12px; font-weight: 600; color: var(--on-primary); background-color: var(--primary-container); border-radius: var(--radius-md); display: flex; align-items: center; gap: 8px; transition: background-color 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 .btn-primary-action:hover { background-color: var(--tertiary-container); }
 
-/* =========================================
-   7. BOTTOM NAVIGATION BAR (Mobile)
-   ========================================= */
+
+  /* BOTTOM NAVIGATION BAR (Mobile) */
+ 
 .mobile-nav {
     display: flex;
     justify-content: space-around;

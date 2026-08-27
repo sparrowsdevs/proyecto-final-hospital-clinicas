@@ -1,24 +1,35 @@
 <?php
-/*
+/**
+ * cargar-documento.php
+ *
  * Acceso exclusivo para usuarios con sesión activa y rol Administrador.
+ * CRUD real de documentos, conectado a la base de datos.
  */
 require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
+require_once __DIR__ . '/../Modelo/DocumentoModelo.php';
 
 $auth = new AuthController();
 $auth->protegerRuta('Administrador');
 
 $paginaActual = 'cargar-documento';
+
+$documentoModelo = new DocumentoModelo();
+$documentos = $documentoModelo->listarTodos();
+$categorias = $documentoModelo->obtenerCategorias();
+
+$totalActivos = count(array_filter($documentos, fn($d) => (bool) $d['activo']));
+$totalSuspendidos = count($documentos) - $totalActivos;
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Hospital de Clínicas - Panel de Administración</title>
-    
+    <title>Hospital de Clínicas - Gestión de Documentos</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="assets/css/cargar-documento.css">
     <link rel="stylesheet" href="../../Servicios Comunes/Vista General/assets/css/navbar.css">
 </head>
@@ -34,7 +45,7 @@ $paginaActual = 'cargar-documento';
                         <h1>Documentos</h1>
                         <p>Gestione la documentación, protocolos y material informativo.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="openModal()">
+                    <button class="btn btn-primary" type="button" onclick="abrirModalCreacion()">
                         <span class="material-symbols-outlined icon-sm">add</span>
                         + Cargar Nuevo Documento
                     </button>
@@ -44,26 +55,18 @@ $paginaActual = 'cargar-documento';
                     <div class="bento-card">
                         <div class="accent-line bg-clinical-blue"></div>
                         <div class="bento-header">
-                            <span class="bento-label">Total Documentos</span>
+                            <span class="bento-label">Documentos Activos</span>
                             <span class="material-symbols-outlined text-clinical-blue opacity-80">description</span>
                         </div>
-                        <div class="bento-value">1.250</div>
+                        <div class="bento-value"><?= (int) $totalActivos ?></div>
                     </div>
                     <div class="bento-card">
-                        <div class="accent-line bg-success"></div>
+                        <div class="accent-line bg-error"></div>
                         <div class="bento-header">
-                            <span class="bento-label">Escaneos QR</span>
-                            <span class="material-symbols-outlined text-success opacity-80">qr_code_scanner</span>
+                            <span class="bento-label">Documentos Suspendidos</span>
+                            <span class="material-symbols-outlined text-error opacity-80">block</span>
                         </div>
-                        <div class="bento-value">8.400</div>
-                    </div>
-                    <div class="bento-card">
-                        <div class="accent-line bg-tertiary"></div>
-                        <div class="bento-header">
-                            <span class="bento-label">Nuevas Encuestas</span>
-                            <span class="material-symbols-outlined text-tertiary opacity-80">poll</span>
-                        </div>
-                        <div class="bento-value">45</div>
+                        <div class="bento-value"><?= (int) $totalSuspendidos ?></div>
                     </div>
                 </div>
 
@@ -71,105 +74,80 @@ $paginaActual = 'cargar-documento';
                     <div class="table-toolbar">
                         <div class="search-box">
                             <span class="material-symbols-outlined search-icon">search</span>
-                            <input class="search-input" placeholder="Buscar documentos..." type="text">
-                        </div>
-                        <div class="toolbar-actions">
-                            <button class="btn-icon-square">
-                                <span class="material-symbols-outlined">filter_list</span>
-                            </button>
+                            <input class="search-input" id="buscadorDocumentos" placeholder="Buscar documentos..." type="text">
                         </div>
                     </div>
-                    
+
                     <div class="table-responsive">
-                        <table class="data-table">
+                        <table class="data-table" id="tablaDocumentos">
                             <thead>
                                 <tr>
                                     <th>Título</th>
                                     <th>Categoría</th>
                                     <th>Fecha de Carga</th>
                                     <th>Última Act.</th>
-                                    <th class="text-center">Escaneos</th>
-                                    <th class="text-center">QR</th>
+                                    <th>Estado</th>
                                     <th class="text-right">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php if (empty($documentos)): ?>
                                 <tr>
-                                    <td class="font-bold text-primary">Preparación Centellograma</td>
-                                    <td><span class="badge badge-secondary">Imagenología</span></td>
-                                    <td class="text-secondary">12 Oct 2023</td>
-                                    <td class="text-secondary">15 Oct 2023</td>
-                                    <td class="text-center font-bold">342</td>
-                                    <td class="text-center">
-                                        <button class="icon-action text-clinical-blue"><span class="material-symbols-outlined">qr_code</span></button>
+                                    <td colspan="6" style="text-align: center; padding: 32px; color: var(--outline);">
+                                        No hay documentos cargados todavía.
+                                    </td>
+                                </tr>
+                                <?php endif; ?>
+
+                                <?php foreach ($documentos as $doc): ?>
+                                <tr>
+                                    <td class="font-bold text-primary"><?= htmlspecialchars($doc['titulo'], ENT_QUOTES, 'UTF-8') ?></td>
+                                    <td><span class="badge badge-secondary"><?= htmlspecialchars($doc['nombre_categoria'], ENT_QUOTES, 'UTF-8') ?></span></td>
+                                    <td class="text-secondary"><?= htmlspecialchars($doc['fecha_carga'], ENT_QUOTES, 'UTF-8') ?></td>
+                                    <td class="text-secondary"><?= htmlspecialchars($doc['fecha_modificacion'] ?? '—', ENT_QUOTES, 'UTF-8') ?></td>
+                                    <td>
+                                        <?php if ($doc['activo']): ?>
+                                            <span class="badge badge-success">Activo</span>
+                                        <?php else: ?>
+                                            <span class="badge badge-error">Suspendido</span>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="text-right">
                                         <div class="action-group">
-                                            <button class="icon-action text-secondary hover-blue"><span class="material-symbols-outlined icon-sm">edit</span></button>
-                                            <button class="icon-action text-secondary hover-red"><span class="material-symbols-outlined icon-sm">delete</span></button>
+                                            <button
+                                                class="icon-action text-secondary hover-blue"
+                                                title="Editar documento"
+                                                onclick="abrirModalEdicion(
+                                                    <?= (int) $doc['id_documento'] ?>,
+                                                    '<?= htmlspecialchars(addslashes($doc['titulo']), ENT_QUOTES, 'UTF-8') ?>',
+                                                    '<?= htmlspecialchars(addslashes($doc['descripcion'] ?? ''), ENT_QUOTES, 'UTF-8') ?>',
+                                                    '<?= htmlspecialchars(addslashes($doc['archivo_url']), ENT_QUOTES, 'UTF-8') ?>',
+                                                    <?= (int) $doc['id_categoria'] ?>
+                                                )">
+                                                <span class="material-symbols-outlined icon-sm">edit</span>
+                                            </button>
+
+                                            <?php if ($doc['activo']): ?>
+                                                <button
+                                                    class="icon-action text-secondary hover-red"
+                                                    title="Suspender documento"
+                                                    onclick="confirmarCambioEstado(<?= (int) $doc['id_documento'] ?>, 'suspender')">
+                                                    <span class="material-symbols-outlined icon-sm">block</span>
+                                                </button>
+                                            <?php else: ?>
+                                                <button
+                                                    class="icon-action text-secondary hover-blue"
+                                                    title="Reactivar documento"
+                                                    onclick="confirmarCambioEstado(<?= (int) $doc['id_documento'] ?>, 'reactivar')">
+                                                    <span class="material-symbols-outlined icon-sm">check_circle</span>
+                                                </button>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="font-bold text-primary">Guía Ingreso Pacientes</td>
-                                    <td><span class="badge badge-gray">General</span></td>
-                                    <td class="text-secondary">05 Sep 2023</td>
-                                    <td class="text-secondary">05 Sep 2023</td>
-                                    <td class="text-center font-bold">1,205</td>
-                                    <td class="text-center">
-                                        <button class="icon-action text-clinical-blue"><span class="material-symbols-outlined">qr_code</span></button>
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="action-group">
-                                            <button class="icon-action text-secondary hover-blue"><span class="material-symbols-outlined icon-sm">edit</span></button>
-                                            <button class="icon-action text-secondary hover-red"><span class="material-symbols-outlined icon-sm">delete</span></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-bold text-primary">Protocolo COVID-19 Act.</td>
-                                    <td><span class="badge badge-error">Urgencia</span></td>
-                                    <td class="text-secondary">20 Ago 2023</td>
-                                    <td class="text-secondary">01 Nov 2023</td>
-                                    <td class="text-center font-bold">890</td>
-                                    <td class="text-center">
-                                        <button class="icon-action text-clinical-blue"><span class="material-symbols-outlined">qr_code</span></button>
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="action-group">
-                                            <button class="icon-action text-secondary hover-blue"><span class="material-symbols-outlined icon-sm">edit</span></button>
-                                            <button class="icon-action text-secondary hover-red"><span class="material-symbols-outlined icon-sm">delete</span></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-bold text-primary">Formulario Alta Médica</td>
-                                    <td><span class="badge badge-tertiary">Administrativo</span></td>
-                                    <td class="text-secondary">10 Jul 2023</td>
-                                    <td class="text-secondary">10 Jul 2023</td>
-                                    <td class="text-center font-bold">456</td>
-                                    <td class="text-center">
-                                        <button class="icon-action text-clinical-blue"><span class="material-symbols-outlined">qr_code</span></button>
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="action-group">
-                                            <button class="icon-action text-secondary hover-blue"><span class="material-symbols-outlined icon-sm">edit</span></button>
-                                            <button class="icon-action text-secondary hover-red"><span class="material-symbols-outlined icon-sm">delete</span></button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
-                    </div>
-                    
-                    <div class="table-footer">
-                        <span class="footer-text">Mostrando 1 a 4 de 1.250 documentos</span>
-                        <div class="pagination">
-                            <button class="page-btn" disabled>Anterior</button>
-                            <button class="page-btn active">1</button>
-                            <button class="page-btn">2</button>
-                            <button class="page-btn">Siguiente</button>
-                        </div>
                     </div>
                 </div>
 
@@ -177,66 +155,119 @@ $paginaActual = 'cargar-documento';
         </div>
     </main>
 
+    <!-- Modal de creación de documento -->
     <div class="modal-overlay hidden" id="uploadModal">
         <div class="modal-window">
-            
+
             <div class="modal-header">
                 <h3>Cargar Nuevo Documento</h3>
-                <button class="btn-close-circle" onclick="closeModal()">
+                <button class="btn-close-circle" type="button" onclick="cerrarModalCreacion()">
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
-            
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label" for="doc-title">Título del Documento</label>
-                    <input class="form-input" id="doc-title" placeholder="Ej: Protocolo de Higiene 2024" type="text">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="doc-category">Categoría</label>
-                    <div class="select-wrapper">
-                        <select class="form-input select-input" id="doc-category">
-                            <option disabled selected value="">Seleccionar categoría...</option>
-                            <option value="imagenologia">Imagenología</option>
-                            <option value="laboratorio">Laboratorio</option>
-                            <option value="general">Información General</option>
-                            <option value="urgencia">Urgencia</option>
-                            <option value="administrativo">Administrativo</option>
-                        </select>
-                        <span class="material-symbols-outlined select-icon">expand_more</span>
+
+            <form id="formCreacionDocumento">
+                <div class="modal-body">
+                    <div class="mensaje-error" id="mensajeErrorCreacion"></div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="crearTitulo">Título del Documento</label>
+                        <input class="form-input" id="crearTitulo" name="titulo" placeholder="Ej: Protocolo de Higiene 2024" type="text" required>
                     </div>
-                </div>
-                
-                <div class="form-group mt-sm">
-                    <label class="form-label">Archivo PDF</label>
-                    <div class="drag-drop-zone">
-                        <div class="upload-icon-circle">
-                            <span class="material-symbols-outlined text-clinical-blue text-2xl">upload_file</span>
+
+                    <div class="form-group">
+                        <label class="form-label" for="crearDescripcion">Descripción</label>
+                        <textarea class="form-input" id="crearDescripcion" name="descripcion" rows="3" placeholder="Breve descripción del documento (opcional)"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="crearCategoria">Categoría</label>
+                        <div class="select-wrapper">
+                            <select class="form-input select-input" id="crearCategoria" name="id_categoria" required>
+                                <option disabled selected value="">Seleccionar categoría...</option>
+                                <?php foreach ($categorias as $cat): ?>
+                                    <option value="<?= (int) $cat['id_categoria'] ?>">
+                                        <?= htmlspecialchars($cat['nombre_categoria'], ENT_QUOTES, 'UTF-8') ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <span class="material-symbols-outlined select-icon">expand_more</span>
                         </div>
-                        <p class="upload-title">Arrastra tu archivo aquí</p>
-                        <p class="upload-subtitle">o haz clic para explorar (Max 10MB)</p>
+                    </div>
+
+                    <div class="form-group mt-sm">
+                        <label class="form-label" for="crearArchivoUrl">URL o ruta del documento</label>
+                        <input class="form-input" id="crearArchivoUrl" name="archivo_url" placeholder="https://... o /ruta/al/archivo.pdf" type="text" required>
+                        <span class="form-hint">Por ahora se ingresa manualmente el enlace o ruta donde está alojado el archivo.</span>
                     </div>
                 </div>
-                
-                <div class="settings-box">
-                    <div class="checkbox-wrapper">
-                        <input checked class="custom-checkbox" id="gen-qr" type="checkbox">
-                    </div>
-                    <div class="settings-text">
-                        <label class="settings-title cursor-pointer" for="gen-qr">Generar QR Automáticamente</label>
-                        <p class="settings-desc">Crea un código QR vinculado permanentemente a la última versión de este documento.</p>
-                    </div>
+
+                <div class="modal-footer">
+                    <button class="btn-secondary" type="button" onclick="cerrarModalCreacion()">Cancelar</button>
+                    <button class="btn-primary-action" type="submit" id="btnGuardarCreacion">
+                        <span class="material-symbols-outlined icon-sm">save</span>
+                        Guardar Documento
+                    </button>
                 </div>
-            </div>
-            
-            <div class="modal-footer">
-                <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
-                <button class="btn-primary-action">
-                    <span class="material-symbols-outlined icon-sm">save</span>
-                    Guardar y Generar
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de edición de documento -->
+    <div class="modal-overlay hidden" id="editModal">
+        <div class="modal-window">
+
+            <div class="modal-header">
+                <h3>Editar Documento</h3>
+                <button class="btn-close-circle" type="button" onclick="cerrarModalEdicion()">
+                    <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
+
+            <form id="formEdicionDocumento">
+                <div class="modal-body">
+                    <div class="mensaje-error" id="mensajeErrorEdicion"></div>
+
+                    <input type="hidden" id="editIdDocumento" name="id_documento">
+
+                    <div class="form-group">
+                        <label class="form-label" for="editTitulo">Título del Documento</label>
+                        <input class="form-input" id="editTitulo" name="titulo" type="text" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editDescripcion">Descripción</label>
+                        <textarea class="form-input" id="editDescripcion" name="descripcion" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editCategoria">Categoría</label>
+                        <div class="select-wrapper">
+                            <select class="form-input select-input" id="editCategoria" name="id_categoria" required>
+                                <?php foreach ($categorias as $cat): ?>
+                                    <option value="<?= (int) $cat['id_categoria'] ?>">
+                                        <?= htmlspecialchars($cat['nombre_categoria'], ENT_QUOTES, 'UTF-8') ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <span class="material-symbols-outlined select-icon">expand_more</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-sm">
+                        <label class="form-label" for="editArchivoUrl">URL o ruta del documento</label>
+                        <input class="form-input" id="editArchivoUrl" name="archivo_url" type="text" required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn-secondary" type="button" onclick="cerrarModalEdicion()">Cancelar</button>
+                    <button class="btn-primary-action" type="submit" id="btnGuardarEdicion">
+                        <span class="material-symbols-outlined icon-sm">save</span>
+                        Guardar Cambios
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
