@@ -76,12 +76,12 @@ const formEdicionDocumento = document.getElementById('formEdicionDocumento');
 const mensajeErrorEdicion = document.getElementById('mensajeErrorEdicion');
 const btnGuardarEdicion = document.getElementById('btnGuardarEdicion');
 
-function abrirModalEdicion(idDocumento, titulo, descripcion, archivoUrl, idCategoria) {
+function abrirModalEdicion(idDocumento, titulo, descripcion, idCategoria) {
     document.getElementById('editIdDocumento').value = idDocumento;
     document.getElementById('editTitulo').value = titulo;
     document.getElementById('editDescripcion').value = descripcion;
-    document.getElementById('editArchivoUrl').value = archivoUrl;
     document.getElementById('editCategoria').value = idCategoria;
+    document.getElementById('editArchivo').value = '';
 
     mensajeErrorEdicion.textContent = '';
 
@@ -172,4 +172,5 @@ document.addEventListener('keydown', (evento) => {
     if (evento.key !== 'Escape') return;
     if (!uploadModal.classList.contains('hidden')) cerrarModalCreacion();
     if (!editModal.classList.contains('hidden')) cerrarModalEdicion();
+    
 });
