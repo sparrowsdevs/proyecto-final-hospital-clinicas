@@ -1,0 +1,12 @@
+# Seguridad: esta carpeta solo debe servir archivos estáticos (PDFs).
+
+# Bloquea la ejecución de PHP u otros scripts, aunque alguien lograra
+
+# subir un archivo malicioso disfrazado de PDF.
+
+<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|cgi|sh|asp|aspx)$">
+Require all denied
+</FilesMatch>
+
+Options -ExecCGI
+php_flag engine off
