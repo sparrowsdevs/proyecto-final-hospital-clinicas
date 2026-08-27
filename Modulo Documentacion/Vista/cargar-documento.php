@@ -114,6 +114,15 @@ $totalSuspendidos = count($documentos) - $totalActivos;
                                     </td>
                                     <td class="text-right">
                                         <div class="action-group">
+                                            <a
+                                                class="icon-action text-secondary hover-blue"
+                                                title="Ver documento"
+                                                href="../<?= htmlspecialchars($doc['archivo_url'], ENT_QUOTES, 'UTF-8') ?>"
+                                                target="_blank"
+                                                rel="noopener">
+                                                <span class="material-symbols-outlined icon-sm">visibility</span>
+                                            </a>
+
                                             <button
                                                 class="icon-action text-secondary hover-blue"
                                                 title="Editar documento"
@@ -121,7 +130,6 @@ $totalSuspendidos = count($documentos) - $totalActivos;
                                                     <?= (int) $doc['id_documento'] ?>,
                                                     '<?= htmlspecialchars(addslashes($doc['titulo']), ENT_QUOTES, 'UTF-8') ?>',
                                                     '<?= htmlspecialchars(addslashes($doc['descripcion'] ?? ''), ENT_QUOTES, 'UTF-8') ?>',
-                                                    '<?= htmlspecialchars(addslashes($doc['archivo_url']), ENT_QUOTES, 'UTF-8') ?>',
                                                     <?= (int) $doc['id_categoria'] ?>
                                                 )">
                                                 <span class="material-symbols-outlined icon-sm">edit</span>
@@ -166,7 +174,7 @@ $totalSuspendidos = count($documentos) - $totalActivos;
                 </button>
             </div>
 
-            <form id="formCreacionDocumento">
+            <form id="formCreacionDocumento" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="mensaje-error" id="mensajeErrorCreacion"></div>
 
@@ -196,9 +204,9 @@ $totalSuspendidos = count($documentos) - $totalActivos;
                     </div>
 
                     <div class="form-group mt-sm">
-                        <label class="form-label" for="crearArchivoUrl">URL o ruta del documento</label>
-                        <input class="form-input" id="crearArchivoUrl" name="archivo_url" placeholder="https://... o /ruta/al/archivo.pdf" type="text" required>
-                        <span class="form-hint">Por ahora se ingresa manualmente el enlace o ruta donde está alojado el archivo.</span>
+                        <label class="form-label" for="crearArchivo">Archivo PDF</label>
+                        <input class="form-input" id="crearArchivo" name="archivo" type="file" accept="application/pdf" required>
+                        <span class="form-hint">Solo archivos PDF, tamaño máximo 10MB.</span>
                     </div>
                 </div>
 
@@ -224,7 +232,7 @@ $totalSuspendidos = count($documentos) - $totalActivos;
                 </button>
             </div>
 
-            <form id="formEdicionDocumento">
+            <form id="formEdicionDocumento" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="mensaje-error" id="mensajeErrorEdicion"></div>
 
@@ -255,8 +263,9 @@ $totalSuspendidos = count($documentos) - $totalActivos;
                     </div>
 
                     <div class="form-group mt-sm">
-                        <label class="form-label" for="editArchivoUrl">URL o ruta del documento</label>
-                        <input class="form-input" id="editArchivoUrl" name="archivo_url" type="text" required>
+                        <label class="form-label" for="editArchivo">Reemplazar archivo PDF</label>
+                        <input class="form-input" id="editArchivo" name="archivo" type="file" accept="application/pdf">
+                        <span class="form-hint">Dejar vacío para conservar el archivo actual.</span>
                     </div>
                 </div>
 
