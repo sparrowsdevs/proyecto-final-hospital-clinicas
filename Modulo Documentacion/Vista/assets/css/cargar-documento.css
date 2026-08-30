@@ -1,6 +1,4 @@
-/* =========================================
-   1. VARIABLES Y TOKENS DE DISEÑO
-   ========================================= */
+/*   VARIABLES Y TOKENS DE DISEÑO   */
 :root {
     /* Colores Principales */
     --primary: #00254b;
@@ -50,9 +48,9 @@
     --radius-xl: 1rem;
 }
 
-/* =========================================
-   2. RESET Y UTILIDADES GLOBALES
-   ========================================= */
+
+/* RESET Y UTILIDADES GLOBALES */
+  
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -93,10 +91,11 @@ table { border-collapse: collapse; width: 100%; text-align: left; }
 .cursor-pointer { cursor: pointer; }
 
 
-/*    3. TOP NAVIGATION BAR + SIDEBAR
+/*   TOP NAVIGATION BAR + SIDEBAR
    Migrados a: Servicios Comunes/Vista General/assets/css/navbar.css
    (componente compartido por los 3 paneles del sistema)
-   */
+   
+*/
 
 
  /* ESTRUCTURA PRINCIPAL (Contenido) */

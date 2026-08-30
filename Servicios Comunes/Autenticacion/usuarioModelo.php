@@ -139,10 +139,6 @@ class UsuarioModelo
      * Cambia el rol de un usuario: elimina su(s) asignación(es) actual(es)
      * en usuario_rol y asigna el nuevo rol. Uso exclusivo del rol Administrador.
      * Envuelto en transacción para que no quede el usuario sin rol si algo falla.
-     *
-     * @param int $idUsuario
-     * @param int $idRol
-     * @return bool
      */
     public function cambiarRol(int $idUsuario, int $idRol): bool
     {

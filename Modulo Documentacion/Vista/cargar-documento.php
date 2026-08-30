@@ -1,7 +1,5 @@
 <?php
-/**
- * cargar-documento.php
- *
+/*
  * Acceso exclusivo para usuarios con sesión activa y rol Administrador.
  * CRUD real de documentos, conectado a la base de datos.
  */

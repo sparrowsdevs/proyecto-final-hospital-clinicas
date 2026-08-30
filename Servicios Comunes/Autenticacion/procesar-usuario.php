@@ -26,8 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $accion = $_POST['accion'] ?? '';
 $idUsuario = isset($_POST['id_usuario']) ? (int) $_POST['id_usuario'] : 0;
 
-// La acción "crear" no tiene id_usuario (todavía no existe el registro);
-// el resto de las acciones sí lo requieren.
+
 if ($accion !== 'crear' && $idUsuario <= 0) {
     echo json_encode(['exito' => false, 'mensaje' => 'Usuario inválido.']);
     exit;

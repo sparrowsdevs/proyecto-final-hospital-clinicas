@@ -52,9 +52,7 @@ body {
 .page-header h1 { font-family: var(--font-heading); font-size: 28px; font-weight: 700; color: var(--primary); }
 .page-header p { font-size: 14px; color: var(--secondary); }
 
-/* =========================================
-   Tabla de usuarios
-   ========================================= */
+/* Tabla de usuarios */
 .table-container {
     background-color: #ffffff;
     border-radius: 16px;
@@ -89,9 +87,7 @@ body {
 .btn-icon-action:disabled { opacity: 0.35; cursor: not-allowed; }
 .btn-icon-action:disabled:hover { background-color: #ffffff; color: var(--secondary); border-color: var(--outline-variant); }
 
-/* =========================================
-   Modal de edición
-   ========================================= */
+/*   Modal de edición   */
 .modal-overlay {
     position: fixed; inset: 0; background-color: rgba(27, 28, 28, 0.4);
     backdrop-filter: blur(4px); z-index: 100;

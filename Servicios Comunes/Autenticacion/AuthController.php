@@ -25,10 +25,6 @@ class AuthController
      * Procesa el intento de login (cédula + contraseña).
      * Si es exitoso, guarda los datos del usuario y sus roles en $_SESSION.
      * Nunca guarda la contraseña en sesión.
-     *
-     * @param string $cedula
-     * @param string $contrasena
-     * @return array ['exito' => bool, 'mensaje' => string]
      */
     public function iniciarSesion(string $cedula, string $contrasena): array
     {
@@ -76,20 +72,7 @@ class AuthController
         session_destroy();
     }
 
-    /**
-     * Protege una ruta: exige sesión activa (y opcionalmente un rol específico).
-     * Si no se cumple, redirige al login. Además, envía cabeceras HTTP que
-     * impiden el cacheo de la página en el navegador — esto evita que, tras
-     * cerrar sesión, el botón "Atrás" muestre una copia cacheada del panel
-     * en vez de forzar una nueva verificación de sesión contra el servidor.
-     *
-     * Uso: al inicio de cada vista protegida, ANTES de imprimir cualquier HTML.
-     *   $auth->protegerRuta();                  // exige solo sesión activa
-     *   $auth->protegerRuta('Administrador');   // exige sesión + rol específico
-     *
-     * @param string|null $rolRequerido Nombre del rol exigido, o null si alcanza con estar logueado.
-     * @param string $rutaLogin Ruta relativa hacia index.php desde el archivo que llama a este método.
-     */
+   
     public function protegerRuta(?string $rolRequerido = null, string $rutaLogin = '../../index.php'): void
     {
         // Cabeceras anti-caché: fuerzan al navegador a no guardar esta página
@@ -116,13 +99,7 @@ class AuthController
         return isset($_SESSION['id_usuario']);
     }
 
-    /**
-     * Verifica si el usuario en sesión posee un rol específico.
-     * Preparado para soportar múltiples roles por usuario.
-     *
-     * @param string $nombreRol Ej: "Administrador", "Medico", "Chofer"
-     * @return bool
-     */
+    
     public function tieneRol(string $nombreRol): bool
     {
         if (!$this->sesionActiva() || !isset($_SESSION['roles'])) {

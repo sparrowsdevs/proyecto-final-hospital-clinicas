@@ -1,11 +1,6 @@
 <?php
-/**
- * DocumentoModelo.php
- * Modulo Documentacion / Modelo
- *
- * Proyecto S.I.G.S.M. - Hospital de Clínicas
- * Sparrows Devs
- *
+/*
+
  * CRUD de documentos: alta, listado, edición y borrado lógico
  * (suspender/reactivar). Uso exclusivo del rol Administrador.
  */
@@ -23,9 +18,6 @@ class DocumentoModelo
 
     /**
      * Lista todos los documentos activos, con el nombre de su categoría
-     * y el nombre de quien lo cargó, para la tabla de administración.
-     *
-     * @return array
      */
     public function listarActivos(): array
     {
@@ -49,8 +41,6 @@ class DocumentoModelo
     /**
      * Lista TODOS los documentos (activos e inactivos), para el panel de
      * administración donde también se ven los suspendidos.
-     *
-     * @return array
      */
     public function listarTodos(): array
     {
@@ -72,9 +62,6 @@ class DocumentoModelo
 
     /**
      * Busca un documento por su ID (para precargar el formulario de edición).
-     *
-     * @param int $idDocumento
-     * @return array|false
      */
     public function buscarPorId(int $idDocumento): array|false
     {
@@ -92,10 +79,6 @@ class DocumentoModelo
 
     /**
      * Crea un nuevo documento.
-     *
-     * @param array $datos Debe incluir: titulo, descripcion, archivo_url,
-     *                      id_categoria, id_usuario_carga.
-     * @return int ID del documento recién creado.
      */
     public function crear(array $datos): int
     {
@@ -116,10 +99,6 @@ class DocumentoModelo
     /**
      * Actualiza los datos de un documento existente.
      * Registra automáticamente la fecha de modificación.
-     *
-     * @param int $idDocumento
-     * @param array $datos Debe incluir: titulo, descripcion, archivo_url, id_categoria.
-     * @return bool
      */
     public function actualizar(int $idDocumento, array $datos): bool
     {
@@ -172,11 +151,10 @@ class DocumentoModelo
         return $consulta->execute();
     }
 
-    /**
+    /*
      * Obtiene el catálogo completo de categorías, para poblar el selector
      * del formulario de carga/edición de documentos.
      *
-     * @return array Lista de categorías (id_categoria, nombre_categoria).
      */
     public function obtenerCategorias(): array
     {

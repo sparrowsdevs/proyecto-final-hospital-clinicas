@@ -1,6 +1,5 @@
 <?php
-/**
- * Clase Conexion
+/*
  * Provee una única instancia de conexión PDO a la base de datos MySQL.
  * reutilizable por todos los módulos del sistema (Documentación, Ambulancias, Encuestas).
  *

@@ -1,6 +1,6 @@
 <?php
 /**
- * Endpoint AJAX: recibe cédula + contraseña vía POST (FormData),
+ * Endpoint AJAX: recibe cédula + contraseña vía POST ,
  * procesa el login mediante AuthController y devuelve el resultado en JSON.
  * Consumido por el fetch() del formulario en index.php.
  */
