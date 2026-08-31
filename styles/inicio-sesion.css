@@ -1,6 +1,4 @@
-/* =========================================
-   1. VARIABLES CSS
-   ========================================= */
+/*  VARIABLES CSS */
 :root {
     /* Paleta de Colores */
     --primary: #00254b;
@@ -29,16 +27,13 @@
     --spacing-lg: 32px;
 }
 
-/* =========================================
-   2. RESET Y BASE
-   ========================================= */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-/* EL TRUCO PARA EL FOOTER: Flexbox en el body con min-height: 100vh */
+/*  Flexbox en el body con min-height: 100vh */
 body {
     font-family: var(--font-body);
     color: var(--on-surface);
@@ -46,24 +41,29 @@ body {
     flex-direction: column;
     min-height: 100vh;
     background-color: var(--surface);
-    /* Efecto Mesh */
+    
+
     background-image: 
         radial-gradient(at 0% 0%, rgba(205, 225, 252, 0.3) 0, transparent 50%), 
         radial-gradient(at 100% 100%, rgba(176, 196, 222, 0.2) 0, transparent 50%);
     -webkit-font-smoothing: antialiased;
 }
 
-a { text-decoration: none; }
-button, input { font-family: inherit; border: none; outline: none; background: transparent; }
+a {
+    text-decoration: none;
+}
+button, input {
+     font-family: inherit;
+      border: none; outline: none;
+       background: transparent;
+}
 
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
-/* =========================================
-   3. BACKGROUND Y DECORACIÓN
-   ========================================= */
-.bg-wrapper {
+/*  BACKGROUND Y DECORACIÓN */
+.contenedor-fondo {
     position: fixed;
     inset: 0;
     z-index: 0;
@@ -72,7 +72,7 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     overflow: hidden;
 }
 
-.bg-image {
+.imagen-fondo {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -81,11 +81,9 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     transition: transform 0.1s ease-out;
 }
 
-/* =========================================
-   4. CONTENIDO PRINCIPAL Y CENTRADO
-   ========================================= */
+/*  CONTENIDO PRINCIPAL Y CENTRADO  */
 /* Al tener flex-grow: 1, ocupa todo el espacio libre y empuja el footer abajo */
-.main-content {
+.contenido-principal {
     position: relative;
     z-index: 10;
     flex-grow: 1;
@@ -95,10 +93,10 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     padding: var(--spacing-sm);
 }
 @media (min-width: 768px) {
-    .main-content { padding: var(--spacing-lg); }
+    .contenido-principal { padding: var(--spacing-lg); }
 }
 
-.login-card {
+.tarjeta-login {
     width: 100%;
     max-width: 28rem; /* 448px */
     background-color: #ffffff;
@@ -108,30 +106,82 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     overflow: hidden;
     transition: border-color 0.3s;
 }
-.login-card:hover { border-color: var(--primary-fixed); }
 
-.accent-bar { height: 6px; width: 100%; background-color: var(--primary-container); }
-.card-body { padding: var(--spacing-lg); }
+.tarjeta-login:hover {
+     border-color: var(--primary-fixed);
+}
+
+.barra-acento {
+     height: 6px; width: 100%;
+     background-color: var(--primary-container);
+}
+
+.cuerpo-tarjeta {
+     padding: var(--spacing-lg);
+}
 
 /* Card Header */
-.card-header { display: flex; flex-direction: column; align-items: center; margin-bottom: var(--spacing-lg); text-align: center; }
-.brand-logo { height: 100px; width: auto; object-fit: contain; margin-bottom: var(--spacing-md); }
-.title { font-family: var(--font-heading); font-size: 24px; font-weight: 600; color: var(--primary); margin-top: var(--spacing-xs); }
-.subtitle { font-size: 12px; font-weight: 600; color: var(--outline); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+.encabezado-tarjeta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    text-align: center; 
+}
 
-/* =========================================
-   5. FORMULARIO
-   ========================================= */
-.login-form { display: flex; flex-direction: column; gap: var(--spacing-md); }
-.form-group { display: flex; flex-direction: column; gap: var(--spacing-xs); }
-.form-label { font-size: 12px; font-weight: 600; color: var(--on-surface-variant); }
+.logo-marca {
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: var(--spacing-md);
+}
+.titulo-login {
+    font-family: var(--font-heading);
+    font-size: 24px; font-weight: 600;
+    color: var(--primary);
+    margin-top: var(--spacing-xs);
+}
+.subtitulo {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--outline);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+}
+
+/* FORMULARIO */
+.formulario-login {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+ }
+.grupo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+ }
+.etiqueta-formulario {
+     font-size: 12px;
+    font-weight: 600;
+    color: var(--on-surface-variant);
+ }
 
 /* Inputs y Wrappers */
-.input-wrapper { position: relative; display: flex; align-items: center; }
-.input-icon { position: absolute; left: 12px; color: var(--outline); transition: color 0.2s; }
-.input-wrapper:focus-within .input-icon { color: var(--primary); }
+.contenedor-input {
+    position: relative;
+    display: flex; align-items: center;
+ }
+.icono-input {
+    position: absolute;
+    left: 12px; color: var(--outline);
+    transition: color 0.2s;
+}
+.contenedor-input:focus-within .icono-input {
+     color: var(--primary);
+}
 
-.form-control {
+.control-formulario {
     width: 100%;
     padding: 12px 16px 12px 40px;
     background-color: #ffffff;
@@ -141,11 +191,18 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     color: var(--on-surface);
     transition: all 0.2s;
 }
-.form-control::placeholder { color: rgba(115, 119, 129, 0.5); }
-.form-control:focus { border-color: var(--primary-container); box-shadow: 0 0 0 2px var(--primary-fixed); }
-.pr-12 { padding-right: 48px; } /* Espacio para el ojito de password */
+.control-formulario::placeholder {
+    color: rgba(115, 119, 129, 0.5);
+ }
+.control-formulario:focus {
+     border-color: var(--primary-container);
+    box-shadow: 0 0 0 2px var(--primary-fixed);
+}
+.pr-12 {
+     padding-right: 48px;
+} /* Espacio para el ojito de password */
 
-.toggle-password-btn {
+.btn-mostrar-contrasena {
     position: absolute;
     right: 12px;
     color: var(--outline);
@@ -154,19 +211,53 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     align-items: center;
     transition: color 0.2s;
 }
-.toggle-password-btn:hover { color: var(--primary); }
+.btn-mostrar-contrasena:hover {
+     color: var(--primary);
+     }
 
 /* Opciones debajo de inputs */
-.form-actions { display: flex; align-items: center; justify-content: space-between; padding-top: 4px; }
-.checkbox-wrapper { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-.custom-checkbox { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--outline-variant); accent-color: var(--primary-container); cursor: pointer; }
-.checkbox-text { font-size: 14px; color: var(--on-surface-variant); transition: color 0.2s; }
-.checkbox-wrapper:hover .checkbox-text { color: var(--on-surface); }
-.forgot-link { font-size: 12px; font-weight: 600; color: var(--primary-container); text-underline-offset: 4px; text-decoration-thickness: 2px; transition: text-decoration 0.2s; }
-.forgot-link:hover { text-decoration: underline; }
+.acciones-formulario {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 4px; 
+}
+.contenedor-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+ }
+.checkbox-personalizado {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1px solid var(--outline-variant);
+    accent-color: var(--primary-container);
+    cursor: pointer; 
+}
+.texto-checkbox {
+    font-size: 14px;
+    color: var(--on-surface-variant);
+    transition: color 0.2s;
+ }
+.contenedor-checkbox:hover .texto-checkbox {
+    color: var(--on-surface);
+    }
+.enlace-olvido {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary-container);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
+    transition: text-decoration 0.2s;
+ }
+.enlace-olvido:hover { 
+    text-decoration: underline;
+ }
 
 /* Botón Submit */
-.btn-submit {
+.btn-enviar {
     width: 100%;
     background-color: var(--primary-container);
     color: var(--on-primary);
@@ -183,18 +274,32 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     box-shadow: 0 4px 12px rgba(0, 59, 113, 0.2);
     transition: all 0.3s;
 }
-.btn-submit:hover { background-color: var(--primary); }
-.btn-submit:active { transform: scale(0.98); }
-.btn-submit.loading { opacity: 0.8; cursor: not-allowed; pointer-events: none; }
+.btn-enviar:hover {
+    background-color: var(--primary);
+ }
+.btn-enviar:active {
+     transform: scale(0.98);
+}
+.btn-enviar.cargando-estado {
+     opacity: 0.8; cursor: not-allowed; pointer-events: none;
+}
 
 /* Animación Spinner para cuando carga */
-.spinner { height: 20px; width: 20px; color: var(--on-primary); animation: spin 1s linear infinite; }
-.spinner-track { opacity: 0.25; }
-.spinner-head { opacity: 0.75; }
+.cargando {
+    height: 20px; width: 20px;
+    color: var(--on-primary);
+    animation: spin 1s linear infinite;
+ }
+.cargando-pista {
+     opacity: 0.25;
+}
+.cargando-cabeza {
+     opacity: 0.75;
+}
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 /* Form Footer Links */
-.card-footer {
+.pie-tarjeta {
     margin-top: var(--spacing-lg);
     padding-top: var(--spacing-md);
     border-top: 1px solid var(--outline-variant);
@@ -203,8 +308,10 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     align-items: center;
     gap: var(--spacing-xs);
 }
-.card-footer p { font-size: 14px; color: var(--on-surface-variant); }
-.btn-outline {
+.pie-tarjeta p {
+     font-size: 14px; color: var(--on-surface-variant);
+}
+.btn-contorno {
     display: inline-flex;
     align-items: center;
     font-size: 12px;
@@ -215,12 +322,14 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     padding: 8px 24px;
     transition: all 0.3s;
 }
-.btn-outline:hover { background-color: var(--clinical-blue-vibrant); color: var(--on-primary); border-color: var(--clinical-blue-vibrant); }
+.btn-contorno:hover {
+    background-color: var(--clinical-blue-vibrant);
+    color: var(--on-primary);
+    border-color: var(--clinical-blue-vibrant);
+     }
 
-/* =========================================
-   6. GLOBAL FOOTER
-   ========================================= */
-.global-footer {
+/* GLOBAL FOOTER */
+.pie-global {
     position: relative;
     z-index: 10;
     width: 100%;
@@ -231,10 +340,12 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     margin-top: auto; /* Empuja el footer firmemente al fondo si el main no ocupa todo */
 }
 @media (min-width: 768px) {
-    .global-footer { padding-left: var(--spacing-lg); padding-right: var(--spacing-lg); }
+    .pie-global { padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+        }
 }
 
-.footer-content {
+.contenido-pie {
     max-width: var(--container-max);
     margin: 0 auto;
     display: flex;
@@ -244,13 +355,27 @@ button, input { font-family: inherit; border: none; outline: none; background: t
     gap: var(--spacing-sm);
 }
 @media (min-width: 768px) {
-    .footer-content { flex-direction: row; }
+    .contenido-pie { flex-direction: row; }
 }
 
-.footer-copy { font-size: 12px; font-weight: 600; color: var(--on-surface-variant); text-align: center; }
-.footer-links { display: flex; gap: var(--spacing-md); }
-.footer-links a { font-size: 12px; font-weight: 600; color: var(--outline); transition: color 0.2s; }
-.footer-links a:hover { color: var(--primary); }
+.copyright-pie {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--on-surface-variant);
+    text-align: center;
+ }
+.enlaces-pie {
+    display: flex;
+    gap: var(--spacing-md);
+ }
+.enlaces-pie a {
+    font-size: 12px;
+    font-weight: 600; color: var(--outline);
+    transition: color 0.2s;
+ }
+.enlaces-pie a:hover {
+     color: var(--primary);
+}
 
 .mensaje-error {
     background-color: #fdecea;
