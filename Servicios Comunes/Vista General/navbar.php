@@ -46,15 +46,6 @@ function claseActivaNav(string $pagina, string $paginaActual): string
         </a>
         <?php endif; ?>
     </nav>
-
-    <?php if ($esAdministrador): ?>
-    <div class="sidebar-footer">
-        <a href="cargar-documento.php" class="btn btn-action">
-            <span class="material-symbols-outlined">add_circle</span>
-            Nuevo Documento
-        </a>
-    </div>
-    <?php endif; ?>
 </aside>
 
 <header class="topbar">
@@ -63,11 +54,6 @@ function claseActivaNav(string $pagina, string $paginaActual): string
     </div>
 
     <div class="topbar-right">
-        <button class="icon-btn">
-            <span class="material-symbols-outlined">notifications</span>
-            <span class="badge-dot"></span>
-        </button>
-
         <div class="user-profile">
             <div class="user-info">
                 <p class="user-name"><?= htmlspecialchars($nombreUsuario, ENT_QUOTES, 'UTF-8') ?></p>
