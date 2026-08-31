@@ -73,7 +73,6 @@ function claseActivaNav(string $pagina, string $paginaActual): string
                 <p class="user-name"><?= htmlspecialchars($nombreUsuario, ENT_QUOTES, 'UTF-8') ?></p>
                 <p class="user-role"><?= htmlspecialchars(mb_strtoupper($rolUsuario, 'UTF-8'), ENT_QUOTES, 'UTF-8') ?></p>
             </div>
-            <img alt="Avatar del usuario" class="user-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfsEIou6s2sMAq4m24L_nLyJfh2FtUJGkUBwv9EYRRDsyNxnRz9sPofD3A54kY6d6OSy7SI77mXa_LxtgZRen0VE8zM1KlqNcGE-sEadHhKeYv9_5fbTVtJopEfkdTCe3v_JgxfARWaziGM4U4Lo3MP8-qfOhlIwVpFFGv2iM-eALZ_YBT2ZujuZ-FpPL4w7K6c287gkV9A9RecFUoL_kZBi1XydK38hLm0BKDr-Mz3lW1LR8UlWOsEujLJFsOm-n2MRrKvuLN105U">
         </div>
 
         <a href="../../Servicios Comunes/Autenticacion/logout.php" class="btn-logout">
