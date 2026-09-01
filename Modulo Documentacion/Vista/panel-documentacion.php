@@ -64,8 +64,7 @@ $paginaActual = 'documentacion';
                         <p class="doc-desc">Instrucciones detalladas sobre ayuno y consumo de líquidos previos al estudio de abdomen superior.</p>
                     </div>
                     <button class="btn-outline-primary w-full" onclick="openModal('Preparación para Ecografía Abdominal', 'Radiología')">
-                        <span class="material-symbols-outlined icon-sm">qr_code_2</span>
-                        Mostrar código QR
+                        Visualizar PDF
                     </button>
                 </div>
 
@@ -79,8 +78,7 @@ $paginaActual = 'documentacion';
                         <p class="doc-desc">Protocolo de ayuno de 8 a 12 horas para perfiles lipídicos y glucemia basal. Recomendaciones generales.</p>
                     </div>
                     <button class="btn-outline-primary w-full" onclick="openModal('Ayuno para Análisis de Sangre', 'Laboratorio')">
-                        <span class="material-symbols-outlined icon-sm">qr_code_2</span>
-                        Mostrar código QR
+                        Visualizar PDF
                     </button>
                 </div>
 
@@ -94,8 +92,7 @@ $paginaActual = 'documentacion';
                         <p class="doc-desc">Requisitos de vestimenta y medicación previa para el test de ergometría graduada.</p>
                     </div>
                     <button class="btn-outline-primary w-full" onclick="openModal('Preparación para Prueba de Esfuerzo', 'Cardiología')">
-                        <span class="material-symbols-outlined icon-sm">qr_code_2</span>
-                        Mostrar código QR
+                        Visualizar PDF
                     </button>
                 </div>
 
@@ -109,8 +106,7 @@ $paginaActual = 'documentacion';
                         <p class="doc-desc">Guía de higiene y suspensión de anticoagulantes para cirugías programadas de baja complejidad.</p>
                     </div>
                     <button class="btn-outline-primary w-full" onclick="openModal('Indicaciones Pre-operatorias Generales', 'Cirugía')">
-                        <span class="material-symbols-outlined icon-sm">qr_code_2</span>
-                        Mostrar código QR
+                        Visualizar PDF
                     </button>
                 </div>
 
