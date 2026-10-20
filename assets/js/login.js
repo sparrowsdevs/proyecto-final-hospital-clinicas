@@ -1,8 +1,3 @@
-/*
- * Lógica de la vista de login (index.php): mostrar/ocultar contraseña,
- * validación del formulario, envío vía AJAX (fetch) y efecto de
- * movimiento (parallax) en la imagen de fondo.
- */
 
 // Referencias a los elementos del formulario (por su "id" en el HTML)
 const formularioLogin = document.getElementById('formularioLogin');
@@ -14,15 +9,12 @@ const mensajeError = document.getElementById('mensajeError');
 const errorCedula = document.getElementById('errorCedula');
 const errorContrasena = document.getElementById('errorContrasena');
 
-// ============================================
+
 // Validaciones del formulario (solo para mejorar la experiencia del
 // usuario). La validación real y definitiva siempre ocurre en el backend.
-// ============================================
 
-/**
- * Revisa que la cédula tenga el formato correcto: solo números, 7 u 8 dígitos.
- * @returns {boolean} true si es válida.
- */
+
+
 function validarCedula() {
     const valor = inputCedula.value.trim();
     const esValida = /^\d{7,8}$/.test(valor);
@@ -38,10 +30,7 @@ function validarCedula() {
     return esValida;
 }
 
-/**
- * Revisa que el campo de contraseña no esté vacío.
- * @returns {boolean} true si es válida.
- */
+
 function validarContrasena() {
     const esValida = inputContrasena.value.length > 0;
 
@@ -54,7 +43,7 @@ function validarContrasena() {
     return esValida;
 }
 
-/**
+/*
  * Marca un campo como inválido (borde rojo) y muestra el mensaje de error.
  */
 function mostrarError(campoInput, contenedorError, mensaje) {
@@ -62,7 +51,7 @@ function mostrarError(campoInput, contenedorError, mensaje) {
     contenedorError.textContent = mensaje;
 }
 
-/**
+/*
  * Quita la marca de inválido de un campo y borra su mensaje de error.
  */
 function limpiarError(campoInput, contenedorError) {
@@ -70,7 +59,7 @@ function limpiarError(campoInput, contenedorError) {
     contenedorError.textContent = '';
 }
 
-/**
+/*
  * Habilita el botón "Ingresar" solo cuando ambos campos son válidos.
  * Se llama después de cada validación individual, sin mostrar mensajes nuevos.
  */
@@ -94,18 +83,17 @@ inputContrasena.addEventListener('input', actualizarEstadoBoton);
 // Al cargar la página, el botón arranca deshabilitado hasta completar ambos campos
 botonEnviar.disabled = true;
 
-// ============================================
-// Mostrar u ocultar la contraseña al hacer clic en el ícono del ojo
-// ============================================
+
+
 mostrarContrasena.addEventListener('click', () => {
     const estaOculta = inputContrasena.type === 'password';
     inputContrasena.type = estaOculta ? 'text' : 'password';
     mostrarContrasena.textContent = estaOculta ? 'visibility_off' : 'visibility';
 });
 
-// ============================================
+
 // Envío del formulario de login vía AJAX (sin recargar la página)
-// ============================================
+
 formularioLogin.addEventListener('submit', async (evento) => {
     evento.preventDefault();
 
@@ -158,10 +146,9 @@ formularioLogin.addEventListener('submit', async (evento) => {
     }
 });
 
-// ============================================
 // Efecto de movimiento sutil (parallax) en la imagen de fondo,
 // siguiendo el mouse por la pantalla
-// ============================================
+
 document.addEventListener('mousemove', (evento) => {
     const moverX = (evento.clientX - window.innerWidth / 2) * 0.01;
     const moverY = (evento.clientY - window.innerHeight / 2) * 0.01;
