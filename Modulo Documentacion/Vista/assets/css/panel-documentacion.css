@@ -239,18 +239,9 @@ input {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* Acentos izquierdos de las tarjetas */
-.border-blue {
+/* Acento neutro común a todas las tarjetas */
+.doc-card {
     border-left: 4px solid var(--primary-container);
-}
-.border-success {
-    border-left: 4px solid var(--success);
-}
-.border-tertiary {
-    border-left: 4px solid var(--tertiary);
-}
-.border-error {
-    border-left: 4px solid var(--error);
 }
 
 .doc-card-body {
@@ -272,21 +263,10 @@ input {
     letter-spacing: 0.05em;
     border-radius: 4px;
 }
-.badge-blue {
+/* Badge de categoría (estilo único) */
+.badge {
     background-color: var(--secondary-container);
     color: var(--on-secondary-container);
-}
-.badge-success {
-    background-color: var(--success-light);
-    color: var(--success);
-}
-.badge-tertiary {
-    background-color: var(--blue-100);
-    color: var(--primary);
-}
-.badge-error {
-    background-color: var(--error-light);
-    color: var(--error);
 }
 
 .doc-title {
@@ -322,169 +302,54 @@ input {
     color: var(--on-primary);
 }
 
-/* 
-   6. MODAL (QR CODE)
-   */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-}
-.modal-overlay.hidden {
-    display: none;
-}
-
-.modal-container {
-    width: 100%;
-    max-width: 28rem;
-    background-color: var(--surface);
-    border-radius: var(--radius-xl);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    overflow: hidden;
-    transform: scale(0.95);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.modal-container.show {
-    transform: scale(1);
-    opacity: 1;
-}
-
-.modal-header {
-    padding: 16px 24px;
-    background-color: var(--surface-container-low);
-    border-bottom: 1px solid var(--outline-variant);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.modal-title {
-    font-family: var(--font-heading);
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--primary);
-}
-.btn-close {
-    color: var(--on-surface-variant);
-    transition: color 0.2s;
-}
-.btn-close:hover {
-    color: var(--error);
-}
-
-.modal-body {
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-/* Representación simulada del QR usando CSS puro */
-.qr-representation {
-    background-color: var(--surface);
-    padding: 16px;
-    border: 2px solid var(--primary);
-    border-radius: 8px;
-    margin-bottom: 24px;
-    position: relative;
-}
-.qr-pattern {
-    width: 192px;
-    height: 192px;
-    background-image: radial-gradient(var(--primary-container) 1px, transparent 1px);
-    background-size: 8px 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-.qr-icon {
-    font-size: 64px;
-    color: var(--primary);
-    opacity: 0.2;
-}
-
-/* Esquinas decorativas del QR */
-.qr-corner {
-    position: absolute;
-    width: 32px;
-    height: 32px;
-    border-color: var(--primary);
-}
-.top-left {
-    top: 0;
-    left: 0;
-    border-top: 4px solid;
-    border-left: 4px solid;
-}
-.top-right {
-    top: 0;
-    right: 0;
-    border-top: 4px solid;
-    border-right: 4px solid;
-}
-.bottom-left {
-    bottom: 0;
-    left: 0;
-    border-bottom: 4px solid;
-    border-left: 4px solid;
-}
-.bottom-right {
-    bottom: 0;
-    right: 0;
-    border-bottom: 4px solid;
-    border-right: 4px solid;
-}
-
-.modal-doc-name {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--on-surface);
-    margin-bottom: 4px;
-}
-.modal-doc-category {
+/* Fecha de carga y acciones de cada tarjeta */
+.doc-fecha {
+    margin-top: 12px;
     font-size: 12px;
-    font-weight: 600;
-    color: var(--on-surface-variant);
+    color: var(--outline);
 }
-
-.modal-actions {
+.doc-acciones {
     display: flex;
-    gap: 16px;
-    width: 100%;
-    margin-top: 32px;
+    gap: 12px;
 }
-.btn-primary {
+.doc-acciones .btn-outline-primary,
+.doc-acciones .btn-primary-solid {
+    flex: 1;
+}
+.btn-primary-solid {
     padding: 12px;
     background-color: var(--primary);
     color: var(--on-primary);
     font-weight: 700;
-    border-radius: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     transition: background-color 0.2s;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
-.btn-primary:hover {
+.btn-primary-solid:hover {
     background-color: var(--primary-container);
 }
-.btn-primary:active {
-    transform: scale(0.95);
+
+/* Ocultar elementos filtrados */
+.hidden {
+    display: none !important;
 }
-.btn-secondary {
-    padding: 12px;
-    background-color: var(--surface);
-    border: 1px solid var(--outline);
-    color: var(--on-surface);
-    font-weight: 700;
-    border-radius: 8px;
-    transition: background-color 0.2s;
+
+/* Estado vacío */
+.estado-vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 48px 0;
+    color: var(--on-surface-variant);
+    font-size: 16px;
+    text-align: center;
 }
-.btn-secondary:hover {
-    background-color: var(--surface-container-high);
+.estado-vacio .material-symbols-outlined {
+    font-size: 48px;
+    color: var(--outline);
 }
