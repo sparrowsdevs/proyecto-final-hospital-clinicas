@@ -6,6 +6,7 @@
  */
 require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
 require_once __DIR__ . '/../Modelo/DocumentoModelo.php';
+require_once __DIR__ . '/../../Servicios Comunes/Seguridad/AccesoPublico.php';
 
 $auth = new AuthController();
 $auth->protegerRuta();
@@ -15,6 +16,11 @@ $paginaActual = 'documentacion';
 // Documentos activos cargados por el Administrador (borrado lógico: activo = TRUE)
 $documentoModelo = new DocumentoModelo();
 $documentos = $documentoModelo->listarActivos();
+
+// URL que se codifica en el QR (repositorio público + token) y aviso si es local
+$urlQr = AccesoPublico::urlRepositorio($_SERVER['SCRIPT_NAME']);
+$qrEsLocal = AccesoPublico::esUrlLocal($urlQr);
+$servidorQr = parse_url($urlQr, PHP_URL_HOST) . (parse_url($urlQr, PHP_URL_PORT) ? ':' . parse_url($urlQr, PHP_URL_PORT) : '');
 
 // Categorías que realmente tienen documentos (para no mostrar chips vacíos)
 $categoriasConDocumentos = [];
@@ -53,6 +59,11 @@ function esc(?string $texto): string
             <section class="hero-section">
                 <h1 class="page-title">Panel de Documentación</h1>
 
+                <button class="btn-qr" id="btnMostrarQr" type="button">
+                    <span class="material-symbols-outlined">qr_code_2</span>
+                    Mostrar QR a los pacientes
+                </button>
+
                 <div class="search-wrapper">
                     <div class="search-input-group">
                         <input class="search-input" id="buscadorDocumentos" autocomplete="off"
@@ -76,8 +87,7 @@ function esc(?string $texto): string
             <section class="results-grid" id="listaDocumentos">
                 <?php foreach ($documentos as $documento): ?>
                     <?php
-                        $rutaArchivo = '../' . $documento['archivo_url'];
-                        $nombreDescarga = $documento['titulo'] . '.pdf';
+                        $urlControlador = '../Controlador/servir-documento.php?id=' . (int) $documento['id_documento'];
                     ?>
                     <div class="doc-card"
                          data-categoria="<?= (int) $documento['id_categoria'] ?>"
@@ -95,12 +105,12 @@ function esc(?string $texto): string
                         </div>
                         <div class="doc-acciones">
                             <a class="btn-outline-primary"
-                               href="<?= esc($rutaArchivo) ?>" target="_blank" rel="noopener">
+                               href="<?= esc($urlControlador . '&accion=ver') ?>" target="_blank" rel="noopener">
                                 <span class="material-symbols-outlined icon-sm">visibility</span>
                                 Ver PDF
                             </a>
                             <a class="btn-primary-solid"
-                               href="<?= esc($rutaArchivo) ?>" download="<?= esc($nombreDescarga) ?>">
+                               href="<?= esc($urlControlador . '&accion=descargar') ?>">
                                 <span class="material-symbols-outlined icon-sm">download</span>
                                 Descargar PDF
                             </a>
@@ -121,6 +131,41 @@ function esc(?string $texto): string
         </div>
     </main>
 
+    <!-- Modal: código QR para los pacientes (solo personal con sesión iniciada) -->
+    <div class="modal-overlay hidden" id="modalQr" role="dialog" aria-modal="true" aria-labelledby="tituloModalQr"
+         data-url="<?= esc($urlQr) ?>">
+        <div class="modal-container">
+            <div class="modal-header no-imprimir">
+                <h2 class="modal-title" id="tituloModalQr">Código QR para pacientes</h2>
+                <button class="btn-close" id="btnCerrarQr" type="button" aria-label="Cerrar">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="qr-titulo-impresion">Hospital de Clínicas</p>
+                <div class="qr-lienzo" id="lienzoQr"></div>
+                <p class="qr-instruccion">Escanee este código con la cámara de su celular para ver y descargar los documentos de preparación e indicaciones.</p>
+
+                <?php if ($qrEsLocal): ?>
+                    <p class="qr-aviso no-imprimir">
+                        El QR apunta a <strong><?= esc($servidorQr) ?></strong>, una dirección local que los celulares
+                        no pueden abrir. Configure <code>URL_BASE_PUBLICA</code> en
+                        <code>Servicios Comunes/Configuracion/configuracion.php</code>.
+                    </p>
+                <?php else: ?>
+                    <p class="qr-servidor no-imprimir">Servidor: <?= esc($servidorQr) ?></p>
+                <?php endif; ?>
+
+                <div class="modal-actions no-imprimir">
+                    <button class="btn-primary flex-1" id="btnImprimirQr" type="button">Imprimir</button>
+                    <button class="btn-secondary flex-1" id="btnFinalizarQr" type="button">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/qrcode.js"></script>
+    <script src="assets/js/qr-pacientes.js"></script>
     <script src="assets/js/panel-documentacion.js"></script>
 </body>
 </html>
