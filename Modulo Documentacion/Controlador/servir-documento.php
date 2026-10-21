@@ -1,7 +1,7 @@
 <?php
 /*
  * Controlador que entrega los archivos PDF (ver o descargar).
- *
+ * 
  * Los PDF NO se sirven directamente desde /uploads (esa carpeta está
  * bloqueada por .htaccess). Todo acceso pasa por acá, donde se verifica:
  *   - que quien pide tenga una sesión activa (personal del hospital)

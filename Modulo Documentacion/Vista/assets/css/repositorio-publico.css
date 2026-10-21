@@ -1,0 +1,44 @@
+/* Repositorio público (paciente): se apoya en panel-documentacion.css */
+.pagina-publica {
+    background-color: var(--surface-bg);
+}
+.publico-encabezado {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background-color: var(--primary);
+    color: var(--on-primary);
+}
+.publico-encabezado .material-symbols-outlined {
+    font-size: 32px;
+}
+.publico-hospital {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 18px;
+}
+.publico-subtitulo {
+    font-size: 13px;
+    opacity: 0.85;
+}
+.publico-contenedor {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 16px 16px 48px;
+}
+.pagina-publica .hero-section {
+    padding: 24px 0 8px;
+}
+.publico-aviso {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--outline);
+}
+@media (max-width: 480px) {
+    .doc-acciones {
+        flex-direction: column;
+    }
+}
