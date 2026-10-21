@@ -115,7 +115,7 @@ $totalSuspendidos = count($documentos) - $totalActivos;
                                             <a
                                                 class="icon-action text-secondary hover-blue"
                                                 title="Ver documento"
-                                                href="../<?= htmlspecialchars($doc['archivo_url'], ENT_QUOTES, 'UTF-8') ?>"
+                                                href="../Controlador/servir-documento.php?id=<?= (int) $doc['id_documento'] ?>&accion=ver"
                                                 target="_blank"
                                                 rel="noopener">
                                                 <span class="material-symbols-outlined icon-sm">visibility</span>
