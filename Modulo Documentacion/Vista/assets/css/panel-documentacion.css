@@ -353,3 +353,173 @@ input {
     font-size: 48px;
     color: var(--outline);
 }
+
+/* Botón "Mostrar QR a los pacientes" */
+.btn-qr {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: var(--primary);
+    color: var(--on-primary);
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: var(--radius-md);
+    transition: background-color 0.2s;
+}
+.btn-qr:hover {
+    background-color: var(--primary-container);
+}
+
+/* Modal del QR */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.modal-container {
+    width: 100%;
+    max-width: 28rem;
+    max-height: 100%;
+    overflow-y: auto;
+    background-color: var(--surface);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.modal-header {
+    padding: 16px 24px;
+    background-color: var(--surface-container-low);
+    border-bottom: 1px solid var(--outline-variant);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-title {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary);
+}
+.btn-close {
+    color: var(--on-surface-variant);
+}
+.btn-close:hover {
+    color: var(--error);
+}
+.modal-body {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.qr-titulo-impresion {
+    display: none;
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 16px;
+}
+.qr-lienzo {
+    width: 280px;
+    max-width: 100%;
+    padding: 12px;
+    background-color: #ffffff;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+}
+.qr-lienzo svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.qr-instruccion {
+    margin-top: 20px;
+    font-size: 15px;
+    color: var(--on-surface);
+    line-height: 1.5;
+}
+.qr-servidor {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--outline);
+}
+.qr-aviso {
+    margin-top: 16px;
+    padding: 12px;
+    background-color: var(--error-light);
+    color: var(--error);
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    line-height: 1.5;
+}
+.modal-actions {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    margin-top: 24px;
+}
+.btn-primary {
+    padding: 12px;
+    background-color: var(--primary);
+    color: var(--on-primary);
+    font-weight: 700;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+.btn-primary:hover {
+    background-color: var(--primary-container);
+}
+.btn-secondary {
+    padding: 12px;
+    background-color: var(--surface);
+    border: 1px solid var(--outline);
+    color: var(--on-surface);
+    font-weight: 700;
+    border-radius: 8px;
+}
+.btn-secondary:hover {
+    background-color: var(--surface-container-high);
+}
+
+/* Impresión: solo se imprime el QR con su leyenda */
+@media print {
+    body > *:not(#modalQr) {
+        display: none !important;
+    }
+    #modalQr {
+        position: static;
+        background: #ffffff;
+        backdrop-filter: none;
+        padding: 0;
+    }
+    #modalQr .modal-container {
+        box-shadow: none;
+        max-width: none;
+        overflow: visible;
+    }
+    #modalQr .modal-body {
+        padding: 48px 0;
+    }
+    #modalQr .no-imprimir {
+        display: none !important;
+    }
+    .qr-titulo-impresion {
+        display: block;
+    }
+    .qr-lienzo {
+        width: 420px;
+        border: none;
+    }
+    .qr-instruccion {
+        font-size: 20px;
+        max-width: 520px;
+    }
+}

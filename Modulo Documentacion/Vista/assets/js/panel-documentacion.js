@@ -1,5 +1,5 @@
 /*
- * filtrado en vivo (sin recargar la página)
+ * Panel de Documentación: filtrado en vivo (sin recargar la página)
  * por texto de búsqueda y por categoría. Las tarjetas ya vienen
  * renderizadas desde PHP con los atributos data-categoria y data-busqueda.
  */
