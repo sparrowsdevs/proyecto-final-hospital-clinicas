@@ -1,3 +1,15 @@
+<?php
+/*
+ * Acceso para cualquier usuario con sesión activa (Administrador y Usuario Básico).
+ * Si no hay sesión, se lo redirige al login.
+ */
+require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
+
+$auth = new AuthController();
+$auth->protegerRuta();
+
+$paginaActual = 'traslado-formulario';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,74 +21,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/css/form-traslado.css">
+    <link rel="stylesheet" href="../../Servicios Comunes/Vista General/assets/css/navbar.css">
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="brand-header">
-            <img alt="Hospital de Clinicas Logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnQG5BbOtUZYm8wlwzLWy649KTL7oBPfAkSEQ-r0noZgmtp7bHtLj9hgyixUMl2BuOcfB1oPzxA_L27PBIY9lQutdCPhsm3AwSu46oj7sLZtY1kGmmi0UUVKcBaO-fFJ-AwA_hVC2u16EU6C7TE0NzhxkI4SxwTad2H7oOa0Dan7U5eX5dykTPba56IHqVIXJWOVttVkvl0rZwLSgvk_FvR6Kgdkp96_mtcNKJDE6xcAcS4U4kagnVguVITg5RKjuSCSMgfoJIqcY">
-            <h2>Hospital de Clínicas</h2>
-            <p>Módulo de Logística</p>
-        </div>
-        <div style="padding: 16px;">
-            <button class="btn btn-primary" style="width: 100%;">
-                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
-                Nuevo Traslado
-            </button>
-        </div>
-        <nav class="sidebar-nav">
-            <ul>
-                <li><a class="nav-link" href="#"><span class="material-symbols-outlined">dashboard</span> Panel de Control</a></li>
-                <li><a class="nav-link active" href="#"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_shipping</span> Traslados</a></li>
-                <li><a class="nav-link" href="#"><span class="material-symbols-outlined">minor_crash</span> Gestión de Flota</a></li>
-                <li><a class="nav-link" href="#"><span class="material-symbols-outlined">map</span> Planificación de Rutas</a></li>
-                <li><a class="nav-link" href="#"><span class="material-symbols-outlined">assessment</span> Reportes</a></li>
-            </ul>
-        </nav>
-        <div class="sidebar-footer">
-            <ul>
-                <li><a class="nav-link" href="#"><span class="material-symbols-outlined">settings</span> Configuración</a></li>
-                <li><a class="nav-link" href="#"><span class="material-symbols-outlined">contact_support</span> Soporte</a></li>
-            </ul>
-        </div>
-    </aside>
+    <?php require __DIR__ . '/../../Servicios Comunes/Vista General/navbar.php'; ?>
 
     <main class="main-wrapper">
-        
-        <header class="topbar">
-            <div class="topbar-left">
-                <button class="icon-btn menu-toggle"><span class="material-symbols-outlined">menu</span></button>
-                <div class="mobile-brand">S.I.G.S.M.</div>
-                <div class="search-bar">
-                    <span class="material-symbols-outlined text-on-surface-variant">search</span>
-                    <input placeholder="Buscar..." type="text">
-                </div>
-            </div>
-            
-            <div class="topbar-right">
-                <button aria-label="Notificaciones" class="icon-btn">
-                    <span class="material-symbols-outlined">notifications</span>
-                    <span class="badge"></span>
-                </button>
-                <button aria-label="Ayuda" class="icon-btn hide-mobile">
-                    <span class="material-symbols-outlined">help</span>
-                </button>
-                <div style="width: 1px; height: 32px; background: var(--outline-variant); margin: 0 8px;" class="hide-mobile"></div>
-                
-                <button aria-label="Perfil" class="profile-btn">
-                    <img alt="Administrator Profile" class="profile-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUujrTo75TD7-Utskem1ZXlimqaUHSNjPdIht9H52dYBVtbzOfOclkiG-IYsXYmv-vK629kAHfe51PSdDn1v1KRlcIXSf6PjjUeKj91_mL92XeObrsfiqeEMTK0JDoQO4V2nfB3xIGZ9kHM3ndcv1LHev0dcqaYsjQoU2CoyDAIXKF1r6pMIe8aEP9mEdWBZuAHGcGbGpjHC7gioWgGISdIpE_Sb1RVS3K6989fjkwVIkoTytA5FUOC7mXpC-gQSTvIWk5iobw9HI">
-                    <span class="profile-name">Admin</span>
-                    <span class="material-symbols-outlined profile-chevron">expand_more</span>
-                </button>
-            </div>
-        </header>
 
         <div class="page-container">
             
             <div class="page-header">
                 <div>
                     <div class="breadcrumb">
-                        <a href="#">Traslados</a>
+                        <a href="panel-de-gestion.php">Traslados</a>
                         <span class="material-symbols-outlined" style="font-size: 16px;">chevron_right</span>
                         <span class="active">Nuevo Traslado</span>
                     </div>
@@ -84,7 +42,7 @@
                     <p class="page-subtitle">Complete los detalles a continuación para registrar una nueva solicitud de traslado en el sistema logístico.</p>
                 </div>
                 <div class="header-actions">
-                    <button class="btn btn-outline">Cancelar</button>
+                    <a class="btn btn-outline" href="panel-de-gestion.php">Cancelar</a>
                     <button class="btn btn-primary hide-mobile" type="submit" form="transfer-form">
                         <span class="material-symbols-outlined" style="font-size: 16px;">save</span>
                         Registrar Traslado
@@ -102,22 +60,13 @@
                             <h2 class="card-title">1. Datos del Traslado</h2>
                         </div>
                         <div class="input-grid">
-                            <div class="form-group">
+                            <div class="form-group span-2">
                                 <label class="form-label">Tipo de Carga / Paciente <span class="text-error">*</span></label>
                                 <select class="form-control">
                                     <option disabled selected value="">Seleccione el tipo...</option>
                                     <option value="paciente_ambulatorio">Paciente Ambulatorio</option>
                                     <option value="paciente_camilla">Paciente en Camilla</option>
                                     <option value="insumos_medicos">Insumos Médicos</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Prioridad <span class="text-error">*</span></label>
-                                <select class="form-control">
-                                    <option disabled selected value="">Seleccione prioridad...</option>
-                                    <option value="baja">Baja (Rutina)</option>
-                                    <option value="media">Media (Programado)</option>
-                                    <option value="alta">Alta (Urgente)</option>
                                 </select>
                             </div>
                             <div class="form-group span-2">
@@ -202,7 +151,7 @@
                         <div class="form-group">
                             <label class="form-label">Personal Médico Acompañante</label>
                             <input class="form-control" placeholder="Buscar por nombre o ID..." type="text">
-                            <p style="font-size: 12px; color: var(--on-surface-variant); margin-top: 4px;">Requerido si prioridad es Alta o Crítica.</p>
+                            <p style="font-size: 12px; color: var(--on-surface-variant); margin-top: 4px;">Opcional: indique quién acompaña el traslado.</p>
                         </div>
                     </section>
 
@@ -222,25 +171,6 @@
             </form>
         </div>
     </main>
-
-    <nav class="bottom-nav">
-        <a class="bottom-nav-item" href="#">
-            <span class="material-symbols-outlined">dashboard</span>
-            <span class="text">Panel</span>
-        </a>
-        <a class="bottom-nav-item active" href="#">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
-            <span class="text">Traslados</span>
-        </a>
-        <a class="bottom-nav-item" href="#">
-            <span class="material-symbols-outlined">map</span>
-            <span class="text">Rutas</span>
-        </a>
-        <a class="bottom-nav-item" href="#">
-            <span class="material-symbols-outlined">person</span>
-            <span class="text">Perfil</span>
-        </a>
-    </nav>
 
 </body>
 </html>
