@@ -23,7 +23,9 @@
     text-align: center;
  }
 .logo-marca {
-    height: 64px;
+    width: 100%;
+    max-width: 200px;
+    height: auto;
     object-fit: contain;
     margin-bottom: 16px;
  }
@@ -70,10 +72,14 @@
 
 /* Compensa la barra lateral fija: todo el contenido principal de la
    página debe quedar corrido a la derecha en pantallas de escritorio. */
+/* .main-wrapper es el nombre que usan las páginas PHP; .contenedor-principal se
+   mantiene como alias para no romper maquetas anteriores. */
 @media (min-width: 768px) {
-    .contenedor-principal { margin-left: 256px; }
+    .contenedor-principal,
+    .main-wrapper { margin-left: 256px; }
 }
-.contenedor-principal { 
+.contenedor-principal,
+.main-wrapper { 
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -154,3 +160,14 @@
 .btn-cerrar-sesion:hover {
      color: var(--error, #D32F2F);
      }
+
+/* Títulos de grupo del menú (Documentación / Ambulancias) */
+.titulo-seccion-nav {
+    margin: 16px 16px 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--outline, #737781);
+}
+.titulo-seccion-nav:first-child { margin-top: 0; }
