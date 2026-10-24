@@ -22,28 +22,48 @@ function claseActivaNav(string $pagina, string $paginaActual): string
 ?>
 <aside class="barra-lateral">
     <div class="encabezado-lateral">
-        <img alt="Logo Institucional" class="logo-marca" src="../../img/logosigsm.png">
+        <img alt="Hospital de Clínicas Dr. Manuel Quintela" class="logo-marca" src="../../img/logo-hospital-clinicas.png">
         <h2>S.I.G.S.M.</h2>
-        <p><?= $esAdministrador ? 'Administración Central' : 'Documentación Clínica' ?></p>
+        <p><?= $esAdministrador ? 'Administración Central' : 'Hospital de Clínicas' ?></p>
     </div>
 
     <nav class="nav-lateral">
-        <a class="<?= claseActivaNav('documentacion', $paginaActual) ?>" href="panel-documentacion.php">
+        <!-- Los enlaces son relativos a Vista/ y valen para cualquier módulo (mismo nivel de carpetas) -->
+        <p class="titulo-seccion-nav">Documentación</p>
+
+        <a class="<?= claseActivaNav('documentacion', $paginaActual) ?>" href="../../Modulo Documentacion/Vista/panel-documentacion.php">
             <span class="material-symbols-outlined">folder_shared</span>
             <span>Documentación</span>
         </a>
 
         <?php if ($esAdministrador): ?>
-        <a class="<?= claseActivaNav('cargar-documento', $paginaActual) ?>" href="cargar-documento.php">
+        <a class="<?= claseActivaNav('cargar-documento', $paginaActual) ?>" href="../../Modulo Documentacion/Vista/cargar-documento.php">
             <span class="material-symbols-outlined">upload_file</span>
             <span>Carga de Archivos</span>
         </a>
 
-        <a class="<?= claseActivaNav('usuarios', $paginaActual) ?>" href="gestion-usuarios.php">
+        <a class="<?= claseActivaNav('usuarios', $paginaActual) ?>" href="../../Modulo Documentacion/Vista/gestion-usuarios.php">
             <span class="material-symbols-outlined">group</span>
             <span>Gestión de Usuarios</span>
         </a>
         <?php endif; ?>
+
+        <p class="titulo-seccion-nav">Ambulancias</p>
+
+        <a class="<?= claseActivaNav('traslado-formulario', $paginaActual) ?>" href="../../Modulo Ambulancias/Vista/form-traslado.php">
+            <span class="material-symbols-outlined">edit_note</span>
+            <span>Formulario de Traslado</span>
+        </a>
+
+        <a class="<?= claseActivaNav('traslado-panel', $paginaActual) ?>" href="../../Modulo Ambulancias/Vista/panel-de-gestion.php">
+            <span class="material-symbols-outlined">local_shipping</span>
+            <span>Panel de Gestión</span>
+        </a>
+
+        <a class="<?= claseActivaNav('traslado-seguimiento', $paginaActual) ?>" href="../../Modulo Ambulancias/Vista/seguimiento.php">
+            <span class="material-symbols-outlined">pin_drop</span>
+            <span>Seguimiento</span>
+        </a>
     </nav>
 </aside>
 
