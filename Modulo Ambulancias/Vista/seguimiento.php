@@ -1,3 +1,15 @@
+<?php
+/*
+ * Acceso para cualquier usuario con sesión activa (Administrador y Usuario Básico).
+ * Si no hay sesión, se lo redirige al login.
+ */
+require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
+
+$auth = new AuthController();
+$auth->protegerRuta();
+
+$paginaActual = 'traslado-seguimiento';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,6 +27,7 @@
     
     <!-- Enlace al archivo CSS Puro -->
     <link rel="stylesheet" href="assets/css/seguimiento.css">
+    <link rel="stylesheet" href="../../Servicios Comunes/Vista General/assets/css/navbar.css">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -22,60 +35,10 @@
 </head>
 <body>
 
-    <!-- SIDEBAR (Desktop) -->
-    <aside class="sidebar">
-        <div class="brand-header">
-            <img alt="Hospital de Clinicas Logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3gXemotEj85WDWYVVyjxbDMZ-KmEbvGUwGw1IzGiGChUujtYyodVAxz6KqKlTkbXZ15U-prR4rdwM02GnYEMSSW1jU3AHmZFpWhjYaxHTbrweY8B7PNxzt_dZ7JefxngByMxXO1xYkegGFWwZB8fNFGKoG2vI3LQKziAbdYi1pRQXLngNdpZsYUENcePp8Rp1lPw1L7mnvQpFcUR6w9EdWfdQiJioovhVzuP1GzHIFoi3pJ_tQgowd4JrFpZNzR-AaY_ynyBkuiY">
-            <h2>Hospital de Clínicas</h2>
-            <p>Módulo de Logística</p>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <div class="nav-links">
-                <a class="nav-link" href="#"><span class="material-symbols-outlined">dashboard</span> Panel de Control</a>
-                <a class="nav-link active" href="#"><span class="material-symbols-outlined">local_shipping</span> Traslados</a>
-                <a class="nav-link" href="#"><span class="material-symbols-outlined">minor_crash</span> Gestión de Flota</a>
-                <a class="nav-link" href="#"><span class="material-symbols-outlined">map</span> Planificación de Rutas</a>
-                <a class="nav-link" href="#"><span class="material-symbols-outlined">assessment</span> Reportes</a>
-            </div>
-            <div class="nav-cta">
-                <button class="btn btn-primary btn-full">
-                    <span class="material-symbols-outlined">add</span> Nuevo Traslado
-                </button>
-            </div>
-        </nav>
-        
-        <div class="sidebar-footer">
-            <a class="nav-link" href="#"><span class="material-symbols-outlined">settings</span> Configuración</a>
-            <a class="nav-link" href="#"><span class="material-symbols-outlined">contact_support</span> Soporte</a>
-        </div>
-    </aside>
+    <?php require __DIR__ . '/../../Servicios Comunes/Vista General/navbar.php'; ?>
 
     <!-- MAIN CONTENT WRAPPER -->
     <div class="main-wrapper">
-        
-        <!-- TOP NAVBAR -->
-        <header class="topbar">
-            <div class="search-container">
-                <span class="material-symbols-outlined search-icon">search</span>
-                <input class="search-input" placeholder="Buscar traslados, vehículos..." type="text">
-            </div>
-            
-            <div class="topbar-actions">
-                <button class="icon-btn">
-                    <span class="material-symbols-outlined">notifications</span>
-                    <span class="badge-dot"></span>
-                </button>
-                <div class="divider-vertical"></div>
-                <button class="profile-btn">
-                    <span class="material-symbols-outlined profile-icon">account_circle</span>
-                    <div class="profile-info">
-                        <p class="profile-name">Perfil Administrador</p>
-                        <p class="profile-role">Depto. Logística</p>
-                    </div>
-                </button>
-            </div>
-        </header>
 
         <!-- PAGE CANVAS -->
         <main class="page-canvas">
@@ -94,7 +57,7 @@
                     <div class="card">
                         <div class="tracking-header">
                             <div class="header-titles">
-                                <a class="back-link" href="#">
+                                <a class="back-link" href="panel-de-gestion.php">
                                     <span class="material-symbols-outlined text-sm">arrow_back</span> Volver a Traslados
                                 </a>
                                 <h1>Seguimiento de Estado de Traslado</h1>
@@ -158,8 +121,8 @@
                                         <p class="title fw-normal">3.456.789-0</p>
                                     </div>
                                     <div class="span-2">
-                                        <p class="label">Prioridad</p>
-                                        <span class="badge badge-warning">Alta (Código Amarillo)</span>
+                                        <p class="label">Tipo de traslado</p>
+                                        <span class="badge badge-warning">Programado</span>
                                     </div>
                                 </div>
                             </div>
