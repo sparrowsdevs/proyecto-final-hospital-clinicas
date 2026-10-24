@@ -102,10 +102,33 @@ button { font-family: inherit; border: none; outline: none; background: transpar
 /* =========================================
    5. DOCUMENT CARD
    ========================================= */
-.doc-card { width: 100%; background-color: var(--surface); border: 1px solid var(--outline-variant); border-radius: var(--radius-lg); position: relative; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.02); }
-.accent-bar-left { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background-color: var(--clinical-blue); }
+.doc-card { 
+   width: 100%; 
+   background-color: var(--surface); 
+   border: 1px solid var(--outline-variant); 
+   border-radius: var(--radius-lg); 
+   position: relative; 
+   overflow: hidden; 
+   box-shadow: 0 4px 24px rgba(0,0,0,0.02); 
+}
 
-.doc-card-body { padding: 32px 24px 32px 32px; display: flex; flex-direction: column; gap: 16px; text-align: center; }
+.accent-bar-left { 
+   position: absolute; 
+   left: 0; 
+   top: 0; 
+   bottom: 0; 
+   width: 4px; 
+   background-color: var(--clinical-blue); 
+}
+
+.doc-card-body { 
+   padding: 32px 24px 32px 32px; 
+   display: flex; 
+   flex-direction: column; 
+   gap: 16px; 
+   text-align: center; 
+}
+
 @media (min-width: 768px) { .doc-card-body { text-align: left; } }
 
 .badge-group { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 8px; }

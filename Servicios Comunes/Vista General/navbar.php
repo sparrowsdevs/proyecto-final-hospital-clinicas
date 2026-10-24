@@ -23,7 +23,7 @@ function claseActivaNav(string $pagina, string $paginaActual): string
 <aside class="barra-lateral">
     <div class="encabezado-lateral">
         <img alt="Logo Institucional" class="logo-marca" src="../../img/logosigsm.png">
-        <h2>Gestión Documental</h2>
+        <h2>S.I.G.S.M.</h2>
         <p><?= $esAdministrador ? 'Administración Central' : 'Documentación Clínica' ?></p>
     </div>
 
