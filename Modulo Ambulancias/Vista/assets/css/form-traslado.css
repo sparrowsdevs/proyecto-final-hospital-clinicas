@@ -41,9 +41,6 @@
     --radius-lg: 0.75rem;
 }
 
-/* =========================================
-    2. RESET & BASE
-    ========================================= */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -58,16 +55,6 @@ body {
     font-family: var(--font-body);
     background-color: var(--bg-color);
     color: var(--on-bg-color);
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-@media (min-width: 768px) {
-    body {
-        flex-direction: row;
-    }
 }
 
 a {
@@ -81,184 +68,6 @@ button, input, select, textarea {
     font-family: inherit;
 }
 
-/* =========================================
-    3. LAYOUT (Sidebar, Header, Main)
-    ========================================= */
-/* Sidebar usando Flexbox */
-.sidebar {
-    display: none;
-    flex-direction: column;
-    width: 256px;
-    height: 100vh;
-    position: sticky;
-    top: 0;
-    background-color: var(--surface-container-low);
-    border-right: 1px solid var(--outline-variant);
-    flex-shrink: 0;
-    z-index: 40;
-}
-@media (min-width: 768px) {
-    .sidebar {
-        display: flex;
-    }
-}
-
-.brand-header {
-    padding: var(--spacing-md);
-    border-bottom: 1px solid var(--outline-variant);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.brand-header img {
-    width: 100%;
-    max-width: 160px;
-    margin-bottom: 16px;
-    object-fit: contain;
-}
-.brand-header h2 {
-    font-family: var(--font-heading);
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--on-surface);
-}
-.brand-header p {
-    font-size: 14px;
-    color: var(--on-surface-variant);
-    margin-top: 4px;
-}
-
-.sidebar-nav {
-    flex: 1;
-    overflow-y: auto;
-    padding: 8px 0;
-}
-.sidebar-footer {
-    border-top: 1px solid var(--outline-variant);
-    padding: 8px 0;
-    margin-top: auto;
-}
-
-.nav-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    margin: 4px 8px;
-    border-radius: var(--radius-md);
-    color: var(--on-surface-variant);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    transition: all 0.15s ease;
-}
-.nav-link:hover {
-    background-color: var(--surface-container-high);
-    transform: scale(0.98);
-}
-.nav-link.active {
-    background-color: var(--secondary-container);
-    color: var(--on-secondary-container);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-}
-
-/* Main Content usando Flexbox */
-.main-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    position: relative;
-}
-
-/* Topbar */
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 64px;
-    padding: 0 var(--spacing-sm);
-    background-color: var(--surface);
-    border-bottom: 1px solid var(--outline-variant);
-    position: sticky;
-    top: 0;
-    z-index: 50;
-}
-@media (min-width: 768px) {
-    .topbar {
-        padding: 0 var(--spacing-lg);
-    }
-}
-
-.topbar-left, .topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.mobile-brand {
-    font-family: var(--font-heading);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--clinical-blue);
-}
-@media (min-width: 768px) {
-    .mobile-brand, .menu-toggle {
-        display: none;
-    }
-}
-
-.search-bar {
-    display: none;
-    align-items: center;
-    background-color: var(--surface-container-low);
-    border: 1px solid var(--outline-variant);
-    border-radius: 999px;
-    padding: 8px 16px;
-    width: 256px;
-    transition: box-shadow 0.2s;
-}
-@media (min-width: 768px) {
-    .search-bar {
-        display: flex;
-    }
-}
-@media (min-width: 1024px) {
-    .search-bar {
-        width: 384px;
-    }
-}
-.search-bar:focus-within {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 1px var(--primary);
-}
-.search-bar input {
-    border: none;
-    background: transparent;
-    outline: none;
-    width: 100%;
-    font-size: 16px;
-    color: var(--on-surface);
-    margin-left: 8px;
-}
-
-.icon-btn {
-    background: transparent;
-    border: none;
-    color: var(--on-surface-variant);
-    padding: 8px;
-    border-radius: 50%;
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.icon-btn:hover {
-    background-color: var(--surface-container);
-}
 .badge {
     position: absolute;
     top: 8px;
@@ -269,54 +78,10 @@ button, input, select, textarea {
     border-radius: 50%;
 }
 
-.profile-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: transparent;
-    border: 1px solid var(--outline-variant);
-    padding: 4px;
-    border-radius: 999px;
-    cursor: pointer;
-}
-@media (min-width: 768px) {
-    .profile-btn {
-        border: none;
-        padding-right: 12px;
-    }
-}
-.profile-btn:hover {
-    background-color: var(--surface-container);
-}
-.profile-img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1px solid var(--outline-variant);
-}
-.profile-name {
-    display: none;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--on-surface);
-}
-@media (min-width: 768px) {
-    .profile-name, .profile-chevron {
-        display: block;
-    }
-}
-.profile-chevron {
-    display: none;
-    color: var(--on-surface-variant);
-}
-
-/* =========================================
-    4. PAGE CONTENT & FORMS (GRID + FLEXBOX)
-    ========================================= */
 .page-container {
     padding: var(--spacing-sm);
     flex: 1;
-    padding-bottom: 96px; /* Espacio para el nav móvil */
+    padding-bottom: var(--spacing-lg);
     max-width: var(--container-max);
     margin: 0 auto;
     width: 100%;
@@ -638,58 +403,4 @@ select.form-control {
     .hide-mobile {
         display: flex;
     }
-}
-
-/* =========================================
-    5. BOTTOM NAV (Mobile Only) Flexbox
-    ========================================= */
-.bottom-nav {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 64px;
-    background-color: var(--surface);
-    border-top: 1px solid var(--outline-variant);
-    z-index: 50;
-}
-@media (min-width: 768px) {
-    .bottom-nav {
-        display: none;
-    }
-}
-
-.bottom-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    color: var(--on-surface-variant);
-    position: relative;
-}
-.bottom-nav-item:hover {
-    color: var(--primary);
-}
-.bottom-nav-item.active {
-    color: var(--primary);
-    font-weight: 600;
-}
-.bottom-nav-item.active::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 32px;
-    height: 4px;
-    background-color: var(--primary);
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-}
-.bottom-nav-item span.text {
-    font-size: 10px;
-    font-weight: 500;
-    margin-top: 4px;
 }
