@@ -37,7 +37,7 @@ if ($auth->sesionActiva()) {
             
             <div class="cuerpo-tarjeta">
                 <div class="encabezado-tarjeta">
-                    <img alt="Hospital de Clínicas Logo" class="logo-marca" src="./img/logosigsm.png">
+                    <img alt="Hospital de Clínicas Dr. Manuel Quintela" class="logo-marca" src="img/logo-hospital-clinicas.png">
                     <h1 class="titulo-login">Inicio de Sesión</h1>
                     <p class="subtitulo">Módulo de Gestión Documental</p>
                 </div>
