@@ -43,14 +43,9 @@ if (!$resultado['exito']) {
     exit;
 }
 
-// Determina a qué panel redirigir según el rol del usuario.
-// Prioridad: Administrador > resto de roles (Médico, Enfermería, etc.).
+// Todos los roles (Administrador y Usuario Básico) ingresan al Panel de Documentación.
 // Ruta relativa a la raíz del proyecto, donde vive index.php.
 $redireccion = 'Modulo Documentacion/Vista/panel-documentacion.php';
-
-if ($auth->tieneRol('Administrador')) {
-    $redireccion = 'Modulo Documentacion/Vista/panel-administrador.php';
-}
 
 echo json_encode([
     'exito'       => true,

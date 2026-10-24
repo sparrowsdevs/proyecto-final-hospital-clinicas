@@ -8,11 +8,8 @@ require_once __DIR__ . '/Servicios Comunes/Autenticacion/AuthController.php';
 $auth = new AuthController();
 
 if ($auth->sesionActiva()) {
-    $redireccion = $auth->tieneRol('Administrador')
-        ? 'Modulo Documentacion/Vista/panel-administrador.php'
-        : 'Modulo Documentacion/Vista/panel-documentacion.php';
-
-    header('Location: ' . $redireccion);
+    // Todos los roles ingresan al Panel de Documentación
+    header('Location: Modulo Documentacion/Vista/panel-documentacion.php');
     exit;
 }
 ?>
