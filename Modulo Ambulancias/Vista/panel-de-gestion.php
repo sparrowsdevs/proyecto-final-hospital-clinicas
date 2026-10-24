@@ -1,3 +1,15 @@
+<?php
+/*
+ * Acceso para cualquier usuario con sesión activa (Administrador y Usuario Básico).
+ * Si no hay sesión, se lo redirige al login.
+ */
+require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
+
+$auth = new AuthController();
+$auth->protegerRuta();
+
+$paginaActual = 'traslado-panel';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,87 +24,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/css/panel-gestion.css">
+    <link rel="stylesheet" href="../../Servicios Comunes/Vista General/assets/css/navbar.css">
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="brand-header">
-            <img alt="Logo Hospital de Clínicas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnQG5BbOtUZYm8wlwzLWy649KTL7oBPfAkSEQ-r0noZgmtp7bHtLj9hgyixUMl2BuOcfB1oPzxA_L27PBIY9lQutdCPhsm3AwSu46oj7sLZtY1kGmmi0UUVKcBaO-fFJ-AwA_hVC2u16EU6C7TE0NzhxkI4SxwTad2H7oOa0Dan7U5eX5dykTPba56IHqVIXJWOVttVkvl0rZwLSgvk_FvR6Kgdkp96_mtcNKJDE6xcAcS4U4kagnVguVITg5RKjuSCSMgfoJIqcY">
-            <h2>Hospital de Clínicas</h2>
-            <p>Módulo de Logística</p>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <div class="nav-links">
-                <a class="nav-link active" href="#">
-                    <span class="material-symbols-outlined">dashboard</span>
-                    Panel de Control
-                </a>
-                <a class="nav-link" href="#">
-                    <span class="material-symbols-outlined">local_shipping</span>
-                    Traslados
-                </a>
-                <a class="nav-link" href="#">
-                    <span class="material-symbols-outlined">minor_crash</span>
-                    Gestión de Flota
-                </a>
-                <a class="nav-link" href="#">
-                    <span class="material-symbols-outlined">map</span>
-                    Planificación de Rutas
-                </a>
-                <a class="nav-link" href="#">
-                    <span class="material-symbols-outlined">assessment</span>
-                    Reportes
-                </a>
-            </div>
-            <div class="nav-cta">
-                <button class="btn btn-primary btn-full">
-                    <span class="material-symbols-outlined text-sm">add</span>
-                    Nuevo Traslado
-                </button>
-            </div>
-        </nav>
-        
-        <div class="sidebar-footer">
-            <a class="nav-link" href="#">
-                <span class="material-symbols-outlined">settings</span>
-                Configuración
-            </a>
-            <a class="nav-link" href="#">
-                <span class="material-symbols-outlined">contact_support</span>
-                Soporte
-            </a>
-        </div>
-    </aside>
+    <?php require __DIR__ . '/../../Servicios Comunes/Vista General/navbar.php'; ?>
 
     <div class="main-wrapper">
-        
-        <header class="topbar">
-            <div class="search-container">
-                <span class="material-symbols-outlined search-icon">search</span>
-                <input class="search-input" placeholder="Buscar traslados, vehículos..." type="text">
-            </div>
-            
-            <div class="topbar-actions">
-                <button class="icon-btn">
-                    <span class="material-symbols-outlined">notifications</span>
-                    <span class="badge-dot"></span>
-                </button>
-                <button class="icon-btn">
-                    <span class="material-symbols-outlined">help</span>
-                </button>
-                
-                <div class="divider-vertical"></div>
-                
-                <button class="profile-btn">
-                    <span class="material-symbols-outlined profile-icon">account_circle</span>
-                    <div class="profile-info">
-                        <p class="profile-name">Perfil de Administrador</p>
-                        <p class="profile-role">Depto. Logística</p>
-                    </div>
-                </button>
-            </div>
-        </header>
 
         <main class="dashboard-canvas">
             
@@ -209,7 +147,7 @@
                                         <div class="avatar bg-tertiary"><span class="material-symbols-outlined text-sm">bloodtype</span></div>
                                         <div>
                                             <p class="td-title">Muestras de Sangre</p>
-                                            <p class="td-subtitle">Alta Prioridad</p>
+                                            <p class="td-subtitle">Programado</p>
                                         </div>
                                     </div>
                                 </td>
