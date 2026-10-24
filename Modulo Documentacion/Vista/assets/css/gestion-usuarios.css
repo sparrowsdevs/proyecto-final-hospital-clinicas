@@ -1,18 +1,26 @@
 :root {
     --primary: #00254b;
+
     --primary-container: #003b71;
+
     --on-primary-container: #7ea7e3;
+
     --on-primary: #ffffff;
 
     --secondary: #4d6077;
+
     --secondary-container: #cde1fc;
+
     --on-secondary-container: #0a2540;
 
     --clinical-blue: #186AAD;
 
     --surface: #fbf9f8;
+
     --surface-subtle: #F2F4F5;
+
     --surface-container-low: #f6f3f2;
+
     --surface-container: #f0eded;
 
     --on-surface: #1b1c1c;
@@ -22,11 +30,15 @@
     --outline-variant: #c3c6d1;
 
     --success: #2E7D32;
+
     --success-light: rgba(46, 125, 50, 0.1);
+
     --error: #D32F2F;
+
     --error-light: rgba(211, 47, 47, 0.1);
 
     --font-heading: 'Montserrat', sans-serif;
+    
     --font-body: 'Open Sans', sans-serif;
 
     --max-width: 1280px;
