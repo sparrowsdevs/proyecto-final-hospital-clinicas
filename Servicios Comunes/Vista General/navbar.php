@@ -28,13 +28,6 @@ function claseActivaNav(string $pagina, string $paginaActual): string
     </div>
 
     <nav class="nav-lateral">
-        <?php if ($esAdministrador): ?>
-        <a class="<?= claseActivaNav('dashboard', $paginaActual) ?>" href="panel-administrador.php">
-            <span class="material-symbols-outlined">dashboard</span>
-            <span>Dashboard</span>
-        </a>
-        <?php endif; ?>
-
         <a class="<?= claseActivaNav('documentacion', $paginaActual) ?>" href="panel-documentacion.php">
             <span class="material-symbols-outlined">folder_shared</span>
             <span>Documentación</span>
