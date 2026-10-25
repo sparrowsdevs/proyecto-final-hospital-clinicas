@@ -1,8 +1,5 @@
 <?php
-/*
- * Acceso para cualquier usuario con sesión activa (Administrador y Usuario Básico).
- * Si no hay sesión, se lo redirige al login.
- */
+
 require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
 
 $auth = new AuthController();
@@ -40,13 +37,6 @@ $paginaActual = 'traslado-formulario';
                     </div>
                     <h1 class="page-title">Formulario de Alta de Traslado</h1>
                     <p class="page-subtitle">Complete los detalles a continuación para registrar una nueva solicitud de traslado en el sistema logístico.</p>
-                </div>
-                <div class="header-actions">
-                    <a class="btn btn-outline" href="panel-de-gestion.php">Cancelar</a>
-                    <button class="btn btn-primary hide-mobile" type="submit" form="transfer-form">
-                        <span class="material-symbols-outlined" style="font-size: 16px;">save</span>
-                        Registrar Traslado
-                    </button>
                 </div>
             </div>
 
