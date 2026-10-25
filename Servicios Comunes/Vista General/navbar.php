@@ -6,15 +6,10 @@ if (!isset($auth) || !($auth instanceof AuthController)) {
 
 $paginaActual = $paginaActual ?? '';
 
-// Datos del usuario que inició sesión, para mostrarlos en la barra superior
 $esAdministrador = $auth->tieneRol('Administrador');
 $nombreUsuario = trim(($_SESSION['nombre'] ?? '') . ' ' . ($_SESSION['apellido'] ?? ''));
 $rolUsuario = $esAdministrador ? 'Administrador' : 'Usuario Básico';
 
-/*
- * Devuelve la clase CSS del enlace del menú, marcándolo como "activo"
- * si corresponde a la página en la que está parado el usuario.
- */
 function claseActivaNav(string $pagina, string $paginaActual): string
 {
     return $pagina === $paginaActual ? 'enlace-nav activo' : 'enlace-nav';
@@ -22,13 +17,12 @@ function claseActivaNav(string $pagina, string $paginaActual): string
 ?>
 <aside class="barra-lateral">
     <div class="encabezado-lateral">
-        <img alt="Hospital de Clínicas Dr. Manuel Quintela" class="logo-marca" src="../../img/logo-hospital-clinicas.png">
+        <img alt="Hospital de Clínicas Dr. Manuel Quintela" class="logo-marca" src="../../img/logosigsm.png">
         <h2>S.I.G.S.M.</h2>
         <p><?= $esAdministrador ? 'Administración Central' : 'Hospital de Clínicas' ?></p>
     </div>
 
     <nav class="nav-lateral">
-        <!-- Los enlaces son relativos a Vista/ y valen para cualquier módulo (mismo nivel de carpetas) -->
         <p class="titulo-seccion-nav">Documentación</p>
 
         <a class="<?= claseActivaNav('documentacion', $paginaActual) ?>" href="../../Modulo Documentacion/Vista/panel-documentacion.php">
