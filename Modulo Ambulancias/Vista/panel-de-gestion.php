@@ -1,8 +1,4 @@
 <?php
-/*
- * Acceso para cualquier usuario con sesión activa (Administrador y Usuario Básico).
- * Si no hay sesión, se lo redirige al login.
- */
 require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
 
 $auth = new AuthController();
@@ -37,11 +33,7 @@ $paginaActual = 'traslado-panel';
             <div class="page-header">
                 <div>
                     <h1 class="page-title">Panel de Gestión de Traslados</h1>
-                    <p class="page-subtitle">Vista en tiempo real de las operaciones logísticas y estado de la flota.</p>
-                </div>
-                <div class="update-pill">
-                    <span class="material-symbols-outlined icon-blue">schedule</span>
-                    <span>Última actualización: Justo ahora</span>
+                    <p class="page-subtitle">Registro y gestión de los traslados no urgentes.</p>
                 </div>
             </div>
 
@@ -56,10 +48,8 @@ $paginaActual = 'traslado-panel';
                         </div>
                     </div>
                     <div class="kpi-body">
-                        <p class="kpi-value">17</p>
-                        <p class="kpi-trend text-success">
-                            <span class="material-symbols-outlined text-sm">trending_up</span> +12% esta semana
-                        </p>
+                        <p class="kpi-value">0</p>
+                        <p class="kpi-trend text-muted">Sin traslados registrados</p>
                     </div>
                 </div>
 
@@ -72,10 +62,8 @@ $paginaActual = 'traslado-panel';
                         </div>
                     </div>
                     <div class="kpi-body">
-                        <p class="kpi-value">2<span class="value-sub">/6</span></p>
-                        <p class="kpi-trend text-muted">
-                            <span class="dot bg-success"></span> 6 actualmente en mantenimiento
-                        </p>
+                        <p class="kpi-value">0</p>
+                        <p class="kpi-trend text-muted">Sin datos de vehículos</p>
                     </div>
                 </div>
 
@@ -88,10 +76,8 @@ $paginaActual = 'traslado-panel';
                         </div>
                     </div>
                     <div class="kpi-body">
-                        <p class="kpi-value">12</p>
-                        <p class="kpi-trend text-muted">
-                            En turno en todas las zonas
-                        </p>
+                        <p class="kpi-value">0</p>
+                        <p class="kpi-trend text-muted">Sin traslados asignados</p>
                     </div>
                 </div>
 
@@ -104,10 +90,8 @@ $paginaActual = 'traslado-panel';
                         </div>
                     </div>
                     <div class="kpi-body">
-                        <p class="kpi-value">05</p>
-                        <p class="kpi-trend text-error">
-                            <span class="material-symbols-outlined text-sm">warning</span> Requiere asignación inmediata
-                        </p>
+                        <p class="kpi-value">0</p>
+                        <p class="kpi-trend text-muted">Sin solicitudes pendientes</p>
                     </div>
                 </div>
 
@@ -141,95 +125,9 @@ $paginaActual = 'traslado-panel';
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="fw-bold">TR-8492</td>
-                                <td>
-                                    <div class="td-flex">
-                                        <div class="avatar bg-tertiary"><span class="material-symbols-outlined text-sm">bloodtype</span></div>
-                                        <div>
-                                            <p class="td-title">Muestras de Sangre</p>
-                                            <p class="td-subtitle">Programado</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-muted">Laboratorio Central</td>
-                                <td class="text-muted">Hospital de Clínicas</td>
-                                <td class="text-muted">Camioneta 04 (M. Silva)</td>
-                                <td>
-                                    <span class="badge badge-blue">
-                                        <span class="dot bg-blue animate-pulse"></span> En Progreso
-                                    </span>
-                                </td>
-                                <td class="text-right">
-                                    <button class="icon-btn-small"><span class="material-symbols-outlined">more_vert</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="fw-bold">TR-8493</td>
-                                <td>
-                                    <div class="td-flex">
-                                        <div class="avatar bg-variant"><span class="material-symbols-outlined text-sm">accessible</span></div>
-                                        <div>
-                                            <p class="td-title">Juan Pérez (Paciente)</p>
-                                            <p class="td-subtitle">Traslado de Rutina</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-muted">Pabellón B, Cama 12</td>
-                                <td class="text-muted">Depto. Imágenes</td>
-                                <td class="text-muted f-italic">Sin asignar</td>
-                                <td>
-                                    <span class="badge badge-gray">
-                                        <span class="dot bg-gray"></span> Pendiente
-                                    </span>
-                                </td>
-                                <td class="text-right">
-                                    <button class="icon-btn-small"><span class="material-symbols-outlined">more_vert</span></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="fw-bold">TR-8490</td>
-                                <td>
-                                    <div class="td-flex">
-                                        <div class="avatar bg-tertiary"><span class="material-symbols-outlined text-sm">medication</span></div>
-                                        <div>
-                                            <p class="td-title">Reabastecimiento de Farmacia</p>
-                                            <p class="td-subtitle">Estándar</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-muted">Depósito Central</td>
-                                <td class="text-muted">Clínica Norte</td>
-                                <td class="text-muted">Camión 02 (A. Gómez)</td>
-                                <td>
-                                    <span class="badge badge-blue">
-                                        <span class="dot bg-blue animate-pulse"></span> En Progreso
-                                    </span>
-                                </td>
-                                <td class="text-right">
-                                    <button class="icon-btn-small"><span class="material-symbols-outlined">more_vert</span></button>
-                                </td>
-                            </tr>
-                            <tr class="row-completed">
-                                <td class="fw-bold">TR-8488</td>
-                                <td>
-                                    <div class="td-flex">
-                                        <div class="avatar bg-variant"><span class="material-symbols-outlined text-sm">science</span></div>
-                                        <div>
-                                            <p class="td-title">Equipo: Bobina de RM</p>
-                                            <p class="td-subtitle">Frágil</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-muted">Ingeniería Biomédica</td>
-                                <td class="text-muted">Radiología</td>
-                                <td class="text-muted">Carro 05 (L. Ruiz)</td>
-                                <td>
-                                    <span class="badge badge-success">
-                                        <span class="material-symbols-outlined text-sm">check_circle</span> Completado
-                                    </span>
-                                </td>
-                                <td class="text-right">
-                                    <button class="icon-btn-small"><span class="material-symbols-outlined">more_vert</span></button>
+                                <td class="tabla-vacia" colspan="7">
+                                    <span class="material-symbols-outlined">local_shipping</span>
+                                    <p>Aún no hay traslados registrados.</p>
                                 </td>
                             </tr>
                         </tbody>
@@ -237,10 +135,10 @@ $paginaActual = 'traslado-panel';
                 </div>
                 
                 <div class="table-footer">
-                    <p class="text-muted text-sm">Mostrando 1 a 4 de 24 traslados activos</p>
+                    <p class="text-muted text-sm">Mostrando 0 traslados</p>
                     <div class="pagination-controls">
                         <button class="btn-page" disabled><span class="material-symbols-outlined">chevron_left</span></button>
-                        <button class="btn-page"><span class="material-symbols-outlined">chevron_right</span></button>
+                        <button class="btn-page" disabled><span class="material-symbols-outlined">chevron_right</span></button>
                     </div>
                 </div>
             </section>
