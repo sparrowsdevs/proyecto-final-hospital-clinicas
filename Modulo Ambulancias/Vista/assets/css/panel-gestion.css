@@ -493,3 +493,16 @@ ul {
 .btn-outline-sm:hover {
     background-color: var(--surface-container-low);
 }
+
+/* Estado vacío de la tabla de traslados */
+.tabla-vacia {
+    text-align: center;
+    padding: 48px 16px;
+    color: var(--on-surface-variant);
+}
+.tabla-vacia .material-symbols-outlined {
+    display: block;
+    font-size: 40px;
+    margin-bottom: 8px;
+    color: var(--outline-variant);
+}
