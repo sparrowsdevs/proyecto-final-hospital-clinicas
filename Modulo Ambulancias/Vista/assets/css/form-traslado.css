@@ -404,3 +404,89 @@ select.form-control {
         display: flex;
     }
 }
+
+/* ============================================================
+   Formulario funcional: mensajes, ayudas y modal de ubicación
+   ============================================================ */
+[hidden] {
+    display: none !important;
+}
+
+.alerta {
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    font-size: 14px;
+    font-weight: 600;
+}
+.alerta-error {
+    background-color: #fee2e2;
+    color: var(--error);
+    border: 1px solid #fecaca;
+}
+.alerta-exito {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+.alerta-exito a {
+    color: #166534;
+    text-decoration: underline;
+}
+
+.ayuda-campo {
+    font-size: 12px;
+    color: var(--on-surface-variant);
+    margin-top: 4px;
+}
+.ayuda-asignacion {
+    margin-bottom: var(--spacing-sm);
+}
+.form-control[readonly] {
+    background-color: var(--surface-container);
+    color: var(--on-surface-variant);
+}
+
+.modal-fondo {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-ventana {
+    width: 100%;
+    max-width: 28rem;
+    padding: var(--spacing-md);
+    background-color: var(--surface-container-lowest);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.modal-titulo {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    color: var(--primary-container);
+    margin-bottom: var(--spacing-sm);
+}
+.mensaje-modal {
+    min-height: 20px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--error);
+}
+.modal-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: var(--spacing-sm);
+}
+.modal-acciones .btn-action {
+    width: auto;
+}
