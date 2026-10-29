@@ -161,9 +161,87 @@ try {
             break;
 
         // ------------------------------------------------------------------
+        case 'actualizar':
+            $idTraslado = enteroEstricto($_POST['id_traslado'] ?? '');
+            if ($idTraslado === 0) {
+                responder(false, 'Traslado no válido.');
+            }
+            $actual = $modelo->buscarTraslado($idTraslado);
+            if ($actual === false) {
+                responder(false, 'El traslado no existe.');
+            }
+
+            // Fecha prevista: solo se rechaza el pasado si la fecha fue modificada
+            $fecha = DateTime::createFromFormat('Y-m-d\TH:i', (string) ($_POST['hora_prevista'] ?? ''));
+            $erroresFecha = DateTime::getLastErrors();
+            if ($fecha === false || ($erroresFecha && ($erroresFecha['warning_count'] || $erroresFecha['error_count']))) {
+                responder(false, 'Indique la fecha y hora prevista del traslado.');
+            }
+            $horaPrevista = $fecha->format('Y-m-d H:i:s');
+            $fechaActual = substr((string) $actual['hora_prevista'], 0, 16); // Y-m-d H:i
+            if ($fecha->format('Y-m-d H:i') !== $fechaActual && $fecha->getTimestamp() < time() - 5 * 60) {
+                responder(false, 'La nueva fecha y hora prevista no puede estar en el pasado.');
+            }
+
+            $idVehiculo = enteroOpcional($_POST['id_vehiculo'] ?? '');
+            $idChofer = enteroOpcional($_POST['id_chofer'] ?? '');
+            $idEnfermero = enteroOpcional($_POST['id_enfermero'] ?? '');
+
+            if ($idVehiculo !== null && !$modelo->existeRegistro('vehiculo', 'id_vehiculo', $idVehiculo)) {
+                responder(false, 'El vehículo seleccionado no existe.');
+            }
+            foreach ([[$idChofer, 'chofer'], [$idEnfermero, 'personal acompañante']] as [$idUsuario, $rol]) {
+                if ($idUsuario !== null && !$modelo->existeRegistro('usuario', 'id_usuario', $idUsuario)) {
+                    responder(false, "El {$rol} seleccionado no es un usuario activo.");
+                }
+            }
+            if ($idChofer !== null && $idChofer === $idEnfermero) {
+                responder(false, 'El chofer y el personal acompañante deben ser personas distintas.');
+            }
+
+            $estadoSolicitado = trim((string) ($_POST['estado'] ?? ''));
+            if ($estadoSolicitado !== '' && !in_array($estadoSolicitado, $modelo->obtenerEstados(), true)) {
+                responder(false, 'El estado seleccionado no es válido.');
+            }
+
+            $resultado = $modelo->actualizarTraslado($idTraslado, [
+                'hora_prevista' => $horaPrevista,
+                'id_vehiculo' => $idVehiculo,
+                'id_chofer' => $idChofer,
+                'id_enfermero' => $idEnfermero,
+                'estado' => $estadoSolicitado === '' ? null : $estadoSolicitado,
+            ], (int) $_SESSION['id_usuario']);
+
+            responder(true, 'Traslado actualizado correctamente.', $resultado);
+            break;
+
+        // ------------------------------------------------------------------
+        case 'cancelar':
+            $idTraslado = enteroEstricto($_POST['id_traslado'] ?? '');
+            if ($idTraslado === 0) {
+                responder(false, 'Traslado no válido.');
+            }
+            $modelo->cancelarTraslado($idTraslado, (int) $_SESSION['id_usuario']);
+            responder(true, 'Traslado cancelado correctamente.');
+            break;
+
+        // ------------------------------------------------------------------
+        case 'reactivar':
+            $idTraslado = enteroEstricto($_POST['id_traslado'] ?? '');
+            if ($idTraslado === 0) {
+                responder(false, 'Traslado no válido.');
+            }
+            $estado = $modelo->reactivarTraslado($idTraslado, (int) $_SESSION['id_usuario']);
+            responder(true, 'Traslado reactivado.', ['estado' => $estado]);
+            break;
+
+        // ------------------------------------------------------------------
         default:
             responder(false, 'Acción no reconocida.');
     }
+} catch (ReglaDeNegocioException $error) {
+    // Regla de negocio incumplida: se informa al usuario (no es una falla del sistema)
+    responder(false, $error->getMessage());
 } catch (RuntimeException $error) {
     // Errores de configuración propios del sistema (p. ej. falta un catálogo)
     error_log('[S.I.G.S.M. traslados] ' . $error->getMessage());
