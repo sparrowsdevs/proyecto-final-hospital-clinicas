@@ -1,1 +1,55 @@
-Se agrego docker-compose-yml
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-8080}:80"
+    environment:
+      SIGSM_DB_HOST: db
+      SIGSM_DB_PORT: "3306"
+      SIGSM_DB_NAME: database_clinicas
+      SIGSM_DB_USER: sigsm
+      SIGSM_DB_PASS: ${DB_PASSWORD:?Falta DB_PASSWORD en el archivo .env}
+      SIGSM_URL_BASE: ${SIGSM_URL_BASE:-}
+      SIGSM_TOKEN: ${SIGSM_TOKEN:?Falta SIGSM_TOKEN en el archivo .env}
+    volumes:
+      # PDF cargados por los usuarios (persisten aunque se recree el contenedor)
+      - type: volume
+        source: documentos_pdf
+        target: /var/www/html/Modulo Documentacion/uploads/documentos
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Falta DB_ROOT_PASSWORD en el archivo .env}
+      MYSQL_DATABASE: database_clinicas
+      MYSQL_USER: sigsm
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en el archivo .env}
+      TZ: America/Montevideo
+    volumes:
+      - db_data:/var/lib/mysql
+      # Scripts de creación: se ejecutan en orden alfabético, solo la primera vez
+      - ./database/DER-final/ddl.sql:/docker-entrypoint-initdb.d/01-esquema.sql:ro
+      - ./database/modulo1-login-documentacion/seed-data.sql:/docker-entrypoint-initdb.d/02-usuario-roles-categorias.sql:ro
+      - ./database/modulo-ambulancias/01-preparar-traslados.sql:/docker-entrypoint-initdb.d/03-traslados.sql:ro
+      - ./database/modulo-ambulancias/02-compatibilidad-ninguno.sql:/docker-entrypoint-initdb.d/04-compatibilidad.sql:ro
+      - ./database/modulo-encuestas/01-encuesta-documento.sql:/docker-entrypoint-initdb.d/05-encuestas.sql:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'mysqladmin ping -h 127.0.0.1 -uroot -p"$$MYSQL_ROOT_PASSWORD" --silent',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+volumes:
+  db_data:
+  documentos_pdf:

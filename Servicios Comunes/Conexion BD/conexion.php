@@ -1,10 +1,4 @@
 <?php
-/*
- * Provee una única instancia de conexión PDO a la base de datos MySQL.
- * reutilizable por todos los módulos del sistema (Documentación, Ambulancias, Encuestas).
- *
- * Patrón: Singleton
- */
 
 class Conexion
 {
@@ -21,12 +15,36 @@ class Conexion
     private function __construct() {}
     private function __clone() {}
 
+    /**
+     * Datos de conexión. Si existen las variables de entorno SIGSM_DB_* (Docker /
+     * servidor) tienen prioridad; si no, se usan los valores de arriba (XAMPP local).
+     */
+    private static function configuracion(): array
+    {
+        $leer = static function (string $nombre, string $porDefecto): string {
+            $valor = getenv($nombre);
+            return ($valor === false || $valor === '') ? $porDefecto : $valor;
+        };
+        // La contraseña puede ser legítimamente vacía: solo se ignora si la variable no existe
+        $contrasena = getenv('SIGSM_DB_PASS');
+
+        return [
+            'host' => $leer('SIGSM_DB_HOST', self::$host),
+            'puerto' => $leer('SIGSM_DB_PORT', self::$puerto),
+            'baseDatos' => $leer('SIGSM_DB_NAME', self::$baseDatos),
+            'usuario' => $leer('SIGSM_DB_USER', self::$usuario),
+            'contrasena' => $contrasena === false ? self::$contrasena : $contrasena,
+        ];
+    }
+
     public static function obtenerConexion(): PDO
     {
         if (self::$instancia === null) {
+            $config = self::configuracion();
+
             $dsn = sprintf(
                 'mysql:host=%s;port=%s;dbname=%s;charset=%s',
-                self::$host, self::$puerto, self::$baseDatos, self::$charset
+                $config['host'], $config['puerto'], $config['baseDatos'], self::$charset
             );
 
             $opciones = [
@@ -36,7 +54,7 @@ class Conexion
             ];
 
             try {
-                self::$instancia = new PDO($dsn, self::$usuario, self::$contrasena, $opciones);
+                self::$instancia = new PDO($dsn, $config['usuario'], $config['contrasena'], $opciones);
             } catch (PDOException $error) {
                 error_log('Error de conexión a la base de datos: ' . $error->getMessage());
                 throw new PDOException('No fue posible conectar con la base de datos.');

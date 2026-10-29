@@ -1,0 +1,12 @@
+.git
+.gitignore
+.env
+.env.*
+db_data/
+database/
+*.zip
+*.md
+generar-hash.php
+Modulo Documentacion/uploads/documentos/*
+!Modulo Documentacion/uploads/documentos/.htaccess
+!Modulo Documentacion/uploads/documentos/.gitkeep
