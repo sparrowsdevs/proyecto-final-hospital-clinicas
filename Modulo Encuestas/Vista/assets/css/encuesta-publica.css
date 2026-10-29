@@ -1,0 +1,125 @@
+/* Encuesta pública (paciente): se apoya en encuestas.css */
+.encuesta-publica {
+    background-color: var(--background);
+    min-height: 100vh;
+}
+.publico-encabezado {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background-color: var(--primary);
+    color: var(--on-primary);
+}
+.publico-encabezado .material-symbols-outlined {
+    font-size: 32px;
+}
+.publico-hospital {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 18px;
+}
+.publico-subtitulo {
+    font-size: 13px;
+    opacity: 0.85;
+}
+.publico-contenedor {
+    width: 100%;
+    max-width: var(--max-width-sm);
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+}
+
+.documento-evaluado {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 8px 12px;
+    background-color: var(--secondary-container);
+    border-radius: var(--radius-md);
+    font-size: 14px !important;
+    color: var(--primary) !important;
+}
+
+.estado-aviso {
+    padding: 48px 16px;
+    text-align: center;
+    color: var(--secondary);
+}
+
+/* Campo trampa: fuera de pantalla, invisible para las personas */
+.campo-trampa {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.comentario-pie {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+.aviso-privacidad {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--secondary);
+}
+.aviso-privacidad .material-symbols-outlined {
+    font-size: 16px;
+}
+.contador-caracteres {
+    font-size: 12px;
+    color: var(--outline);
+    white-space: nowrap;
+}
+
+.mensaje-error {
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    background-color: #ffdad6;
+    color: #93000a;
+    font-size: 14px;
+}
+.mensaje-error[hidden],
+.survey-card[hidden] {
+    display: none;
+}
+
+.tarjeta-gracias {
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.icono-gracias {
+    font-size: 56px;
+    color: var(--clinical-blue);
+    margin-bottom: 12px;
+}
+.tarjeta-gracias h2 {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+.tarjeta-gracias p {
+    color: var(--secondary);
+    margin-bottom: 24px;
+}
+.enlace-volver {
+    display: inline-flex;
+    width: auto;
+}
+
+.nota-anonima {
+    font-size: 12px !important;
+}
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: default;
+}

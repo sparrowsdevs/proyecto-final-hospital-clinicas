@@ -42,3 +42,21 @@
         flex-direction: column;
     }
 }
+
+/* Enlace a la encuesta de satisfacción de cada documento */
+.enlace-opinion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--clinical-blue);
+    border-radius: 4px;
+}
+.enlace-opinion:hover {
+    background-color: rgba(24, 106, 173, 0.08);
+    text-decoration: underline;
+}

@@ -118,6 +118,11 @@ function esc(?string $texto): string
                             Descargar PDF
                         </a>
                     </div>
+                    <a class="enlace-opinion"
+                       href="<?= esc('../../Modulo%20Encuestas/Vista/encuesta.php?id=' . (int) $documento['id_documento'] . '&t=' . rawurlencode($token)) ?>">
+                        <span class="material-symbols-outlined icon-sm">rate_review</span>
+                        Dejar mi opinión sobre este documento
+                    </a>
                 </div>
             <?php endforeach; ?>
         </section>
