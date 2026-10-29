@@ -1,1 +1,43 @@
-Futuros archivos a ignorar
+
+# --- Secretos y configuración local (contraseñas, token del QR) ---
+.env
+.env.*
+!.env.example
+ 
+
+Modulo Documentacion/uploads/documentos/*
+!Modulo Documentacion/uploads/documentos/.htaccess
+!Modulo Documentacion/uploads/documentos/.gitkeep
+ 
+# --- Utilidades provisorias ---
+generar-hash.php
+ 
+# --- Docker: datos de la base y copias locales ---
+db_data/
+mysql_data/
+docker-compose.override.yml
+ 
+# --- Copias de seguridad y volcados de la base ---
+*.bak
+*.dump
+backup/
+backups/
+ 
+# --- Logs y temporales ---
+*.log
+logs/
+tmp/
+*.tmp
+ 
+# --- Editores y sistema operativo ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+ 
+# --- Paquetes comprimidos y dependencias ---
+*.zip
+node_modules/
+vendor/
