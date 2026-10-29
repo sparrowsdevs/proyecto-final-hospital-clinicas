@@ -8,15 +8,15 @@ I.S.B.O.
 
 ## De qué se trata
 
-Proyecto final para el Hospital de Clínicas. La idea es digitalizar algunos de los procesos internos del hospital que hoy se manejan de forma manual: gestión de documentación clínica (con acceso vía QR para pacientes), traslados en ambulancia y encuestas de satisfacción.
+Proyecto final para el Hospital de Clínicas. La idea es digitalizar algunos de los procesos internos del hospital que hoy se manejan de forma manual: documentación informativa para pacientes (con acceso vía QR), traslados no urgentes en ambulancia y encuestas de satisfacción sobre los documentos.
 
-Todo arranca desde un login por cédula, y de ahí cada usuario accede a los módulos según su rol.
+Todo arranca desde un login por cédula, y de ahí cada usuario accede a los módulos según su rol. Los pacientes, en cambio, **no** inician sesión: llegan escaneando un QR.
 
-> ⚠️ Fuera de alcance: el sistema **no** maneja historias clínicas ni datos médicos sensibles, y **no** es un sistema de emergencias (no atiende Código Rojo ni SAME 105).
+> ⚠️ Fuera de alcance: el sistema **no** maneja historias clínicas ni datos médicos sensibles, y **no** es un sistema de emergencias (no atiende Código Rojo ni SAME 105). Los traslados son exclusivamente **no urgentes** (altas, insumos, órganos, etc.).
 
 ## Cómo está armado
 
-Separamos el proyecto en módulos, y cada uno sigue la lógica de Modelo-Vista-Controlador. Aparte hay una carpeta de "Servicios Comunes" con todo lo que se comparte entre módulos (conexión a la base, autenticación, navegación), para no repetir código.
+Separamos el proyecto en módulos, y cada uno sigue la lógica de Modelo-Vista-Controlador. Aparte hay una carpeta de "Servicios Comunes" con todo lo que se comparte entre módulos (conexión a la base, autenticación, configuración, seguridad, navegación), para no repetir código.
 
 ```
 proyecto-final-hospital-clinicas/
@@ -26,9 +26,11 @@ proyecto-final-hospital-clinicas/
 │
 ├── Servicios Comunes/
 │   ├── Conexion BD/conexion.php       # Singleton de conexión PDO
+│   ├── Configuracion/configuracion.php# Token del QR y URL pública (variables de entorno)
+│   ├── Seguridad/AccesoPublico.php    # Validación del token que llega por QR
 │   ├── Autenticacion/
 │   │   ├── AuthController.php         # Sesión, protegerRuta(), verificación de roles
-│   │   ├── UsuarioModelo.php          # CRUD de usuarios, autenticación, roles
+│   │   ├── usuarioModelo.php          # CRUD de usuarios, autenticación, roles
 │   │   ├── procesar-login.php
 │   │   ├── procesar-usuario.php       # Endpoint AJAX: crear/editar/suspender/reactivar
 │   │   └── logout.php
@@ -37,79 +39,122 @@ proyecto-final-hospital-clinicas/
 │       └── assets/css/navbar.css
 │
 ├── Modulo Documentacion/
+│   ├── Modelo/DocumentoModelo.php
+│   ├── Controlador/
+│   │   ├── procesar-documento.php     # Alta/edición/suspensión de documentos (AJAX)
+│   │   └── servir-documento.php       # Única vía para ver/descargar los PDF
+│   ├── Vista/
+│   │   ├── panel-documentacion.php    # Consulta de documentos + código QR, todos los roles
+│   │   ├── cargar-documento.php       # CRUD de documentos (exclusivo Administrador)
+│   │   ├── gestion-usuarios.php       # Gestión de usuarios (exclusivo Administrador)
+│   │   ├── repositorio-publico.php    # Repositorio al que llega el paciente por QR (sin login)
+│   │   └── assets/{css,js}/
+│   └── uploads/documentos/            # PDF cargados (acceso directo bloqueado por .htaccess)
+│
+├── Modulo Ambulancias/
+│   ├── Modelo/TrasladoModelo.php
+│   ├── Controlador/procesar-traslado.php
 │   └── Vista/
-│       ├── panel-administrador.php    # Panel Principal, exclusivo Administrador
-│       ├── panel-documentacion.php    # Consulta de documentos, todos los roles
-│       ├── cargar-documento.php       # CRUD de documentos (exclusivo Administrador) — vista lista, backend pendiente
-│       ├── gestion-usuarios.php       # Gestión de usuarios (exclusivo Administrador) — funcional
+│       ├── form-traslado.php          # Registro de traslados
+│       ├── panel-de-gestion.php       # Listado, edición, cambio de estado y cancelación
+│       ├── seguimiento.php            # Maqueta del seguimiento (sin GPS por ahora)
 │       └── assets/{css,js}/
 │
-├── Modulo Ambulancias/                # Esqueleto de carpetas, sin desarrollo todavía
-└── Modulo Encuestas/                  # Esqueleto de carpetas, sin desarrollo todavía
+├── Modulo Encuestas/
+│   ├── Modelo/EncuestaModelo.php
+│   ├── Controlador/procesar-encuesta.php
+│   └── Vista/
+│       ├── encuesta.php               # Encuesta pública del paciente (sin login)
+│       ├── resultados-encuestas.php   # Dashboard de resultados (usuarios con login)
+│       └── assets/{css,js}/
+│
+└── database/                          # Scripts SQL (ver sección Base de datos)
 ```
 
 ## Módulos
 
-- **Documentación** *(en desarrollo activo)* — cargar y categorizar documentos informativos para pacientes (no historias clínicas), con un panel de consulta y otro de administración. Los pacientes acceden escaneando un QR desde el celular.
+### Documentación
 
-- **Ambulancias** *(no iniciado)* — pedir un traslado no urgente, asignarle una unidad y hacerle seguimiento hasta destino.
-- **Encuestas** *(no iniciado)* — armar encuestas de satisfacción y ver/exportar resultados.
+Cargar y categorizar documentos informativos para pacientes (instructivos de ayuno, preparación para estudios, cuidados post-operatorios), siempre PDF y nunca historias clínicas.
+
+- **Carga de Archivos** (Administrador): alta, edición y suspensión/reactivación de documentos, con validación del archivo subido.
+- **Panel de Documentación** (todos los roles): búsqueda, filtro por categoría, ver y descargar cada PDF, y una ventana con el **código QR** para mostrarle al paciente.
+- **Repositorio público** (paciente, sin login): se llega escaneando el QR. Permite buscar, ver y descargar los documentos activos, y dejar la opinión sobre cada uno (módulo Encuestas).
+
+### Ambulancias
+
+Gestión de **traslados no urgentes**. Los choferes y el personal acompañante se eligen entre los usuarios activos del sistema.
+
+- **Formulario de Traslado**: se ingresa la cédula del paciente (si ya existe se autocompletan nombre y apellido), el elemento a trasladar (camilla, silla de ruedas o ninguno), origen y destino (con posibilidad de agregar ubicaciones nuevas), fecha prevista, vehículo, chofer y acompañante. Solo se ofrecen los vehículos compatibles con el elemento. El registro se guarda en una única transacción.
+- **Panel de Gestión**: tarjetas con el total de traslados, vehículos disponibles y choferes activos; tabla con paciente, origen, destino, fecha, vehículo, chofer, acompañante («S/A» si no hay) y estado; búsqueda, filtro por estado, paginación y exportación a CSV. Desde la tabla se puede **editar** el traslado, **modificar solo el estado** (ventana chica), **cancelar** y **reactivar**.
+- **Estados**: Solicitado → Vehículo Asignado → En Tránsito → Completado. Cancelar es un borrado lógico (estado «Cancelado», reversible). Cada cambio de estado queda en `historial_estado` con el usuario que lo hizo. Un traslado «En Tránsito» exige vehículo y chofer, y ni el vehículo ni el chofer pueden estar en otro traslado en tránsito a la vez. Los traslados Completados y Cancelados no se editan.
+- **Seguimiento**: por ahora es una maqueta (mapa con Leaflet/OpenStreetMap, que necesita conexión a internet). El rastreo GPS real queda para una etapa posterior.
+- Por privacidad, del paciente solo se guarda cédula, nombre y apellido: no hay campos de diagnóstico ni notas clínicas.
+
+### Encuestas
+
+- **Encuesta pública** (paciente, sin login): se accede desde el botón «Dejar mi opinión» de cada documento del repositorio. Tres preguntas: facilidad de acceso (1 a 5 estrellas), utilidad de la información y comentario opcional (máx. 500 caracteres). Es **anónima**: solo se guarda el documento, las respuestas y la fecha; no se guarda nombre, cédula ni IP.
+- **Resultados de Encuestas** (usuarios con login): dashboard con respuestas recibidas, promedio de facilidad, porcentaje que considera útil la información, gráficos de distribución, tabla por documento, comentarios recientes y filtro por documento.
 
 ## Roles
 
-Hoy el sistema maneja dos niveles de acceso reales:
+El sistema maneja dos niveles de acceso:
 
-- **Administrador**: acceso total — Panel Principal, Carga de Archivos, Gestión de Usuarios, y todo lo que ve un Usuario Básico.
-- **Usuario Básico**: solo el Panel de Documentación (consulta + QR). Agrupa conceptualmente a Médico, Enfermería, Ayudante de Médico, etc.
+- **Administrador**: todo lo que ve un Usuario Básico, más Carga de Archivos y Gestión de Usuarios.
+- **Usuario Básico**: Panel de Documentación (consulta + QR), las tres pantallas de Ambulancias (Formulario, Panel de Gestión y Seguimiento) y Resultados de Encuestas. Agrupa conceptualmente a Médico, Enfermería, Ayudante de Médico, etc.
 
-La tabla `rol` sigue siendo un catálogo abierto (VARCHAR, no ENUM) con relación **N:M** contra `usuario` (tabla intermedia `usuario_rol`), pensado para poder sumar roles a futuro sin migrar el esquema. El rol `Chofer` ya existe en la tabla pero está **excluido a propósito** de los formularios de usuario hasta que se desarrolle el Módulo de Ambulancias.
+La tabla `rol` es un catálogo abierto (VARCHAR, no ENUM) con relación **N:M** contra `usuario` (tabla intermedia `usuario_rol`), pensado para poder sumar roles a futuro sin migrar el esquema. El rol `Chofer` existe en la tabla pero está **excluido a propósito** de los formularios de usuario.
 
-## Backend / autenticación
+## Backend, autenticación y seguridad
 
-El login funciona con cédula y contraseña, vía AJAX (fetch) sin recargar la página, con validación de formato en tiempo real. Las contraseñas se guardan hasheadas (`password_hash`) y nunca se guarda la contraseña en la sesión, solo los datos del usuario y su rol.
-
-La conexión a la base es un Singleton en PHP con PDO (`Servicios Comunes/Conexion BD/conexion.php`), así todos los módulos usan la misma instancia en vez de abrir conexiones nuevas por todos lados.
-
-Las rutas protegidas (`AuthController::protegerRuta()`) exigen sesión activa y, si corresponde, un rol específico, con cabeceras anti-caché para que el botón "Atrás" del navegador no muestre paneles después de cerrar sesión.
+- **Login** con cédula y contraseña, vía AJAX (fetch) sin recargar la página, con validación de formato en tiempo real. Las contraseñas se guardan hasheadas (`password_hash`) y nunca se guarda la contraseña en la sesión.
+- **Conexión** a la base con un Singleton en PHP con PDO, para que todos los módulos usen la misma instancia. Todas las consultas son **prepared statements** (sin concatenar datos del usuario en el SQL) y los datos se escapan al mostrarlos.
+- **Rutas protegidas** (`AuthController::protegerRuta()`): exigen sesión activa y, si corresponde, un rol específico, con cabeceras anti-caché para que el botón «Atrás» no muestre paneles tras cerrar sesión.
+- **Borrado lógico** en usuarios, documentos y traslados; nunca se hace `DELETE` físico sobre esos datos.
+- **Acceso del paciente por QR**: el QR contiene una URL con un token secreto (`Servicios Comunes/Configuracion/configuracion.php`, comparado con `hash_equals`). Ese token solo da acceso al repositorio, a la entrega de PDF y a la encuesta; nada más del sistema lo acepta.
+- **PDF protegidos**: la carpeta `uploads/documentos/` está bloqueada por `.htaccess`; los archivos solo se entregan a través de `servir-documento.php` (con sesión o token válido) y solo si el documento está activo.
+- **Encuesta pública**: token anti-CSRF, una respuesta por documento y por navegador, tope de envíos por sesión, campo trampa contra envíos automáticos y validación estricta de cada respuesta.
+- **Cambios de estado de traslados** dentro de transacciones (rollback ante cualquier error).
 
 ## Qué está funcionando hoy
 
 - ✅ Login, logout y protección de rutas por rol.
-- ✅ Navegación única (sidebar + topbar) compartida por todos los paneles, con nombre y rol reales del usuario logueado.
-- ✅ **Gestión de Usuarios completa**: listar, crear (con selector de rol), editar (datos personales, contraseña, estado y rol), suspender/reactivar. Con protecciones para que un Administrador no se autosuspenda ni se quite su propio rol.
-- 🚧 Módulo de Documentación: vistas listas, pero el CRUD de documentos todavía no está conectado a la base real (datos de ejemplo en `cargar-documento.php`).
-- 🚧 Pendiente: QR único que lleve a un repositorio público de documentos (sin login), con botón para generarlo/imprimirlo desde el Panel de Documentación.
-- ⏸️ Pausado: funcionalidad real de "¿Olvidó su contraseña?" y "Solicitar Acceso" en el login (hoy son solo UI). Falta definir si la solicitud se guarda en la base, se manda por email, o ambas.
-- ❌ Módulos de Ambulancias y Encuestas: sin desarrollo, solo esqueleto de carpetas.
+- ✅ Navegación única (sidebar + topbar) compartida por todos los paneles, con nombre y rol reales del usuario.
+- ✅ Gestión de Usuarios completa (listar, crear, editar, suspender/reactivar), con protecciones para que un Administrador no se autosuspenda ni se quite su propio rol.
+- ✅ Módulo Documentación: CRUD de documentos conectado a la base, panel de consulta, QR y repositorio público.
+- ✅ Módulo Ambulancias: formulario, panel de gestión (editar, cambiar estado, cancelar, reactivar, filtros y CSV).
+- ✅ Módulo Encuestas: encuesta pública anónima y dashboard de resultados.
+- 🎭 Seguimiento de traslados: maqueta, sin GPS.
+- ⏸️ «¿Olvidó su contraseña?» y «Solicitar acceso» en el login: hoy son solo UI. Falta definir si la solicitud se guarda en la base, se manda por email, o ambas.
 
 ## Base de datos
 
-En `database/` está el modelo: usuarios, roles (relación N:M por si un usuario llega a tener más de un rol), categorías y documentos. Motor InnoDB, charset utf8mb4, base de datos `database_clinicas`. Todas las tablas usan borrado lógico (`activo BOOLEAN`), nunca `DELETE` físico sobre usuarios ni documentos.
+Base `database_clinicas`, motor InnoDB, charset utf8mb4. Scripts en `database/`:
+
+| Script                                             | Para qué sirve                                                                                                        |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `DER-final/ddl.sql`                                | Esquema completo (usuarios, roles, documentos, traslados, etc.)                                                       |
+| `DER-final/dml.sql`                                | Datos de ejemplo                                                                                                      |
+| `modulo1-login-documentacion/modulo1.sql`          | Esquema solo de usuarios, roles, categorías y documentos                                                              |
+| `modulo1-login-documentacion/seed-data.sql`        | Usuario Administrador de prueba y roles del sistema                                                                   |
+| `modulo-ambulancias/01-preparar-traslados.sql`     | Tablas y catálogos de traslados (estados, canal, elementos, vehículos, ubicaciones). Se puede ejecutar más de una vez |
+| `modulo-ambulancias/02-compatibilidad-ninguno.sql` | Deja al elemento «Ninguno» compatible con todos los tipos de vehículo (opcional: el código ya lo aplica)              |
+| `modulo-encuestas/01-encuesta-documento.sql`       | Tabla `encuesta_documento` de la encuesta pública                                                                     |
+
+Requiere MySQL 8.0.16+ o MariaDB 10.2+ (por los `CHECK` de la encuesta). Las tablas `encuesta`, `pregunta` y `respuesta_*` del DER original no se usan en la versión actual: la encuesta pública guarda sus respuestas en `encuesta_documento`.
 
 ## Tecnologías
 
-- HTML5 + CSS3 puro para las vistas (sin Bootstrap ni Tailwind, todo maquetado a mano con Grid y Flexbox)
+- HTML5 + CSS3 puro para las vistas (todo maquetado a mano con Grid y Flexbox)
 - PHP orientado a objetos para el backend, sin frameworks
 - MySQL para la base de datos, vía PDO con prepared statements
 - JavaScript vanilla (fetch/AJAX) para el dinamismo del frontend
+- Código QR generado en el navegador con `qrcode.js`; mapa de Seguimiento con Leaflet/OpenStreetMap
 - XAMPP como entorno de desarrollo local
-
-## Cómo levantarlo en local
-
-1. Copiar la carpeta del proyecto dentro de `htdocs/` (XAMPP).
-2. Iniciar Apache y MySQL desde el panel de XAMPP.
-3. Crear la base `database_clinicas` y correr el script de `database/` para crear las tablas.
-4. Cargar al menos un usuario Administrador de prueba (contraseña hasheada con `password_hash`, con su fila en `usuario_rol`).
-5. Entrar a `http://localhost/<carpeta-del-proyecto>/index.php`.
-
 
 ## Equipo — Sparrows Devs
 
- - Ricardo Boggio 
+- Ricardo Boggio
 - Facundo Brun
 - Fernando Aguirre
 - Miguel Duarte
-
-## Próximos pasos
-
-1. Definir mecanismo de contacto (BD / email) y activar los botones de recuperación de acceso del login.

@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/../Conexion BD/conexion.php';
 
+
 class UsuarioModelo
 {
     private PDO $conexion;
