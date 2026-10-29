@@ -10,6 +10,9 @@ class ReglaDeNegocioException extends Exception
 class TrasladoModelo
 {
     // Nombres de los registros de catálogo que usa el formulario
+    /** Elemento «sin equipamiento» (el paciente no necesita camilla ni silla): lo puede llevar cualquier vehículo. */
+    public const ELEMENTO_SIN_EQUIPO = 'Ninguno';
+
     public const CANAL_FORMULARIO = 'App Interna';
     public const ESTADO_SOLICITADO = 'Solicitado';
     public const ESTADO_VEHICULO_ASIGNADO = 'Vehículo Asignado';
@@ -91,8 +94,19 @@ class TrasladoModelo
             $compatibles[(int) $fila['id_tipo_vehiculo']][] = (int) $fila['id_tipo_elemento'];
         }
 
+        // «Ninguno» (sin equipamiento) es compatible con todos los vehículos
+        $consultaSinEquipo = $this->conexion->prepare(
+            'SELECT id_tipo_elemento FROM tipo_elemento WHERE nombre = :nombre'
+        );
+        $consultaSinEquipo->bindValue(':nombre', self::ELEMENTO_SIN_EQUIPO, PDO::PARAM_STR);
+        $consultaSinEquipo->execute();
+        $idSinEquipo = $consultaSinEquipo->fetchColumn();
+
         foreach ($vehiculos as &$vehiculo) {
             $vehiculo['elementos_compatibles'] = $compatibles[(int) $vehiculo['id_tipo_vehiculo']] ?? [];
+            if ($idSinEquipo !== false && !in_array((int) $idSinEquipo, $vehiculo['elementos_compatibles'], true)) {
+                $vehiculo['elementos_compatibles'][] = (int) $idSinEquipo;
+            }
         }
         unset($vehiculo);
 
@@ -172,13 +186,20 @@ class TrasladoModelo
     /** Indica si el vehículo puede transportar el elemento (tabla compatibilidad). */
     public function esVehiculoCompatible(int $idVehiculo, int $idTipoElemento): bool
     {
+        // El elemento «Ninguno» lo puede llevar cualquier vehículo; el resto, según la tabla compatibilidad
         $consulta = $this->conexion->prepare(
             'SELECT COUNT(*) FROM vehiculo v
-             INNER JOIN compatibilidad c ON c.id_tipo_vehiculo = v.id_tipo_vehiculo
-             WHERE v.id_vehiculo = :id_vehiculo AND c.id_tipo_elemento = :id_tipo_elemento'
+             WHERE v.id_vehiculo = :id_vehiculo
+               AND (EXISTS (SELECT 1 FROM tipo_elemento te
+                            WHERE te.id_tipo_elemento = :id_elemento_a AND te.nombre = :sin_equipo)
+                    OR EXISTS (SELECT 1 FROM compatibilidad c
+                               WHERE c.id_tipo_vehiculo = v.id_tipo_vehiculo
+                                 AND c.id_tipo_elemento = :id_elemento_b))'
         );
         $consulta->bindValue(':id_vehiculo', $idVehiculo, PDO::PARAM_INT);
-        $consulta->bindValue(':id_tipo_elemento', $idTipoElemento, PDO::PARAM_INT);
+        $consulta->bindValue(':id_elemento_a', $idTipoElemento, PDO::PARAM_INT);
+        $consulta->bindValue(':id_elemento_b', $idTipoElemento, PDO::PARAM_INT);
+        $consulta->bindValue(':sin_equipo', self::ELEMENTO_SIN_EQUIPO, PDO::PARAM_STR);
         $consulta->execute();
         return (int) $consulta->fetchColumn() > 0;
     }

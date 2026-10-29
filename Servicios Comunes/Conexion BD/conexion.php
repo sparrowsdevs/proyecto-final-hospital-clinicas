@@ -13,7 +13,7 @@ class Conexion
     private static string $puerto = '3306';
     private static string $baseDatos = 'database_clinicas';
     private static string $usuario = 'root';
-    private static string $contrasena = '';
+    private static string $contrasena = 'mysql';
     private static string $charset = 'utf8mb4';
 
     private static ?PDO $instancia = null;
