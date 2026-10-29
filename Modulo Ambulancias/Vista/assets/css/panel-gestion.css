@@ -100,12 +100,12 @@ ul {
     flex: 1;
     padding: 16px;
     width: 100%;
-    max-width: var(--container-max);
+    max-width: 1800px; /* tabla más ancha */
     margin: 0 auto;
 }
 @media (min-width: 768px) {
     .dashboard-canvas {
-        padding: 32px;
+        padding: 32px 24px;
     }
 }
 
@@ -676,4 +676,76 @@ body.modal-abierto {
 .data-table td:first-child,
 .data-table td .td-title {
     white-space: nowrap;
+}
+
+/* Tarjetas: 3 centradas y de tamaño uniforme */
+.kpi-grid {
+    grid-template-columns: 1fr;
+    max-width: 1080px;
+    margin: 0 auto 32px;
+}
+@media (min-width: 640px) {
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.kpi-card {
+    min-height: 168px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+.kpi-card .kpi-header {
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+}
+.kpi-card .kpi-body {
+    text-align: center;
+}
+
+/* Tabla sin barra de desplazamiento horizontal: ocupa todo el ancho */
+.table-responsive {
+    overflow-x: visible;
+}
+.data-table {
+    table-layout: auto;
+}
+.data-table th,
+.data-table td {
+    padding: 14px 10px;
+}
+.data-table th:first-child,
+.data-table td:first-child {
+    padding-left: 20px;
+}
+.data-table th:last-child,
+.data-table td:last-child {
+    padding-right: 20px;
+}
+.data-table td {
+    font-size: 13px;
+}
+
+/* Ajuste fino para que entre sin barra horizontal en pantallas de 1280 px */
+.data-table th,
+.data-table td {
+    padding: 12px 7px;
+}
+.data-table th {
+    font-size: 11px;
+    letter-spacing: 0.02em;
+}
+.data-table th:first-child,
+.data-table td:first-child {
+    padding-left: 16px;
+}
+.data-table th:last-child,
+.data-table td:last-child {
+    padding-right: 16px;
+    width: 1%;
+}
+.acciones-fila .icon-btn-small {
+    padding: 2px;
+}
+.data-table .badge {
+    letter-spacing: 0.02em;
 }

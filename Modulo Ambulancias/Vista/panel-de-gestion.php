@@ -116,20 +116,6 @@ function nombrePersona(?string $nombre, ?string $apellido): string
                     </div>
                 </div>
 
-                <div class="kpi-card hover-error">
-                    <span class="material-symbols-outlined bg-icon text-error">pending_actions</span>
-                    <div class="kpi-header">
-                        <h3>Solicitudes Pendientes</h3>
-                        <div class="kpi-icon-container bg-error-light">
-                            <span class="material-symbols-outlined">pending_actions</span>
-                        </div>
-                    </div>
-                    <div class="kpi-body">
-                        <p class="kpi-value"><?= (int) $resumen['pendientes'] ?></p>
-                        <p class="kpi-trend text-muted"><?= $resumen['pendientes'] === 0 ? 'Sin solicitudes pendientes' : 'esperando asignación de vehículo' ?></p>
-                    </div>
-                </div>
-
             </div>
 
             <section class="table-section">
@@ -357,6 +343,6 @@ function nombrePersona(?string $nombre, ?string $apellido): string
         </div>
     </div>
 
-    <script src="assets/js/panel-gestion.js"></script>
+    <script src="assets/js/panel-de-gestion.js"></script>
 </body>
 </html>
