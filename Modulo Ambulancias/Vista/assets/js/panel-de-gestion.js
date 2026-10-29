@@ -89,10 +89,10 @@
             mostrarAviso('No hay traslados para exportar.', false);
             return;
         }
-        const lineas = [['ID', 'Paciente', 'CI', 'Elemento', 'Origen', 'Destino', 'Fecha prevista', 'Vehículo', 'Chofer', 'Estado']];
+        const lineas = [['ID', 'Paciente', 'CI', 'Elemento', 'Origen', 'Destino', 'Fecha prevista', 'Vehículo', 'Chofer', 'Acompañante', 'Estado']];
         filasFiltradas.forEach(function (f) {
             const d = f.dataset;
-            lineas.push([d.codigo, d.paciente, d.ci, d.elemento, d.origen, d.destino, d.horaTexto, d.matricula, d.choferTexto, d.estado]);
+            lineas.push([d.codigo, d.paciente, d.ci, d.elemento, d.origen, d.destino, d.horaTexto, d.matricula, d.choferTexto, d.enfermeroTexto, d.estado]);
         });
         const csv = '﻿' + lineas.map(function (l) { return l.map(celdaCsv).join(';'); }).join('\r\n');
         const enlace = document.createElement('a');
@@ -173,7 +173,7 @@
     const ayudaEstado = document.getElementById('ayudaEstado');
     const btnGuardar = document.getElementById('btnGuardar');
 
-    function abrirEdicion(fila) {
+    function abrirEdicion(fila, enfocarEstado) {
         const d = fila.dataset;
         mostrarError(editError, '');
         document.getElementById('editId').value = d.id;
@@ -210,7 +210,7 @@
             : '';
 
         abrirModal(modalEditar);
-        document.getElementById('editHora').focus();
+        (enfocarEstado ? editEstado : document.getElementById('editHora')).focus();
     }
 
     formEditar.addEventListener('submit', async function (e) {
@@ -284,7 +284,8 @@
         const boton = e.target.closest('button[data-accion]');
         if (!boton) return;
         const fila = boton.closest('.fila-traslado');
-        if (boton.dataset.accion === 'editar') abrirEdicion(fila);
+        if (boton.dataset.accion === 'editar') abrirEdicion(fila, false);
+        else if (boton.dataset.accion === 'estado') abrirEdicion(fila, true);
         else pedirConfirmacion(fila, boton.dataset.accion);
     });
 

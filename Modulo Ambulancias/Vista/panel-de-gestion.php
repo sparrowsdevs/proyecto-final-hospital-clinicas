@@ -167,6 +167,8 @@ function nombrePersona(?string $nombre, ?string $apellido): string
                                 <th>Destino</th>
                                 <th>Fecha prevista</th>
                                 <th>Vehículo</th>
+                                <th>Chofer</th>
+                                <th>Acompañante</th>
                                 <th>Estado</th>
                                 <th class="text-right">Acciones</th>
                             </tr>
@@ -204,6 +206,7 @@ function nombrePersona(?string $nombre, ?string $apellido): string
                                 data-chofer="<?= (int) $traslado['id_chofer'] ?>"
                                 data-chofer-texto="<?= esc($chofer) ?>"
                                 data-enfermero="<?= (int) $traslado['id_enfermero'] ?>"
+                                data-enfermero-texto="<?= esc($enfermero !== '' ? $enfermero : 'S/A') ?>"
                                 data-transiciones="<?= esc(implode('|', $trasladoModelo->obtenerTransiciones($estado))) ?>">
                                 <td class="td-title"><?= esc($codigo) ?></td>
                                 <td>
@@ -225,6 +228,8 @@ function nombrePersona(?string $nombre, ?string $apellido): string
                                         <span class="text-muted">Sin asignar</span>
                                     <?php endif; ?>
                                 </td>
+                                <td><?= $chofer !== '' ? esc($chofer) : '<span class="text-muted">Sin asignar</span>' ?></td>
+                                <td><?= $enfermero !== '' ? esc($enfermero) : '<span class="text-muted" title="Sin acompañante">S/A</span>' ?></td>
                                 <td>
                                     <span class="badge <?= $claseBadge ?>">
                                         <span class="dot <?= $clasePunto ?><?= $pulso ? ' animate-pulse' : '' ?>"></span>
@@ -237,6 +242,9 @@ function nombrePersona(?string $nombre, ?string $apellido): string
                                             <span class="material-symbols-outlined">restore</span>
                                         </button>
                                     <?php elseif (!$finalizado): ?>
+                                        <button class="icon-btn-small" type="button" data-accion="estado" title="Modificar estado" aria-label="Modificar estado de <?= esc($codigo) ?>">
+                                            <span class="material-symbols-outlined">swap_vert</span>
+                                        </button>
                                         <button class="icon-btn-small" type="button" data-accion="editar" title="Editar traslado" aria-label="Editar <?= esc($codigo) ?>">
                                             <span class="material-symbols-outlined">edit</span>
                                         </button>
@@ -248,7 +256,7 @@ function nombrePersona(?string $nombre, ?string $apellido): string
                             </tr>
                             <?php endforeach; ?>
                             <tr class="fila-vacia" <?= $traslados === [] ? '' : 'hidden' ?>>
-                                <td class="tabla-vacia" colspan="8">
+                                <td class="tabla-vacia" colspan="10">
                                     <span class="material-symbols-outlined">local_shipping</span>
                                     <p id="textoVacio"><?= $traslados === [] ? 'Aún no hay traslados registrados.' : 'Ningún traslado coincide con el filtro.' ?></p>
                                 </td>
