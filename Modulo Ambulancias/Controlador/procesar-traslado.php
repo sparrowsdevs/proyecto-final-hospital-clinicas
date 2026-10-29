@@ -216,6 +216,40 @@ try {
             break;
 
         // ------------------------------------------------------------------
+        case 'cambiar-estado':
+            // Cambio rápido: solo el estado; el resto de los datos se conserva tal cual.
+            $idTraslado = enteroEstricto($_POST['id_traslado'] ?? '');
+            $nuevoEstado = trim((string) ($_POST['estado'] ?? ''));
+            if ($idTraslado === 0) {
+                responder(false, 'Traslado no válido.');
+            }
+            if (!in_array($nuevoEstado, $modelo->obtenerEstados(), true)) {
+                responder(false, 'Seleccione un estado válido.');
+            }
+            $actual = $modelo->buscarTraslado($idTraslado);
+            if ($actual === false) {
+                responder(false, 'El traslado no existe.');
+            }
+            if ($actual['estado'] === $nuevoEstado) {
+                responder(false, 'El traslado ya se encuentra en ese estado.');
+            }
+            // Volver a «Solicitado» libera el vehículo asignado
+            $idVehiculo = $actual['id_vehiculo'] === null ? null : (int) $actual['id_vehiculo'];
+            if ($nuevoEstado === TrasladoModelo::ESTADO_SOLICITADO) {
+                $idVehiculo = null;
+            }
+            $resultado = $modelo->actualizarTraslado($idTraslado, [
+                'hora_prevista' => (new DateTime($actual['hora_prevista']))->format('Y-m-d H:i:s'),
+                'id_vehiculo' => $idVehiculo,
+                'id_chofer' => $actual['id_chofer'] === null ? null : (int) $actual['id_chofer'],
+                'id_enfermero' => $actual['id_enfermero'] === null ? null : (int) $actual['id_enfermero'],
+                'estado' => $nuevoEstado,
+            ], (int) $_SESSION['id_usuario']);
+
+            responder(true, 'Estado actualizado a «' . $resultado['estado'] . '».', $resultado);
+            break;
+
+        // ------------------------------------------------------------------
         case 'cancelar':
             $idTraslado = enteroEstricto($_POST['id_traslado'] ?? '');
             if ($idTraslado === 0) {

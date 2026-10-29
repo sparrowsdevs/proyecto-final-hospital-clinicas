@@ -749,3 +749,33 @@ body.modal-abierto {
 .data-table .badge {
     letter-spacing: 0.02em;
 }
+
+/* Botones de acción: separación y color al pasar el mouse */
+.acciones-fila {
+    display: table-cell;
+}
+.acciones-fila .icon-btn-small {
+    padding: 6px;
+    margin-left: 10px;
+    border-radius: var(--radius-sm);
+    transition: color 0.15s, background-color 0.15s;
+}
+.acciones-fila .icon-btn-small:first-child {
+    margin-left: 0;
+}
+.acciones-fila .icon-btn-small[data-accion="estado"]:hover {
+    color: #1a73e8;
+    background-color: rgba(26, 115, 232, 0.12);
+}
+.acciones-fila .icon-btn-small[data-accion="editar"]:hover {
+    color: #b7791f;
+    background-color: rgba(250, 204, 21, 0.28);
+}
+.acciones-fila .icon-btn-small[data-accion="cancelar"]:hover {
+    color: var(--error);
+    background-color: var(--error-container);
+}
+.acciones-fila .icon-btn-small[data-accion="reactivar"]:hover {
+    color: var(--success);
+    background-color: rgba(46, 125, 50, 0.12);
+}

@@ -238,6 +238,72 @@
     });
 
     // ------------------------------------------------------------------
+    // Modificar solo el estado (ventana chica)
+    // ------------------------------------------------------------------
+    const modalEstado = document.getElementById('modalEstado');
+    const formEstado = document.getElementById('formEstado');
+    const estadoNuevo = document.getElementById('estadoNuevo');
+    const estadoError = document.getElementById('estadoError');
+    const ayudaNuevoEstado = document.getElementById('ayudaNuevoEstado');
+    const btnGuardarEstado = document.getElementById('btnGuardarEstado');
+
+    function abrirEstado(fila) {
+        const d = fila.dataset;
+        const tieneVehiculo = d.vehiculo !== '0';
+        const tieneChofer = d.chofer !== '0';
+        mostrarError(estadoError, '');
+        document.getElementById('estadoId').value = d.id;
+        document.getElementById('tituloEstado').textContent = 'Modificar estado de ' + d.codigo;
+        document.getElementById('estadoResumen').textContent = 'Estado actual: ' + d.estado;
+
+        estadoNuevo.innerHTML = '';
+        const transiciones = d.transiciones ? d.transiciones.split('|') : [];
+        let hayRestringidas = false;
+        transiciones.forEach(function (nombre) {
+            const opcion = document.createElement('option');
+            opcion.value = nombre;
+            let motivo = '';
+            if (nombre === 'Vehículo Asignado' && !tieneVehiculo) motivo = 'requiere vehículo';
+            if ((nombre === 'En Tránsito' || nombre === 'Completado') && (!tieneVehiculo || !tieneChofer)) motivo = 'requiere vehículo y chofer';
+            opcion.textContent = motivo ? nombre + ' (' + motivo + ')' : nombre;
+            opcion.disabled = motivo !== '';
+            hayRestringidas = hayRestringidas || motivo !== '';
+            estadoNuevo.appendChild(opcion);
+        });
+        // Se selecciona la primera opción disponible
+        const libre = Array.from(estadoNuevo.options).find(function (o) { return !o.disabled; });
+        if (libre) estadoNuevo.value = libre.value;
+        btnGuardarEstado.disabled = !libre;
+
+        ayudaNuevoEstado.textContent = hayRestringidas || !libre
+            ? 'Para las opciones deshabilitadas, asigne primero los datos faltantes con «Editar traslado».'
+            : (d.estado === 'Vehículo Asignado' ? 'Al volver a «Solicitado» se libera el vehículo asignado.' : '');
+        abrirModal(modalEstado);
+        estadoNuevo.focus();
+    }
+
+    formEstado.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        mostrarError(estadoError, '');
+        const datos = new FormData();
+        datos.append('accion', 'cambiar-estado');
+        datos.append('id_traslado', document.getElementById('estadoId').value);
+        datos.append('estado', estadoNuevo.value);
+        btnGuardarEstado.disabled = true;
+        try {
+            const r = await enviar(datos);
+            if (r.exito) {
+                recargarConAviso(r.mensaje);
+                return;
+            }
+            mostrarError(estadoError, r.mensaje);
+        } catch (err) {
+            mostrarError(estadoError, 'No se pudo conectar con el servidor. Intente nuevamente.');
+        }
+        btnGuardarEstado.disabled = false;
+    });
+
+    // ------------------------------------------------------------------
     // Cancelar / reactivar (con confirmación)
     // ------------------------------------------------------------------
     const modalConfirmar = document.getElementById('modalConfirmar');
@@ -285,7 +351,7 @@
         if (!boton) return;
         const fila = boton.closest('.fila-traslado');
         if (boton.dataset.accion === 'editar') abrirEdicion(fila, false);
-        else if (boton.dataset.accion === 'estado') abrirEdicion(fila, true);
+        else if (boton.dataset.accion === 'estado') abrirEstado(fila);
         else pedirConfirmacion(fila, boton.dataset.accion);
     });
 

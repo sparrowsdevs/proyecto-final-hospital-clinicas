@@ -327,6 +327,30 @@ function nombrePersona(?string $nombre, ?string $apellido): string
         </div>
     </div>
 
+    <!-- Modal chico: modificar solo el estado -->
+    <div class="modal-fondo" id="modalEstado" hidden>
+        <div class="modal-caja modal-chica" role="dialog" aria-modal="true" aria-labelledby="tituloEstado">
+            <div class="modal-cabecera">
+                <h2 id="tituloEstado">Modificar estado</h2>
+                <button class="icon-btn-small" type="button" data-cerrar aria-label="Cerrar"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <form id="formEstado" novalidate>
+                <input type="hidden" id="estadoId">
+                <p class="modal-resumen" id="estadoResumen"></p>
+                <div class="form-group">
+                    <label class="form-label" for="estadoNuevo">Nuevo estado</label>
+                    <select class="form-control" id="estadoNuevo"></select>
+                    <p class="ayuda-campo" id="ayudaNuevoEstado"></p>
+                </div>
+                <p class="mensaje-error" id="estadoError" role="alert" hidden></p>
+                <div class="modal-pie">
+                    <button class="btn btn-outline-sm" type="button" data-cerrar>Cancelar</button>
+                    <button class="btn btn-primary" type="submit" id="btnGuardarEstado">Guardar estado</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Modal: confirmar cancelación / reactivación -->
     <div class="modal-fondo" id="modalConfirmar" hidden>
         <div class="modal-caja modal-chica" role="alertdialog" aria-modal="true" aria-labelledby="tituloConfirmar">
