@@ -58,6 +58,13 @@ function claseActivaNav(string $pagina, string $paginaActual): string
             <span class="material-symbols-outlined">pin_drop</span>
             <span>Seguimiento</span>
         </a>
+
+        <p class="titulo-seccion-nav">Encuestas</p>
+
+        <a class="<?= claseActivaNav('encuestas-resultados', $paginaActual) ?>" href="../../Modulo Encuestas/Vista/resultados-encuestas.php">
+            <span class="material-symbols-outlined">analytics</span>
+            <span>Resultados de Encuestas</span>
+        </a>
     </nav>
 </aside>
 
