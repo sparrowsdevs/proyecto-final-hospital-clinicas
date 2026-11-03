@@ -1,12 +1,17 @@
+# S.I.G.S.M. - Despliegue en contenedores (alternativo al despliegue nativo)
+name: sigsm
+
 services:
   app:
     build: .
+    image: sigsm-app:1.0
     restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     ports:
-      - "${APP_PORT:-8080}:80"
+      # Por defecto solo escucha en el propio servidor (ver punto 3.9)
+      - "${APP_BIND:-127.0.0.1}:${APP_PORT:-8080}:80"
     environment:
       SIGSM_DB_HOST: db
       SIGSM_DB_PORT: "3306"
