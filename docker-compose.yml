@@ -38,12 +38,8 @@ services:
       TZ: America/Montevideo
     volumes:
       - db_data:/var/lib/mysql
-      # Scripts de creación: se ejecutan en orden alfabético, solo la primera vez
-      - ./database/DER-final/ddl.sql:/docker-entrypoint-initdb.d/01-esquema.sql:ro
-      - ./database/modulo1-login-documentacion/seed-data.sql:/docker-entrypoint-initdb.d/02-usuario-roles-categorias.sql:ro
-      - ./database/modulo-ambulancias/01-preparar-traslados.sql:/docker-entrypoint-initdb.d/03-traslados.sql:ro
-      - ./database/modulo-ambulancias/02-compatibilidad-ninguno.sql:/docker-entrypoint-initdb.d/04-compatibilidad.sql:ro
-      - ./database/modulo-encuestas/01-encuesta-documento.sql:/docker-entrypoint-initdb.d/05-encuestas.sql:ro
+      # Script de creación (esquema y datos iniciales): se ejecuta solo la primera vez
+      - ./database/query/sigsm-docker.sql:/docker-entrypoint-initdb.d/01-sigsm.sql:ro
     healthcheck:
       test:
         [
