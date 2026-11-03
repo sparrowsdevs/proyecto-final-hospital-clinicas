@@ -5,7 +5,7 @@
  * personales o suspender/reactivar su cuenta.
  */
 require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/AuthController.php';
-require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/UsuarioModelo.php';
+require_once __DIR__ . '/../../Servicios Comunes/Autenticacion/usuarioModelo.php';
 
 $auth = new AuthController();
 $auth->protegerRuta('Administrador');

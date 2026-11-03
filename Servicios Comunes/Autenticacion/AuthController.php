@@ -5,7 +5,7 @@
  * los módulos (Documentación, Ambulancias, Encuestas).
  */
 
-require_once __DIR__ . '/UsuarioModelo.php';
+require_once __DIR__ . '/usuarioModelo.php';
 
 class AuthController
 {

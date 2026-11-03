@@ -6,7 +6,7 @@ declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 
 require_once __DIR__ . '/AuthController.php';
-require_once __DIR__ . '/UsuarioModelo.php';
+require_once __DIR__ . '/usuarioModelo.php';
 
 $auth = new AuthController();
 
