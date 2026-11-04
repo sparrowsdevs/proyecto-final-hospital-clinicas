@@ -15,7 +15,7 @@ function claseActivaNav(string $pagina, string $paginaActual): string
     return $pagina === $paginaActual ? 'enlace-nav activo' : 'enlace-nav';
 }
 ?>
-<aside class="barra-lateral">
+<aside class="barra-lateral" id="menu-lateral">
     <div class="encabezado-lateral">
         <img alt="Hospital de Clínicas Dr. Manuel Quintela" class="logo-marca" src="../../img/logosigsm.png">
         <h2>S.I.G.S.M.</h2>
@@ -71,7 +71,9 @@ function claseActivaNav(string $pagina, string $paginaActual): string
 <!-- Barra superior: menú hamburguesa (mobile) + datos del usuario + logout -->
 <header class="barra-superior">
     <div class="superior-izquierda">
-        <button class="boton-menu"><span class="material-symbols-outlined">menu</span></button>
+        <button type="button" class="boton-menu" aria-controls="menu-lateral" aria-expanded="false" aria-label="Abrir menú">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
     </div>
 
     <div class="superior-derecha">
@@ -88,3 +90,7 @@ function claseActivaNav(string $pagina, string $paginaActual): string
         </a>
     </div>
 </header>
+
+<!-- Fondo oscuro detrás del menú desplegado en mobile (al tocarlo, se cierra el menú) -->
+<div class="fondo-menu" hidden></div>
+<script src="../../Servicios Comunes/Vista General/assets/js/navbar.js" defer></script>

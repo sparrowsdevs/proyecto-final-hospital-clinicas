@@ -171,3 +171,23 @@
     color: var(--outline, #737781);
 }
 .titulo-seccion-nav:first-child { margin-top: 0; }
+
+/* --- Menú desplegable en mobile (botón hamburguesa) ---
+   Debajo de 768 px la barra lateral está oculta; navbar.js le agrega la
+   clase "abierta" para mostrarla por encima del contenido. */
+.fondo-menu {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 940;
+}
+.fondo-menu[hidden] { display: none; }
+
+@media (max-width: 767px) {
+    .barra-lateral.abierta {
+        display: flex;
+        z-index: 950;
+        box-shadow: 4px 0 16px rgba(0, 0, 0, 0.2);
+    }
+    body.menu-abierto { overflow: hidden; }
+}
