@@ -113,6 +113,16 @@ class TrasladoModelo
         return $vehiculos;
     }
 
+    /** Tipos de vehículo, para dar de alta un vehículo desde el formulario. */
+    public function obtenerTiposVehiculo(): array
+    {
+        $consulta = $this->conexion->prepare(
+            'SELECT id_tipo_vehiculo, nombre FROM tipo_vehiculo ORDER BY nombre'
+        );
+        $consulta->execute();
+        return $consulta->fetchAll();
+    }
+
     /** Usuarios activos, para elegir chofer y personal acompañante. */
     public function obtenerUsuariosActivos(): array
     {
@@ -165,6 +175,51 @@ class TrasladoModelo
     }
 
     // ------------------------------------------------------------------
+    // Vehículos
+    // ------------------------------------------------------------------
+
+    /**
+     * Da de alta un vehículo de la flota. La matrícula llega normalizada
+     * (mayúsculas, espacios simples). Si ya existe un vehículo con la misma
+     * matrícula (sin contar espacios ni guiones), devuelve el existente.
+     *
+     * @return array datos del vehículo como en obtenerVehiculos(), más 'existia' => bool
+     */
+    public function crearVehiculo(string $matricula, int $idTipoVehiculo): array
+    {
+        $buscar = $this->conexion->prepare(
+            "SELECT id_vehiculo FROM vehiculo
+             WHERE REPLACE(REPLACE(UPPER(matricula), '-', ''), ' ', '') = :compacta"
+        );
+        $buscar->bindValue(':compacta', str_replace(['-', ' '], '', $matricula), PDO::PARAM_STR);
+        $buscar->execute();
+        $idExistente = $buscar->fetchColumn();
+
+        if ($idExistente !== false) {
+            $idVehiculo = (int) $idExistente;
+            $existia = true;
+        } else {
+            $insertar = $this->conexion->prepare(
+                'INSERT INTO vehiculo (matricula, id_tipo_vehiculo) VALUES (:matricula, :id_tipo)'
+            );
+            $insertar->bindValue(':matricula', $matricula, PDO::PARAM_STR);
+            $insertar->bindValue(':id_tipo', $idTipoVehiculo, PDO::PARAM_INT);
+            $insertar->execute();
+            $idVehiculo = (int) $this->conexion->lastInsertId();
+            $existia = false;
+        }
+
+        // Se reutiliza obtenerVehiculos() para devolver el tipo y los elementos compatibles
+        foreach ($this->obtenerVehiculos() as $vehiculo) {
+            if ((int) $vehiculo['id_vehiculo'] === $idVehiculo) {
+                $vehiculo['existia'] = $existia;
+                return $vehiculo;
+            }
+        }
+        throw new RuntimeException('No fue posible recuperar el vehículo registrado.');
+    }
+
+    // ------------------------------------------------------------------
     // Pacientes
     // ------------------------------------------------------------------
 
@@ -211,6 +266,7 @@ class TrasladoModelo
             'tipo_elemento' => 'id_tipo_elemento',
             'ubicacion' => 'id_ubicacion',
             'vehiculo' => 'id_vehiculo',
+            'tipo_vehiculo' => 'id_tipo_vehiculo',
             'usuario' => 'id_usuario',
         ];
         if (($permitidos[$tabla] ?? null) !== $columnaId) {

@@ -15,6 +15,7 @@ $trasladoModelo = new TrasladoModelo();
 $tiposElemento = $trasladoModelo->obtenerTiposElemento();
 $ubicaciones = $trasladoModelo->obtenerUbicaciones();
 $vehiculos = $trasladoModelo->obtenerVehiculos();
+$tiposVehiculo = $trasladoModelo->obtenerTiposVehiculo();
 $usuariosActivos = $trasladoModelo->obtenerUsuariosActivos();
 
 $registradoPor = trim(($_SESSION['nombre'] ?? '') . ' ' . ($_SESSION['apellido'] ?? ''));
@@ -160,15 +161,20 @@ function esc(?string $texto): string
                         <p class="ayuda-campo ayuda-asignacion">Opcional: también se puede asignar después desde el Panel de Gestión.</p>
                         <div class="form-group">
                             <label class="form-label" for="idVehiculo">Vehículo</label>
-                            <select class="form-control" id="idVehiculo" name="id_vehiculo">
-                                <option value="">Sin asignar</option>
-                                <?php foreach ($vehiculos as $vehiculo): ?>
-                                    <option value="<?= (int) $vehiculo['id_vehiculo'] ?>"
-                                            data-compatibles="<?= esc(implode(',', $vehiculo['elementos_compatibles'])) ?>">
-                                        <?= esc($vehiculo['matricula']) ?> (<?= esc($vehiculo['tipo']) ?>)
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <div class="input-group">
+                                <select class="form-control" id="idVehiculo" name="id_vehiculo">
+                                    <option value="">Sin asignar</option>
+                                    <?php foreach ($vehiculos as $vehiculo): ?>
+                                        <option value="<?= (int) $vehiculo['id_vehiculo'] ?>"
+                                                data-compatibles="<?= esc(implode(',', $vehiculo['elementos_compatibles'])) ?>">
+                                            <?= esc($vehiculo['matricula']) ?> (<?= esc($vehiculo['tipo']) ?>)
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <button class="btn-icon-outline" id="btnNuevoVehiculo" type="button" title="Agregar vehículo" aria-label="Agregar vehículo">
+                                    <span class="material-symbols-outlined">add</span>
+                                </button>
+                            </div>
                             <p class="ayuda-campo" id="ayudaVehiculo"></p>
                         </div>
                         <div class="form-group">
@@ -222,6 +228,34 @@ function esc(?string $texto): string
                 <div class="modal-acciones">
                     <button class="btn btn-outline" id="btnCancelarUbicacion" type="button">Cancelar</button>
                     <button class="btn btn-action" id="btnGuardarUbicacion" type="submit">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: agregar un vehículo a la flota -->
+    <div class="modal-fondo" id="modalVehiculo" hidden>
+        <div class="modal-ventana" role="dialog" aria-modal="true" aria-labelledby="tituloModalVehiculo">
+            <h2 class="modal-titulo" id="tituloModalVehiculo">Agregar vehículo</h2>
+            <form id="formVehiculo" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="matriculaVehiculo">Matrícula</label>
+                    <input class="form-control" id="matriculaVehiculo" type="text" maxlength="15"
+                           placeholder="Ej: SAM 1234" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="tipoVehiculo">Tipo de vehículo</label>
+                    <select class="form-control" id="tipoVehiculo">
+                        <option disabled selected value="">Seleccione el tipo...</option>
+                        <?php foreach ($tiposVehiculo as $tipo): ?>
+                            <option value="<?= (int) $tipo['id_tipo_vehiculo'] ?>"><?= esc($tipo['nombre']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <p class="mensaje-modal" id="errorVehiculo" role="alert"></p>
+                <div class="modal-acciones">
+                    <button class="btn btn-outline" id="btnCancelarVehiculo" type="button">Cancelar</button>
+                    <button class="btn btn-action" id="btnGuardarVehiculo" type="submit">Guardar</button>
                 </div>
             </form>
         </div>

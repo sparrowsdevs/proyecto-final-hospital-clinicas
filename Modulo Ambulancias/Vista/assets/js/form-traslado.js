@@ -1,12 +1,3 @@
-/*
- * Formulario de Alta de Traslado.
- * - Valida los datos en el navegador (el servidor vuelve a validar todo).
- * - Autocompleta nombre y apellido si la cédula ya está registrada.
- * - Muestra solo los vehículos compatibles con el elemento elegido.
- * - Permite agregar ubicaciones nuevas sin salir del formulario.
- * - Envía el alta por AJAX a ../Controlador/procesar-traslado.php.
- */
-
 const ENDPOINT_TRASLADOS = '../Controlador/procesar-traslado.php';
 
 const formulario = document.getElementById('transfer-form');
@@ -226,6 +217,96 @@ formUbicacion.addEventListener('submit', async (evento) => {
         errorUbicacion.textContent = 'No fue posible conectar con el servidor. Intente nuevamente.';
     } finally {
         btnGuardarUbicacion.disabled = false;
+    }
+});
+
+/* ---------- Modal: agregar vehículo ---------- */
+
+const modalVehiculo = document.getElementById('modalVehiculo');
+const formVehiculo = document.getElementById('formVehiculo');
+const campoMatricula = document.getElementById('matriculaVehiculo');
+const selectTipoVehiculo = document.getElementById('tipoVehiculo');
+const errorVehiculo = document.getElementById('errorVehiculo');
+const btnGuardarVehiculo = document.getElementById('btnGuardarVehiculo');
+
+function abrirModalVehiculo() {
+    formVehiculo.reset();
+    errorVehiculo.textContent = '';
+    modalVehiculo.hidden = false;
+    campoMatricula.focus();
+}
+
+function cerrarModalVehiculo() {
+    modalVehiculo.hidden = true;
+}
+
+document.getElementById('btnNuevoVehiculo').addEventListener('click', abrirModalVehiculo);
+document.getElementById('btnCancelarVehiculo').addEventListener('click', cerrarModalVehiculo);
+modalVehiculo.addEventListener('click', (evento) => {
+    if (evento.target === modalVehiculo) cerrarModalVehiculo();
+});
+document.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Escape' && !modalVehiculo.hidden) cerrarModalVehiculo();
+});
+
+/** Agrega el vehículo al select (si no estaba) y devuelve su opción. */
+function agregarOpcionVehiculo(vehiculo) {
+    const id = String(vehiculo.id_vehiculo);
+    let opcion = Array.from(selectVehiculo.options).find((o) => o.value === id);
+    if (!opcion) {
+        opcion = document.createElement('option');
+        opcion.value = id;
+        opcion.textContent = `${vehiculo.matricula} (${vehiculo.tipo})`; // textContent evita inyectar HTML
+        opcion.dataset.compatibles = vehiculo.elementos_compatibles.join(',');
+        selectVehiculo.appendChild(opcion);
+    }
+    return opcion;
+}
+
+formVehiculo.addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+    errorVehiculo.textContent = '';
+
+    const matricula = campoMatricula.value.trim().replace(/\s+/g, ' ').toUpperCase();
+    if (!/^[A-Z0-9][A-Z0-9 -]{2,14}$/.test(matricula) || !/\d/.test(matricula)) {
+        errorVehiculo.textContent = 'La matrícula debe tener entre 3 y 15 caracteres (letras, números, espacio o guion) e incluir al menos un número.';
+        return;
+    }
+    if (selectTipoVehiculo.value === '') {
+        errorVehiculo.textContent = 'Seleccione el tipo de vehículo.';
+        return;
+    }
+
+    btnGuardarVehiculo.disabled = true;
+    try {
+        const datos = new FormData();
+        datos.append('accion', 'crear-vehiculo');
+        datos.append('matricula', matricula);
+        datos.append('id_tipo_vehiculo', selectTipoVehiculo.value);
+        const respuesta = await fetch(ENDPOINT_TRASLADOS, { method: 'POST', body: datos });
+        const resultado = await respuesta.json();
+
+        if (!resultado.exito) {
+            errorVehiculo.textContent = resultado.mensaje;
+            return;
+        }
+
+        const opcion = agregarOpcionVehiculo(resultado.vehiculo);
+        filtrarVehiculos();
+        cerrarModalVehiculo();
+
+        // Solo queda seleccionado si puede llevar el elemento elegido
+        if (!opcion.disabled) {
+            selectVehiculo.value = opcion.value;
+            actualizarEstadoInicial();
+            ayudaVehiculo.textContent = resultado.mensaje;
+        } else {
+            ayudaVehiculo.textContent = 'El vehículo se registró, pero no es compatible con el elemento elegido.';
+        }
+    } catch (error) {
+        errorVehiculo.textContent = 'No fue posible conectar con el servidor. Intente nuevamente.';
+    } finally {
+        btnGuardarVehiculo.disabled = false;
     }
 });
 

@@ -72,6 +72,23 @@ try {
             break;
 
         // ------------------------------------------------------------------
+        case 'crear-vehiculo':
+            // Matrícula en mayúsculas y con espacios simples (ej.: "SAM 1234" o "SAM-1234")
+            $matricula = mb_strtoupper(trim(preg_replace('/\s+/', ' ', (string) ($_POST['matricula'] ?? ''))), 'UTF-8');
+            if (!preg_match('/^[A-Z0-9][A-Z0-9 -]{2,14}$/', $matricula) || !preg_match('/\d/', $matricula)) {
+                responder(false, 'La matrícula debe tener entre 3 y 15 caracteres (letras, números, espacio o guion) e incluir al menos un número.');
+            }
+            $idTipoVehiculo = enteroEstricto($_POST['id_tipo_vehiculo'] ?? '');
+            if ($idTipoVehiculo === 0 || !$modelo->existeRegistro('tipo_vehiculo', 'id_tipo_vehiculo', $idTipoVehiculo)) {
+                responder(false, 'Seleccione un tipo de vehículo válido.');
+            }
+            $vehiculo = $modelo->crearVehiculo($matricula, $idTipoVehiculo);
+            responder(true, $vehiculo['existia']
+                ? "La matrícula ya estaba registrada como {$vehiculo['tipo']}; se usará ese vehículo."
+                : 'Vehículo agregado correctamente.', ['vehiculo' => $vehiculo]);
+            break;
+
+        // ------------------------------------------------------------------
         case 'crear':
             // --- Paciente
             $ci = preg_replace('/\D/', '', (string) ($_POST['ci_paciente'] ?? ''));
