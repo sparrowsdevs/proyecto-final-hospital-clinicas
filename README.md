@@ -1,160 +1,306 @@
 # S.I.G.S.M. — Sistema Informático de Gestión de Servicios Médicos
 
-Proyecto de Egreso — BT en Tecnologías de la Información (2026)
-I.S.B.O.
+Proyecto de egreso del Bachillerato Tecnológico en Tecnologías de la Información (I.S.B.O.), generación 2026.
 
-**Empresa desarrolladora:** Sparrows Devs
-**Cliente:** Hospital de Clínicas — Montevideo, Uruguay
+**Desarrollado por:** Sparrows Devs
+**Cliente:** Hospital de Clínicas, Montevideo, Uruguay
 
-## De qué se trata
+## 1. De qué trata el proyecto
 
-Proyecto final para el Hospital de Clínicas. La idea es digitalizar algunos de los procesos internos del hospital que hoy se manejan de forma manual: documentación informativa para pacientes (con acceso vía QR), traslados no urgentes en ambulancia y encuestas de satisfacción sobre los documentos.
+El Hospital de Clínicas maneja hoy de forma manual varios procesos que se prestan a ser digitalizados. Nosotros tomamos tres:
 
-Todo arranca desde un login por cédula, y de ahí cada usuario accede a los módulos según su rol. Los pacientes, en cambio, **no** inician sesión: llegan escaneando un QR.
+- los **instructivos para pacientes** (ayuno previo a un estudio, cuidados después de una cirugía, etc.), que se entregan en papel;
+- los **traslados no urgentes** de pacientes, insumos y órganos, que se coordinan sin un registro central;
+- la **opinión de los pacientes** sobre esos instructivos, que hoy no se recoge de ninguna forma.
 
-> ⚠️ Fuera de alcance: el sistema **no** maneja historias clínicas ni datos médicos sensibles, y **no** es un sistema de emergencias (no atiende Código Rojo ni SAME 105). Los traslados son exclusivamente **no urgentes** (altas, insumos, órganos, etc.).
+El sistema responde a eso con tres módulos: Documentación, Ambulancias y Encuestas. El personal del hospital ingresa con su cédula y contraseña. El paciente, en cambio, no tiene usuario: escanea un código QR impreso, llega a un repositorio con los documentos vigentes, puede descargarlos y, si quiere, dejar su opinión de forma anónima.
 
-## Cómo está armado
+El proyecto está escrito en PHP puro, sin frameworks, con arquitectura MVC y MySQL como base de datos. Esa fue una decisión de cátedra y de equipo: queríamos entender qué hace un framework por debajo antes de usar uno.
 
-Separamos el proyecto en módulos, y cada uno sigue la lógica de Modelo-Vista-Controlador. Aparte hay una carpeta de "Servicios Comunes" con todo lo que se comparte entre módulos (conexión a la base, autenticación, configuración, seguridad, navegación), para no repetir código.
+## 2. Lo que el sistema no hace
+
+Estos límites se definieron con el cliente y los respetamos en todo el código.
+
+- **No es un gestor de historias clínicas.** No hay campos de diagnóstico, antecedentes ni notas médicas. De un paciente solo se guarda cédula, nombre y apellido, y únicamente cuando se registra un traslado.
+- **No es un sistema de emergencias.** No atiende Código Rojo ni reemplaza al SAME 105. Los traslados son exclusivamente no urgentes: altas, insumos, órganos y similares.
+- **No reemplaza ningún sistema clínico del hospital.** Los documentos que se cargan son material informativo en PDF.
+
+## 3. Estructura del repositorio
+
+Cada módulo tiene sus propias carpetas `Modelo`, `Vista` y `Controlador`. Lo que comparten todos (conexión a la base, sesiones, configuración, menú de navegación) está en `Servicios Comunes`, para no copiar código de un módulo a otro.
 
 ```
 proyecto-final-hospital-clinicas/
-├── index.php                          # Login del sistema (punto de entrada único)
+├── index.php                       Login y punto de entrada del sistema
 ├── assets/js/login.js
 ├── styles/inicio-sesion.css
 │
 ├── Servicios Comunes/
-│   ├── Conexion BD/conexion.php       # Singleton de conexión PDO
-│   ├── Configuracion/configuracion.php# Token del QR y URL pública (variables de entorno)
-│   ├── Seguridad/AccesoPublico.php    # Validación del token que llega por QR
+│   ├── Conexion BD/conexion.php            Conexión PDO (patrón Singleton)
+│   ├── Configuracion/configuracion.php     URL pública y token del QR
+│   ├── Seguridad/AccesoPublico.php         Validación del token que llega por QR
 │   ├── Autenticacion/
-│   │   ├── AuthController.php         # Sesión, protegerRuta(), verificación de roles
-│   │   ├── usuarioModelo.php          # CRUD de usuarios, autenticación, roles
+│   │   ├── AuthController.php              Sesión, protección de rutas y roles
+│   │   ├── usuarioModelo.php               Consultas de usuarios y roles
 │   │   ├── procesar-login.php
-│   │   ├── procesar-usuario.php       # Endpoint AJAX: crear/editar/suspender/reactivar
+│   │   ├── procesar-usuario.php            Alta, edición y suspensión (AJAX)
 │   │   └── logout.php
-│   └── Vista General/
-│       ├── navbar.php                 # Sidebar + topbar único, compartido por todos los paneles
-│       └── assets/css/navbar.css
+│   └── Vista General/                      navbar.php, compartido por todos los paneles
 │
 ├── Modulo Documentacion/
 │   ├── Modelo/DocumentoModelo.php
 │   ├── Controlador/
-│   │   ├── procesar-documento.php     # Alta/edición/suspensión de documentos (AJAX)
-│   │   └── servir-documento.php       # Única vía para ver/descargar los PDF
+│   │   ├── procesar-documento.php          Alta, edición y suspensión de documentos
+│   │   └── servir-documento.php            Única vía para ver o descargar un PDF
 │   ├── Vista/
-│   │   ├── panel-documentacion.php    # Consulta de documentos + código QR, todos los roles
-│   │   ├── cargar-documento.php       # CRUD de documentos (exclusivo Administrador)
-│   │   ├── gestion-usuarios.php       # Gestión de usuarios (exclusivo Administrador)
-│   │   ├── repositorio-publico.php    # Repositorio al que llega el paciente por QR (sin login)
-│   │   └── assets/{css,js}/
-│   └── uploads/documentos/            # PDF cargados (acceso directo bloqueado por .htaccess)
+│   │   ├── panel-documentacion.php         Consulta de documentos y QR
+│   │   ├── cargar-documento.php            Gestión de documentos (Administrador)
+│   │   ├── gestion-usuarios.php            Gestión de usuarios (Administrador)
+│   │   └── repositorio-publico.php         Lo que ve el paciente al escanear el QR
+│   └── uploads/documentos/                 PDF subidos (acceso directo bloqueado)
 │
 ├── Modulo Ambulancias/
 │   ├── Modelo/TrasladoModelo.php
 │   ├── Controlador/procesar-traslado.php
 │   └── Vista/
-│       ├── form-traslado.php          # Registro de traslados
-│       ├── panel-de-gestion.php       # Listado, edición, cambio de estado y cancelación
-│       ├── seguimiento.php            # Maqueta del seguimiento (sin GPS por ahora)
-│       └── assets/{css,js}/
+│       ├── form-traslado.php               Registro de un traslado
+│       ├── panel-de-gestion.php            Listado, edición, estados y cancelación
+│       └── seguimiento.php                 Maqueta del seguimiento (sin GPS)
 │
 ├── Modulo Encuestas/
 │   ├── Modelo/EncuestaModelo.php
 │   ├── Controlador/procesar-encuesta.php
 │   └── Vista/
-│       ├── encuesta.php               # Encuesta pública del paciente (sin login)
-│       ├── resultados-encuestas.php   # Dashboard de resultados (usuarios con login)
-│       └── assets/{css,js}/
+│       ├── encuesta.php                    Encuesta anónima del paciente
+│       └── resultados-encuestas.php        Resultados para el personal
 │
-└── database/                          # Scripts SQL (ver sección Base de datos)
+├── database/
+│   ├── query/sigsm-docker.sql              Script completo: esquema y datos iniciales
+│   └── DER-final/DER Clinicas.png          Diagrama entidad-relación
+│
+├── docker/                                 Ajustes de Apache y PHP para el contenedor
+├── Dockerfile
+├── docker-compose.yml
+├── .env.example                            Plantilla de variables (el .env real no se sube)
+└── .gitignore / .dockerignore
 ```
 
-## Módulos
+Hay algunos archivos HTML en `Modulo Encuestas/Vista` (`encuestas.html`, `instrucciones.html`, `descarga-documento.html`) y `panel-administrador.php` en Documentación. Son restos de maquetas anteriores que ya no se usan y están pendientes de limpieza.
 
-### Documentación
+## 4. Módulos
 
-Cargar y categorizar documentos informativos para pacientes (instructivos de ayuno, preparación para estudios, cuidados post-operatorios), siempre PDF y nunca historias clínicas.
+### 4.1 Documentación
 
-- **Carga de Archivos** (Administrador): alta, edición y suspensión/reactivación de documentos, con validación del archivo subido.
-- **Panel de Documentación** (todos los roles): búsqueda, filtro por categoría, ver y descargar cada PDF, y una ventana con el **código QR** para mostrarle al paciente.
-- **Repositorio público** (paciente, sin login): se llega escaneando el QR. Permite buscar, ver y descargar los documentos activos, y dejar la opinión sobre cada uno (módulo Encuestas).
+Permite cargar documentos informativos en PDF, clasificarlos por categoría y ponerlos a disposición del paciente mediante un QR. Las categorías corresponden a los servicios del hospital (Cardiología, Neurología, Oncología, etc.).
 
-### Ambulancias
+- **Carga de archivos** (solo Administrador): alta, edición, suspensión y reactivación de documentos. Se valida el tipo y el tamaño del archivo (hasta 10 MB) antes de guardarlo.
+- **Panel de Documentación** (todos los usuarios con sesión): búsqueda, filtro por categoría, vista y descarga de cada PDF, y una ventana que muestra el QR listo para mostrar o imprimir.
+- **Repositorio público** (paciente, sin sesión): al que se llega escaneando el QR. Muestra solo los documentos activos, con buscador y filtro por categoría, y un botón para dejar la opinión de cada uno.
+- **Gestión de usuarios** (solo Administrador): alta, edición, suspensión y reactivación de las cuentas del personal.
 
-Gestión de **traslados no urgentes**. Los choferes y el personal acompañante se eligen entre los usuarios activos del sistema.
+### 4.2 Ambulancias
 
-- **Formulario de Traslado**: se ingresa la cédula del paciente (si ya existe se autocompletan nombre y apellido), el elemento a trasladar (camilla, silla de ruedas o ninguno), origen y destino (con posibilidad de agregar ubicaciones nuevas), fecha prevista, vehículo, chofer y acompañante. Solo se ofrecen los vehículos compatibles con el elemento. El registro se guarda en una única transacción.
-- **Panel de Gestión**: tarjetas con el total de traslados, vehículos disponibles y choferes activos; tabla con paciente, origen, destino, fecha, vehículo, chofer, acompañante («S/A» si no hay) y estado; búsqueda, filtro por estado, paginación y exportación a CSV. Desde la tabla se puede **editar** el traslado, **modificar solo el estado** (ventana chica), **cancelar** y **reactivar**.
-- **Estados**: Solicitado → Vehículo Asignado → En Tránsito → Completado. Cancelar es un borrado lógico (estado «Cancelado», reversible). Cada cambio de estado queda en `historial_estado` con el usuario que lo hizo. Un traslado «En Tránsito» exige vehículo y chofer, y ni el vehículo ni el chofer pueden estar en otro traslado en tránsito a la vez. Los traslados Completados y Cancelados no se editan.
-- **Seguimiento**: por ahora es una maqueta (mapa con Leaflet/OpenStreetMap, que necesita conexión a internet). El rastreo GPS real queda para una etapa posterior.
-- Por privacidad, del paciente solo se guarda cédula, nombre y apellido: no hay campos de diagnóstico ni notas clínicas.
+Gestiona los traslados no urgentes. Los choferes y los acompañantes se eligen entre los usuarios activos del sistema.
 
-### Encuestas
+- **Formulario de traslado.** Se ingresa la cédula del paciente; si ya existe en la base, nombre y apellido se completan solos. Después se elige el elemento a trasladar (camilla, silla de ruedas o ninguno), origen, destino, fecha prevista, vehículo, chofer y acompañante. Solo se ofrecen los vehículos compatibles con el elemento elegido, y si falta una ubicación se puede agregar desde el mismo formulario. Todo se guarda en una única transacción: o se registra completo o no se registra nada.
+- **Panel de gestión.** Tarjetas con el total de traslados, vehículos disponibles y choferes activos, y una tabla con paciente, origen, destino, fecha, vehículo, chofer, acompañante (se muestra «S/A», sin acompañante, cuando no hay) y estado. Tiene búsqueda, filtro por estado, paginación y exportación a CSV. Desde cada fila se puede editar el traslado, cambiar solo su estado, cancelarlo o reactivarlo.
+- **Estados.** Solicitado, Vehículo Asignado, En Tránsito y Completado. Cancelar es un borrado lógico (queda en estado «Cancelado» y se puede revertir). Cada cambio de estado queda registrado en `historial_estado` junto con el usuario que lo hizo. Para pasar a «En Tránsito» hacen falta vehículo y chofer, y ninguno de los dos puede estar en otro traslado en tránsito al mismo tiempo. Los traslados completados o cancelados no se editan.
+- **Seguimiento.** Por ahora es una maqueta con un mapa de Leaflet y OpenStreetMap, por lo que necesita conexión a internet para cargar los mosaicos. El rastreo por GPS está previsto para una etapa posterior.
 
-- **Encuesta pública** (paciente, sin login): se accede desde el botón «Dejar mi opinión» de cada documento del repositorio. Tres preguntas: facilidad de acceso (1 a 5 estrellas), utilidad de la información y comentario opcional (máx. 500 caracteres). Es **anónima**: solo se guarda el documento, las respuestas y la fecha; no se guarda nombre, cédula ni IP.
-- **Resultados de Encuestas** (usuarios con login): dashboard con respuestas recibidas, promedio de facilidad, porcentaje que considera útil la información, gráficos de distribución, tabla por documento, comentarios recientes y filtro por documento.
+### 4.3 Encuestas
 
-## Roles
+- **Encuesta pública.** El paciente llega desde el botón «Dejar mi opinión» de cada documento del repositorio. Son tres preguntas: facilidad para acceder a la información (de 1 a 5), utilidad del documento y un comentario opcional de hasta 500 caracteres. Es anónima: se guarda el documento evaluado, las respuestas y la fecha. No se guarda nombre, cédula ni dirección IP.
+- **Resultados.** Para el personal con sesión. Muestra la cantidad de respuestas, el promedio de facilidad, el porcentaje de pacientes que consideró útil el documento, gráficos de distribución, una tabla por documento y los comentarios más recientes, con filtro por documento.
 
-El sistema maneja dos niveles de acceso:
+## 5. Roles y permisos
 
-- **Administrador**: todo lo que ve un Usuario Básico, más Carga de Archivos y Gestión de Usuarios.
-- **Usuario Básico**: Panel de Documentación (consulta + QR), las tres pantallas de Ambulancias (Formulario, Panel de Gestión y Seguimiento) y Resultados de Encuestas. Agrupa conceptualmente a Médico, Enfermería, Ayudante de Médico, etc.
+| Rol                | Qué puede hacer                                                                                                                                                        |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Administrador**  | Todo lo del Usuario Básico, más Carga de Archivos y Gestión de Usuarios.                                                                                               |
+| **Usuario Básico** | Panel de Documentación (consulta y QR), las tres pantallas de Ambulancias y los resultados de Encuestas. Agrupa en la práctica a médicos, enfermería y demás personal. |
+| **Paciente**       | No tiene cuenta. Solo accede al repositorio público y a la encuesta, y únicamente con el token del QR.                                                                 |
 
-La tabla `rol` es un catálogo abierto (VARCHAR, no ENUM) con relación **N:M** contra `usuario` (tabla intermedia `usuario_rol`), pensado para poder sumar roles a futuro sin migrar el esquema. El rol `Chofer` existe en la tabla pero está **excluido a propósito** de los formularios de usuario.
+La relación entre usuarios y roles es de muchos a muchos (tabla `usuario_rol`), de modo que se pueden sumar roles más adelante sin cambiar el esquema de usuarios.
 
-## Backend, autenticación y seguridad
+## 6. Seguridad
 
-- **Login** con cédula y contraseña, vía AJAX (fetch) sin recargar la página, con validación de formato en tiempo real. Las contraseñas se guardan hasheadas (`password_hash`) y nunca se guarda la contraseña en la sesión.
-- **Conexión** a la base con un Singleton en PHP con PDO, para que todos los módulos usen la misma instancia. Todas las consultas son **prepared statements** (sin concatenar datos del usuario en el SQL) y los datos se escapan al mostrarlos.
-- **Rutas protegidas** (`AuthController::protegerRuta()`): exigen sesión activa y, si corresponde, un rol específico, con cabeceras anti-caché para que el botón «Atrás» no muestre paneles tras cerrar sesión.
-- **Borrado lógico** en usuarios, documentos y traslados; nunca se hace `DELETE` físico sobre esos datos.
-- **Acceso del paciente por QR**: el QR contiene una URL con un token secreto (`Servicios Comunes/Configuracion/configuracion.php`, comparado con `hash_equals`). Ese token solo da acceso al repositorio, a la entrega de PDF y a la encuesta; nada más del sistema lo acepta.
-- **PDF protegidos**: la carpeta `uploads/documentos/` está bloqueada por `.htaccess`; los archivos solo se entregan a través de `servir-documento.php` (con sesión o token válido) y solo si el documento está activo.
-- **Encuesta pública**: token anti-CSRF, una respuesta por documento y por navegador, tope de envíos por sesión, campo trampa contra envíos automáticos y validación estricta de cada respuesta.
-- **Cambios de estado de traslados** dentro de transacciones (rollback ante cualquier error).
+- **Contraseñas** guardadas con `password_hash()` y verificadas con `password_verify()`. La contraseña nunca se guarda en la sesión.
+- **Consultas preparadas** con PDO en todo el sistema. En ningún punto se concatenan datos del usuario dentro del SQL, y lo que se muestra en pantalla se escapa.
+- **Rutas protegidas.** `AuthController::protegerRuta()` exige sesión activa y, cuando corresponde, un rol determinado. Las respuestas llevan cabeceras anti-caché para que el botón «Atrás» no muestre un panel después de cerrar sesión.
+- **Borrado lógico** en usuarios, documentos y traslados. No se hace `DELETE` físico sobre esos datos.
+- **Acceso por QR.** El QR contiene una URL con un token secreto que se compara con `hash_equals`. Ese token solo habilita el repositorio, la entrega de los PDF y la encuesta, y nada más.
+- **PDF protegidos.** Nadie puede abrir la carpeta de uploads por su URL. Los archivos solo salen a través de `servir-documento.php`, que verifica sesión o token y que el documento esté activo.
+- **Encuesta pública.** Token anti-CSRF, una respuesta por documento y por navegador, tope de envíos por sesión, un campo trampa contra envíos automáticos y validación estricta de cada respuesta.
+- **Transacciones** en el alta y los cambios de estado de traslados, con rollback ante cualquier error.
+- **Contenedor.** Apache oculta su versión, no lista directorios y bloquea el acceso a la carpeta de uploads. PHP no muestra errores al público y las cookies de sesión llevan `HttpOnly`, `SameSite=Lax` y modo estricto.
 
-## Qué está funcionando hoy
+## 7. Base de datos
 
-- ✅ Login, logout y protección de rutas por rol.
-- ✅ Navegación única (sidebar + topbar) compartida por todos los paneles, con nombre y rol reales del usuario.
-- ✅ Gestión de Usuarios completa (listar, crear, editar, suspender/reactivar), con protecciones para que un Administrador no se autosuspenda ni se quite su propio rol.
-- ✅ Módulo Documentación: CRUD de documentos conectado a la base, panel de consulta, QR y repositorio público.
-- ✅ Módulo Ambulancias: formulario, panel de gestión (editar, cambiar estado, cancelar, reactivar, filtros y CSV).
-- ✅ Módulo Encuestas: encuesta pública anónima y dashboard de resultados.
-- 🎭 Seguimiento de traslados: maqueta, sin GPS.
-- ⏸️ «¿Olvidó su contraseña?» y «Solicitar acceso» en el login: hoy son solo UI. Falta definir si la solicitud se guarda en la base, se manda por email, o ambas.
+Base `database_clinicas`, motor InnoDB, charset `utf8mb4`. Son 24 tablas, que se pueden ver en el diagrama `database/DER-final/DER Clinicas.png`.
 
-## Base de datos
+Todo está en **un solo script**: `database/query/sigsm-docker.sql`. Crea la base y las tablas, y carga los datos iniciales: el usuario Administrador, los dos roles, las 44 categorías, los estados de traslado, los tipos de vehículo y elemento, la compatibilidad entre ambos, dos vehículos de ejemplo y tres ubicaciones.
 
-Base `database_clinicas`, motor InnoDB, charset utf8mb4. Scripts en `database/`:
+Dos cosas a tener en cuenta:
 
-| Script                                             | Para qué sirve                                                                                                        |
-| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `DER-final/ddl.sql`                                | Esquema completo (usuarios, roles, documentos, traslados, etc.)                                                       |
-| `DER-final/dml.sql`                                | Datos de ejemplo                                                                                                      |
-| `modulo1-login-documentacion/modulo1.sql`          | Esquema solo de usuarios, roles, categorías y documentos                                                              |
-| `modulo1-login-documentacion/seed-data.sql`        | Usuario Administrador de prueba y roles del sistema                                                                   |
-| `modulo-ambulancias/01-preparar-traslados.sql`     | Tablas y catálogos de traslados (estados, canal, elementos, vehículos, ubicaciones). Se puede ejecutar más de una vez |
-| `modulo-ambulancias/02-compatibilidad-ninguno.sql` | Deja al elemento «Ninguno» compatible con todos los tipos de vehículo (opcional: el código ya lo aplica)              |
-| `modulo-encuestas/01-encuesta-documento.sql`       | Tabla `encuesta_documento` de la encuesta pública                                                                     |
+- La parte de datos iniciales no es repetible. Si se ejecuta dos veces sobre la misma base, duplica usuarios y categorías. Para empezar de cero hay que recrear la base.
+- Las tablas `encuesta`, `pregunta`, `opcion_respuesta`, `respuesta_encuesta` y `respuesta_pregunta` vienen del diseño original, pero la encuesta que está en funcionamiento guarda todo en `encuesta_documento`. Las dejamos en el modelo por si más adelante se quiere una encuesta con preguntas configurables.
 
-Requiere MySQL 8.0.16+ o MariaDB 10.2+ (por los `CHECK` de la encuesta). Las tablas `encuesta`, `pregunta` y `respuesta_*` del DER original no se usan en la versión actual: la encuesta pública guarda sus respuestas en `encuesta_documento`.
+Requiere MySQL 8.0.16 o superior (o MariaDB 10.2 o superior), porque usa restricciones `CHECK`.
 
-## Tecnologías
+## 8. Instalación en un entorno local (XAMPP)
 
-- HTML5 + CSS3 puro para las vistas (todo maquetado a mano con Grid y Flexbox)
-- PHP orientado a objetos para el backend, sin frameworks
-- MySQL para la base de datos, vía PDO con prepared statements
-- JavaScript vanilla (fetch/AJAX) para el dinamismo del frontend
-- Código QR generado en el navegador con `qrcode.js`; mapa de Seguimiento con Leaflet/OpenStreetMap
-- XAMPP como entorno de desarrollo local
+Es el entorno con el que desarrollamos.
 
-## Equipo — Sparrows Devs
+1. Instalar XAMPP con Apache y MySQL, y arrancar ambos servicios.
+2. Copiar o clonar el repositorio dentro de `htdocs`, por ejemplo `htdocs/proyecto-final-hospital-clinicas`.
+3. Abrir phpMyAdmin, ir a la pestaña **Importar** y cargar `database/query/sigsm-docker.sql`. Eso crea la base `database_clinicas`.
+4. Revisar los datos de conexión. Si no hay variables de entorno, `Servicios Comunes/Conexion BD/conexion.php` usa estos valores por defecto: servidor `localhost`, puerto `3306`, base `database_clinicas`, usuario `root` y contraseña `mysql`. Si en su XAMPP el usuario `root` tiene otra contraseña (por defecto viene vacía), hay que ajustarla en ese archivo.
+5. Abrir `http://localhost/proyecto-final-hospital-clinicas/` e ingresar.
 
-- Ricardo Boggio
-- Facundo Brun
-- Fernando Aguirre
-- Miguel Duarte
+**Usuario inicial.** El script crea un Administrador con cédula `12345678`. Hay que cambiarle la contraseña en el primer ingreso. Para generar el hash de una contraseña nueva y actualizarla en la base:
+
+```bash
+php -r "echo password_hash('NuevaContraseñaSegura', PASSWORD_DEFAULT);"
+```
+
+```sql
+UPDATE usuario SET contrasena = '<hash generado>' WHERE cedula = '12345678';
+```
+
+**Una advertencia sobre mayúsculas y minúsculas.** Windows no distingue entre `usuarioModelo.php` y `UsuarioModelo.php`, pero Linux sí. El código hace `require` con el nombre exacto del archivo, así que si el nombre en el repositorio cambia de mayúsculas en una computadora y no en otra, funciona en XAMPP y falla en el servidor. Nos pasó. Conviene ejecutar una vez `git config core.ignorecase false` en cada copia del repositorio.
+
+## 9. Despliegue en un servidor Linux con Docker
+
+El repositorio incluye un `Dockerfile` y un `docker-compose.yml` que levantan dos servicios:
+
+- **app**: PHP 8.3 con Apache, con la extensión `pdo_mysql` y los módulos `rewrite` y `headers`.
+- **db**: MySQL 8.0, que ejecuta `database/query/sigsm-docker.sql` automáticamente la primera vez que arranca.
+
+Los datos persisten en dos volúmenes: `db_data` (la base) y `documentos_pdf` (los PDF subidos). Reconstruir o recrear los contenedores no los borra.
+
+### 9.1 Requisitos del servidor
+
+- Debian con Docker Engine y el plugin Docker Compose instalados (`docker compose version` tiene que responder).
+- Git.
+- Un dominio apuntando a la IP del servidor, si se quiere que los pacientes entren desde sus celulares.
+- Los puertos 80 y 443 abiertos para el proxy; el 3306 **no** se abre nunca.
+
+### 9.2 Pasos
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/sparrowsdevs/proyecto-final-hospital-clinicas.git
+cd proyecto-final-hospital-clinicas
+
+# 2. Crear el archivo de configuración a partir de la plantilla
+cp .env.example .env
+chmod 600 .env
+nano .env
+
+# 3. Generar el token del QR y pegarlo en SIGSM_TOKEN
+openssl rand -hex 24
+
+# 4. Construir y levantar
+docker compose up -d --build
+
+# 5. Verificar
+docker compose ps
+docker compose logs -f db
+```
+
+El servicio `db` tiene que quedar en estado `healthy`. Si falla la carga del script SQL, el error aparece en los logs de `db`.
+
+### 9.3 Variables del archivo `.env`
+
+| Variable           | Qué es                                                                                                            |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `DB_ROOT_PASSWORD` | Contraseña de root de MySQL. Obligatoria.                                                                         |
+| `DB_PASSWORD`      | Contraseña del usuario `sigsm` que usa la aplicación. Obligatoria.                                                |
+| `SIGSM_TOKEN`      | Token secreto que va dentro del QR. Obligatorio; si se cambia, los QR impresos dejan de funcionar.                |
+| `SIGSM_URL_BASE`   | URL pública con la que los celulares llegan al sistema, sin barra final. Ejemplo: `https://sigsm.ejemplo.com.uy`. |
+| `APP_BIND`         | Dirección en la que escucha el contenedor. Por defecto `127.0.0.1`, es decir, solo desde el propio servidor.      |
+| `APP_PORT`         | Puerto local de la aplicación. Por defecto `8080`.                                                                |
+
+Las contraseñas y el token tienen que ser distintos entre sí y no se suben nunca al repositorio: `.env` está en el `.gitignore`.
+
+### 9.4 Publicación con HTTPS
+
+Por defecto la aplicación solo escucha en `127.0.0.1:8080`, a propósito: no queremos exponer Apache sin certificado. Para publicarla hay que poner delante un proxy inverso que atienda los puertos 80 y 443, obtenga el certificado y reenvíe a `127.0.0.1:8080`. Con Caddy, por ejemplo, alcanza con un archivo así:
+
+```
+sigsm.ejemplo.com.uy {
+    reverse_proxy 127.0.0.1:8080
+}
+```
+
+Nginx con Certbot también sirve. Una vez publicada, el campo `SIGSM_URL_BASE` del `.env` tiene que llevar la dirección `https://` definitiva, porque es la que se codifica dentro del QR.
+
+### 9.5 Mantenimiento
+
+```bash
+# Actualizar a la última versión del código
+git pull
+docker compose up -d --build
+
+# Ver los registros de la aplicación
+docker compose logs -f app
+
+# Copia de seguridad de la base
+docker compose exec -T db sh -c 'mysqldump -uroot -p"$MYSQL_ROOT_PASSWORD" database_clinicas' > respaldo.sql
+
+# Copia de los PDF subidos
+docker run --rm -v sigsm_documentos_pdf:/datos -v "$PWD":/destino alpine \
+    tar czf /destino/documentos.tar.gz -C /datos .
+
+# Empezar de cero (BORRA la base y los PDF)
+docker compose down -v
+```
+
+El script SQL de inicio solo se ejecuta cuando el volumen `db_data` está vacío. Si se modifica el esquema después de la primera puesta en marcha, hay que aplicar el cambio a mano sobre la base en uso, o recrear los volúmenes con `down -v`.
+
+## 10. Cómo probar el flujo del código QR
+
+1. Con el sistema publicado (o, en la red local, con la IP del servidor), ingresar como Administrador.
+2. En **Carga de Archivos**, subir un PDF y asignarle una categoría.
+3. En **Panel de Documentación**, abrir la ventana del QR.
+4. Escanearlo con un celular que **no** tenga sesión iniciada. Tiene que abrir el repositorio público con el documento.
+5. Abrir el PDF, volver y tocar «Dejar mi opinión»; completar la encuesta.
+6. Volver a ingresar como personal y revisar **Resultados de Encuestas**.
+
+## 11. Estado actual y pendientes
+
+**Funcionando**
+
+- Login, cierre de sesión y protección de rutas por rol.
+- Menú de navegación único para todos los paneles.
+- Gestión de usuarios y de documentos de punta a punta.
+- QR y repositorio público.
+- Formulario y panel de gestión de traslados, con edición, cambio de estado, cancelación, reactivación, filtros y exportación a CSV.
+- Encuesta pública anónima y panel de resultados.
+- Despliegue con Docker.
+
+## 12. Tecnologías
+
+- **PHP 8.3** orientado a objetos, sin frameworks, con arquitectura MVC.
+- **MySQL 8** a través de **PDO** con consultas preparadas.
+- **HTML5 y CSS3** escritos a mano (Grid y Flexbox), sin librerías de estilos.
+- **JavaScript** sin librerías para las llamadas AJAX (`fetch`).
+- **qrcode.js** para generar el QR en el navegador.
+- **Leaflet y OpenStreetMap** para el mapa de la maqueta de seguimiento.
+- **Docker y Docker Compose**, sobre Apache, para el despliegue.
+- **Git y GitHub** para el control de versiones.
+- **XAMPP** como entorno de desarrollo.
+- **draw.io** para los diagramas UML y el diagrama entidad-relación.
+
+## 13. Equipo
+
+**Sparrows Devs** es el equipo de cuatro estudiantes que desarrolló el sistema. Todos participamos en la programación; además cada uno tuvo un rol dentro del grupo.
+
+| Integrantes      |
+| ---------------- |
+| Ricardo Boggio   |
+| Facundo Brun     |
+| Fernando Aguirre |
+| Miguel Duarte    |
+
+Hospital de Clínicas «Dr. Manuel Quintela», Montevideo, Uruguay. Proyecto académico, 2026.
