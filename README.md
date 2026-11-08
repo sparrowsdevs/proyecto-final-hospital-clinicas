@@ -32,8 +32,9 @@ Cada módulo tiene sus propias carpetas `Modelo`, `Vista` y `Controlador`. Lo qu
 ```
 proyecto-final-hospital-clinicas/
 ├── index.php                       Login y punto de entrada del sistema
-├── assets/js/login.js
-├── styles/inicio-sesion.css
+├── assets/
+│   ├── css/inicio-sesion.css
+│   └── js/login.js
 │
 ├── Servicios Comunes/
 │   ├── Conexion BD/conexion.php            Conexión PDO (patrón Singleton)
@@ -76,7 +77,9 @@ proyecto-final-hospital-clinicas/
 │
 ├── database/
 │   ├── query/sigsm-docker.sql              Script completo: esquema y datos iniciales
-│   └── DER-final/DER Clinicas.png          Diagrama entidad-relación
+│   └── DER-final/
+│       ├── DER Clinicas.png                Diagrama entidad-relación
+│       └── DER-estado-y-correcciones.md    Diferencias entre el diagrama y la base real
 │
 ├── docker/                                 Ajustes de Apache y PHP para el contenedor
 ├── Dockerfile
@@ -85,7 +88,7 @@ proyecto-final-hospital-clinicas/
 └── .gitignore / .dockerignore
 ```
 
-Hay algunos archivos HTML en `Modulo Encuestas/Vista` (`encuestas.html`, `instrucciones.html`, `descarga-documento.html`) y `panel-administrador.php` en Documentación. Son restos de maquetas anteriores que ya no se usan y están pendientes de limpieza.
+Cada carpeta principal (`database`, `docker`, `Servicios Comunes`, `Modulo Documentacion`, `Modulo Ambulancias` y `Modulo Encuestas`) tiene su propio `README.md` con el detalle de sus archivos y de cómo funciona.
 
 ## 4. Módulos
 
@@ -136,7 +139,7 @@ La relación entre usuarios y roles es de muchos a muchos (tabla `usuario_rol`),
 
 ## 7. Base de datos
 
-Base `database_clinicas`, motor InnoDB, charset `utf8mb4`. Son 24 tablas, que se pueden ver en el diagrama `database/DER-final/DER Clinicas.png`.
+Base `database_clinicas`, motor InnoDB, charset `utf8mb4`. Son 24 tablas, que se pueden ver en el diagrama `database/DER-final/DER Clinicas.png`. Las diferencias entre ese diagrama y la base real están explicadas en [`DER-estado-y-correcciones.md`](database/DER-final/DER-estado-y-correcciones.md).
 
 Todo está en **un solo script**: `database/query/sigsm-docker.sql`. Crea la base y las tablas, y carga los datos iniciales: el usuario Administrador, los dos roles, las 44 categorías, los estados de traslado, los tipos de vehículo y elemento, la compatibilidad entre ambos, dos vehículos de ejemplo y tres ubicaciones.
 
@@ -267,7 +270,7 @@ El script SQL de inicio solo se ejecuta cuando el volumen `db_data` está vacío
 5. Abrir el PDF, volver y tocar «Dejar mi opinión»; completar la encuesta.
 6. Volver a ingresar como personal y revisar **Resultados de Encuestas**.
 
-## 11. Estado actual y pendientes
+## 11. Estado actual
 
 **Funcionando**
 
@@ -294,7 +297,7 @@ El script SQL de inicio solo se ejecuta cuando el volumen `db_data` está vacío
 
 ## 13. Equipo
 
-**Sparrows Devs** es el equipo de cuatro estudiantes que desarrolló el sistema. Todos participamos en la programación; además cada uno tuvo un rol dentro del grupo.
+**Sparrows Devs** es el equipo de cuatro estudiantes que desarrolló el sistema. Todos participamos en la programación.
 
 | Integrantes      |
 | ---------------- |
